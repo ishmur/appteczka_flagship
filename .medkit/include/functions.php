@@ -15,13 +15,13 @@
 			return false;
 	}
 	
-	function db_new_record(){
+	function db_drugs_new_record($name, $price, $overdue, $username){
 		
 		require("config/sql_connect.php");
-		
+
 		$sql = "INSERT INTO DrugsDB (name, price, overdue, username)
-		VALUES ('Apap', '12', '2016-05-12', 'last')";
-		
+		VALUES ('$name', '$price', '$overdue', '$username')";
+
 		if (mysqli_query($dbConnection, $sql)) {
 			echo "New record created successfully";
 		} else {

@@ -1,8 +1,24 @@
 <?php
 	session_start();
-	
+
+	require_once("include/functions.php");
+
 	if(!isset($_SESSION['username'])){
 		header("Location: index.php?logout=1");
+		exit();
+	}
+
+	if($_SERVER['REQUEST_METHOD'] == 'POST') {
+		$drugName = $_POST['drugName'];
+		$drugPrice = $_POST['drugPrice'];
+		$drugDate = $_POST['drugDate'];
+		$username = $_SESSION['username'];
+
+		//Validate inputs - TBA
+
+		db_drugs_new_record($drugName, $drugPrice, $drugDate, $username);
+
+		header("Location: drugs_new.php");
 		exit();
 	}
 ?>
@@ -35,25 +51,21 @@
 	<div class="row">
 		<div class="col-sm-9 col-sm-offset-3">
 		
-			<div class="col-sm-10">
+			<div class="col-sm-8 col-sm-offset-2">
 				<div class="container-fluid">
-					<div class="col-sm-10">
-						<form class="action="#">
+					<div class="col-sm-12">
+						<form action="" method="POST">
 							<div class="form-group">
 								<label for="drugName"><i class="fa fa-life-ring"></i> Nazwa leku</label>
-								<input type="text" class="form-control" id="drugName" placeholder="Wpisz nazwę nowego leku">
-							</div>
-							<div class="form-group">
-								<label for="drugQuant"><i class="fa fa-plus"></i> Ilość</label>
-								<input type="number" min="1" class="form-control" id="drugQuant" placeholder="Wpisz ilość leku (liczbę opakowań)">
+								<input type="text" class="form-control" name="drugName" placeholder="Wpisz nazwę nowego leku">
 							</div>
 							<div class="form-group">
 								<label for="drugPrice"><i class="fa fa-money"></i> Cena w złotówkach</label>
-								<input type="number" min="0" class="form-control" id="drugPrice" placeholder="Wpisz cenę leku w chwili zakupu">
+								<input type="number" min="0" class="form-control" name="drugPrice" placeholder="Wpisz cenę leku w chwili zakupu">
 							</div>
 							<div class="form-group">
 								<label for="drugDate"><i class="fa fa-hourglass-end"></i> Data ważności leku</label>
-								<input type="date" class="form-control" id="drugDate">
+								<input type="date" class="form-control" name="drugDate">
 							</div>
 							<br />
 							<button type="submit" class="btn btn-col btn-block">Dodaj nowy lek</button>
