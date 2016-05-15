@@ -51,9 +51,9 @@
 	<div class="row">
 		<div class="col-sm-9 col-sm-offset-3">
 		
-			<div class="col-sm-8 col-sm-offset-2">
+			<div class="col-md-8 col-md-offset-2">
 				<div class="container-fluid">
-					<div class="col-sm-12">
+					<div class="col-md-12">
 						<form action="" method="POST">
 							<div class="form-group">
 								<label for="drugName"><i class="fa fa-life-ring"></i> Nazwa leku</label>
