@@ -32,10 +32,10 @@
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-sm-9 col-sm-offset-3">
-		
-			<div class="col-sm-10">
+
+			<div class="col-md-8 col-md-offset-2">
 				<div class="container-fluid">
-					<div class="col-sm-10">
+					<div class="col-md-12">
 						<div class="container-fluid">
 							  <br /><h2>Lista przeterminowanych leków w apteczce:</h2><hr />					  
 							  <table class="table table-hover">
@@ -61,10 +61,10 @@
 					</div>
 				</div>
 			</div>
-			
-			<div class="col-sm-10">
+
+			<div class="col-md-8 col-md-offset-2">
 				<div class="container-fluid">
-					<div class="col-sm-10">
+					<div class="col-md-12">
 						<div class="container-fluid">
 							  <br /><h2>Lista leków, których termin ważności wkrótce minie:</h2><hr />					  
 							  <table class="table table-hover">

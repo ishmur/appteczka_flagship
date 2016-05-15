@@ -1,5 +1,7 @@
 <?php
 	session_start();
+
+	require_once("include/functions.php");
 	
 	if(!isset($_SESSION['username'])){
 		header("Location: index.php?logout=1");
@@ -35,9 +37,9 @@
 	<div class="row">
 		<div class="col-sm-9 col-sm-offset-3">
 		
-			<div class="col-sm-10">
+			<div class="col-lg-8 col-lg-offset-2">
 				<div class="container-fluid">
-					<div class="col-sm-10">
+					<div class="col-lg-12">
 						<form class="action="#">
 							<div class="form-group">
 								<label for="drugsSearch"><i class="fa fa-question-circle"></i> Szukaj leku...</label>
@@ -52,30 +54,15 @@
 								<thead>
 								  <tr>
 									<th>Nazwa leku</th>
-									<th>Ilość</th>
 									<th>Cena w złotówkach</th>
 									<th>Data ważności</th>
+									  <th>Kto dodał</th>
 								  </tr>
 								</thead>
 								<tbody>
-								  <tr>
-									<td>Apap</td>
-									<td>4</td>
-									<td>40</td>
-									<td>13.04.2018</td>
-								  </tr>
-								  <tr>
-									<td>Acodin</td>
-									<td>200</td>
-									<td>14</td>
-									<td>13.04.2018</td>
-								  </tr>
-								  <tr>
-									<td>Zyrtec</td>
-									<td>1</td>
-									<td>8</td>
-									<td>13.04.2018</td>
-								  </tr>
+									<?php
+										db_drugs_print_table();
+									?>
 								</tbody>
 							  </table>
 						</div>
