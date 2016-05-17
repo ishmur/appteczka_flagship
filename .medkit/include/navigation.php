@@ -27,6 +27,7 @@ $settings = Ustawienia
         <li <?php echo $activity ?> ><a href="home.php">Ostatnia aktywność</a></li>
         <li <?php echo $drugsOverview ?> ><a href="drugs_overview.php">Przegląd leków</a></li>
         <li <?php echo $drugsNew ?> ><a href="drugs_new.php">Dodaj nowy lek</a></li>
+		<li <?php echo $drugsSpecification ?> ><a href="drugs_specification.php">Dodaj specyfikację leku</a></li>
         <li <?php echo $drugsOverdue ?> ><a href="drugs_overdue.php">Lista leków przeterminowanych</a></li>
 		<li <?php echo $statistics ?> ><a href="statistics.php">Statystyki</a></li>
       </ul>
@@ -46,6 +47,7 @@ $settings = Ustawienia
 					<div class="dropdown-content col-sm-offset-2 <?php echo $showDropdown ?>">
 						<a <?php echo $drugsOverview ?> href="drugs_overview.php">Przegląd leków</a>
 						<a <?php echo $drugsNew ?> href="drugs_new.php">Dodaj nowy lek</a>
+						<a <?php echo $drugsSpecification ?> href="drugs_specification.php">Dodaj specyfikację leku</a>
 						<a <?php echo $drugsOverdue ?> href="drugs_overdue.php">Lista leków przeterminowanych</a>
 					</div>
 				</li>

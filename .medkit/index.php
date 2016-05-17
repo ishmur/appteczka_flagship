@@ -53,6 +53,12 @@
 			$pswErrMsg = "Nieprawidłowe hasło.";
 			$errorFlag = true; 
 		}
+		elseif(!check_login($login, $password)){
+			$show_modal = "style='display:block'";
+			$pswErrNotification = "has-error";
+			$pswErrMsg = "Nieprawidłowe hasło.";
+			$errorFlag = true; 
+		}
 		
 		// Proceed if no errors
 		if(!$errorFlag){

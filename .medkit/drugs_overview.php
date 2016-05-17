@@ -7,6 +7,13 @@
 		header("Location: index.php?logout=1");
 		exit();
 	}
+
+	if($_SERVER['REQUEST_METHOD'] == 'POST') {
+		foreach ($_POST['drugs'] as $drugID) {
+			db_drugs_delete_record($drugID);
+		}
+	}
+
 ?>
 
 <!DOCTYPE html>
@@ -27,7 +34,7 @@
 <?php 
 	$drugsOverview = 'class="active"'; // set "active" class for current page
 	$showDropdown = "show"; // set drugs side-menu item to be permanently visible
-	$header = "Przegląd leków"; // set header string for current page
+	$header = "Przegląd leków (specyfikacje!)"; // set header string for current page
 	include("include/navigation.php"); // load template html with top-navigation bar, side-navigation bar and header
 ?>
 
@@ -37,9 +44,9 @@
 	<div class="row">
 		<div class="col-sm-9 col-sm-offset-3">
 		
-			<div class="col-lg-8 col-lg-offset-2">
+			<div class="col-md-8 col-md-offset-2">
 				<div class="container-fluid">
-					<div class="col-lg-12">
+					<div class="col-md-12">
 						<form class="action="#">
 							<div class="form-group">
 								<label for="drugsSearch"><i class="fa fa-question-circle"></i> Szukaj leku...</label>
@@ -49,22 +56,17 @@
 							</div>
 						</form>
 						<div class="container-fluid">
+							<form action="" method='POST'>
 							  <br /><h2>Wyniki wyszukiwania</h2><hr />					  
 							  <table class="table table-hover">
-								<thead>
-								  <tr>
-									<th>Nazwa leku</th>
-									<th>Cena w złotówkach</th>
-									<th>Data ważności</th>
-									  <th>Kto dodał</th>
-								  </tr>
-								</thead>
-								<tbody>
+								
 									<?php
-										db_drugs_print_table();
+										db_drugs_print_table_specif();
 									?>
-								</tbody>
+
 							  </table>
+							  <button type="submit" class="btn btn-col btn-block">Usuń zaznaczone leki</button>
+							</form>
 						</div>
 					</div>
 				</div>
