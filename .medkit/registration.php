@@ -6,11 +6,6 @@ require_once("include/functions.php");
 $login_error;
 $password_error;
 
-if(!isset($_SESSION['username'])){
-    header("Location: index.php?logout=1");
-    exit();
-}
-
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = trim_input($_POST['username']);
     $password = md5(trim_input($_POST['password']));

@@ -1,80 +1,70 @@
 <?php
 	session_start();
-	
+
 	require_once("include/functions.php");
-	
-	$errorFlag;
-	
-	$usrErrNotification;
-	$usrErrMsg;
-	$pswErrNotification;
-	$pswErrMsg;
-	
+
+	$user_error_message;
+	$password_error_message;
 	$show_modal;
-	
+
+
 	if($_GET['logout']==1){
+		setcookie('username', "", 1);
+		setcookie('password', "", 1);
 		session_destroy();
 		session_start();
+		header("Location: index.php");
+	}
+
+	else if (isset($_COOKIE['username']) && isset($_COOKIE['password'])){
+		if (correct_password($_COOKIE['username'], $_COOKIE['password'])) {
+			header("Location: home.php");
+			$_SESSION['username'] = $_COOKIE['username'];
+		}
+	}
+
+	if($_SERVER['REQUEST_METHOD'] == 'POST'){
+		//General validation of inputs
+		$username = trim_input($_POST['email']);
+		$password = trim_input($_POST['password']);
+		$remember_me = isset($_POST['remember']);
+
+		$user_check = login_basic_check($username, $user_error_message);
+		$password_check = password_basic_check($password, $password_error_message);
+
+		
+		// Proceed if no errors
+		if($user_check && $password_check){
+			$password = md5($password);
+			if(correct_password($username, $password)) {
+				$_SESSION['username'] = $username;
+				$_SESSION['drugsOverdueModal'] = "show";
+				header("Location: home.php");
+				if(!$remember_me) {
+					exit();
+				} else {
+					setcookie('username', $username, time()+60*60*24*365);
+					setcookie('password', $password, time()+60*60*24*365);
+					exit();
+				}
+			} else {
+				$user_error_message = "Incorrect user/password";
+				$password_error_message = "Incorrect user/password";
+				$show_modal = "style='display:block'";
+				$form_style = "has-error";
+			}
+		} else {
+			$show_modal = "style='display:block'";
+			$form_style = "has-error";
+		}
 	}
 
 	if($_GET['reg']==1){
 		?>
 		<div class="alert alert-success">
-  		<strong>Welcome aboard!</strong> Let's talk drugs, shall we?
+			<strong>Welcome aboard!</strong> Let's talk drugs, shall we?
 		</div>
 		<?
-	}
-
-	if($_SERVER['REQUEST_METHOD'] == 'POST'){
-		//General validation of inputs
-		$username = trim_input($_POST['login']);
-		$password = trim_input($_POST['password']);
-
-		//Validate username
-		if(empty($username)){
-			$show_modal = "style='display:block'";
-			$usrErrNotification = "has-error";
-			$usrErrMsg = "Pole nie może być puste.";
-			$errorFlag = true;
-			$username = NULL;
-			$pswErrNotification = "has-error";
-		}
-		elseif(!preg_match("/^[A-Za-z0-9_]+$/", $username)){
-			$show_modal = "style='display:block'";
-			$usrErrNotification = "has-error";
-			$usrErrMsg = "Nieprawidłowy login.";
-			$errorFlag = true; 
-			$username = NULL;
-			$pswErrNotification = "has-error";
-		}
-	    
-		//Validate password
-		if(empty($password)){
-			$show_modal = "style='display:block'";
-			$pswErrNotification = "has-error";
-			$pswErrMsg = "Pole nie może być puste.";
-			$errorFlag = true;
-		}
-		elseif(!preg_match("/^[A-Za-z0-9_]+$/", $password)){
-			$show_modal = "style='display:block'";
-			$pswErrNotification = "has-error";
-			$pswErrMsg = "Nieprawidłowe hasło.";
-			$errorFlag = true; 
-		}
-		elseif(!check_login($login, $password)){
-			$show_modal = "style='display:block'";
-			$pswErrNotification = "has-error";
-			$pswErrMsg = "Nieprawidłowe hasło.";
-			$errorFlag = true; 
-		}
-		
-		// Proceed if no errors
-		if(!$errorFlag){
-			$_SESSION['username'] = $username;
-			$_SESSION['drugsOverdueModal'] = "show";
-			header("Location: home.php");
-			exit();
-		}
 	}
 ?>
 
@@ -134,18 +124,18 @@
 
                   <div class="modal-body">
                     <form action="" method="POST">
-						<div class="form-group <?php echo $usrErrNotification ?>">
+						<div class="form-group <? echo $form_style; ?>">
 							<label for="usrname"><span class="glyphicon glyphicon-user"></span> Nazwa użytkownika</label>
-							<p style="color:red"><?php echo $usrErrMsg ?></p>
-							<input type="text" name="login" class="form-control" id="usrname" placeholder="Nazwa użytkownika" value=<?php echo "$username" ?>>
+							<p style="color:red"><?php echo $user_error_message ?></p>
+							<input type="email" name="email" class="form-control" id="usrname" placeholder="Nazwa użytkownika" value=<?php echo "$username" ?>>
 						</div>
-						<div class="form-group <?php echo $pswErrNotification ?>">
+						<div class="form-group <? echo $form_style; ?>">
 							<label for="psw"><span class="glyphicon glyphicon-lock"></span> Hasło</label>
-							<p style="color:red"><?php echo $pswErrMsg ?></p>
-							<input type="text" name="password" class="form-control" id="psw" placeholder="Hasło">
+							<p style="color:red"><?php echo $password_error_message ?></p>
+							<input type="password" name="password" class="form-control" id="psw" placeholder="Hasło">
 						</div>
 						<div class="checkbox">
-							<label><input type="checkbox" value="" checked>Zapamiętaj mnie</label>
+							<label><input type="checkbox" name="remember" value="" checked>Zapamiętaj mnie</label>
 						</div>
 						<button type="submit" class="btn btn-col btn-block"><span class="glyphicon glyphicon-off"></span> Zaloguj</button>
                     </form>
@@ -155,7 +145,7 @@
                     <button type="button" class="btn btn-default btn-default pull-left" id="modalCancelBtn">
 						<span class="glyphicon glyphicon-remove"></span> Cofnij
 					</button>
-                    <p><a href="#">Zarejestruj się</a></p>
+                    <p><a href="registration.php">Zarejestruj się</a></p>
                     <p><a href="#">Zapomniałem hasła</a></p>
                   </div>
 

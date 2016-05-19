@@ -81,6 +81,42 @@
 		mysqli_close($dbConnection);
 		return true;
 	}
+
+	function login_basic_check($login, &$error){
+		if (filter_var($login, FILTER_VALIDATE_EMAIL)) {
+			return true;
+		} else {
+			if (empty($login)){
+				$error = "Login cannot be empty";
+				return false;
+			} else {
+				$error = "Login is invalid";
+				return false;
+			}
+		}
+	}
+
+	function password_basic_check($password, &$error){
+		if (empty($password)){
+			$error = "Password cannot be empty";
+			return false;
+		} else {
+			return true;
+		}
+	}
+		
+	function correct_password($username, $password){
+		require("config/sql_connect.php");
+		$sql = "SELECT id FROM users WHERE email = '$username' and password = '$password'";
+		$result = mysqli_query($dbConnection, $sql);
+
+		if (mysqli_num_rows($result) == 1) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 	
 	function db_drugs_new_record($name, $price, $overdue, $username){
 		

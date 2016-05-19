@@ -2,6 +2,17 @@
 	session_start();
 	
 	$show_modal;
+
+	require_once("include/functions.php");
+
+
+
+//	if (isset($_COOKIE['username']) && isset($_COOKIE['password'])){
+//		if (!correct_password($_COOKIE['username'], $_COOKIE['password'])) {
+//			header("Location: index.php?logout=1");
+//			exit();
+//		}
+//	}
 	
 	if(!isset($_SESSION['username'])){
 		header("Location: index.php?logout=1");
