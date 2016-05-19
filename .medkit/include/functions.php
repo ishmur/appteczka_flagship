@@ -10,17 +10,17 @@
 	function login_valid($login, &$error) {
 		if (filter_var($login, FILTER_VALIDATE_EMAIL)) {
 			if (is_login_in_database($login)) {
-				$error = "User with this name already exists";
+				$error = "Podany adres email jest już przypisany do konta";
 				return false;
 			} else {
 				return true;
 			}
 		} else {
 			if (empty($login)){
-				$error = "Login cannot be empty";
+				$error = "Pole nie może być puste";
 				return false;
 			} else {
-				$error = "E-mail is invalid";
+				$error = "Nieprawidłowy adres email";
 				return false;
 			}
 		}
@@ -28,11 +28,11 @@
 
 	function password_valid($password, $password_check, &$error) {
 		if ($password != $password_check){
-			$error = "Password confirmation is different from password";
+			$error = "Wartości obu pól haseł muszą być identyczne";
 			return false;
 		} else {
 			if (empty($password)){
-				$error = "Password cannot be empty";
+				$error = "Pole nie może być puste";
 				return false;
 			} else {
 				return true;
@@ -43,6 +43,7 @@
 	function is_login_in_database($login){
 
 		require("config/sql_connect.php");
+
 		$sql = "SELECT id FROM users WHERE email = '$login'";
 		$result = mysqli_query($dbConnection, $sql);
 
@@ -87,10 +88,10 @@
 			return true;
 		} else {
 			if (empty($login)){
-				$error = "Login cannot be empty";
+				$error = "Pole nie może być puste";
 				return false;
 			} else {
-				$error = "Login is invalid";
+				$error = "Nieprawidłowa nazwa użytkownika";
 				return false;
 			}
 		}
@@ -98,7 +99,7 @@
 
 	function password_basic_check($password, &$error){
 		if (empty($password)){
-			$error = "Password cannot be empty";
+			$error = "Pole nie może być puste";
 			return false;
 		} else {
 			return true;
@@ -107,6 +108,7 @@
 		
 	function correct_password($username, $password){
 		require("config/sql_connect.php");
+		
 		$sql = "SELECT id FROM users WHERE email = '$username' and password = '$password'";
 		$result = mysqli_query($dbConnection, $sql);
 
