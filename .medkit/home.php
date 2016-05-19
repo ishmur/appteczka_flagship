@@ -23,6 +23,15 @@
 		$show_modal = "style='display:block'";
 		$_SESSION['drugsOverdueModal'] = "hide";
 	}
+
+	if($_GET['reg']==1){
+		?>
+		<div class="alert alert-success">
+			You've just created new virtual medical kit called <strong><? echo $_SESSION['new_group']?></strong>! Good for you!
+		</div>
+		<?
+		$_SESSION['new_group'] = "";
+	}
 ?>
 
 <!DOCTYPE html>

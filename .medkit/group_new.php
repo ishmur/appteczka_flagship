@@ -3,21 +3,21 @@ session_start();
 
 require_once("include/functions.php");
 
-$login_error;
+$group_name_error;
 $password_error;
 
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $username = trim_input($_POST['username']);
+    $group_name = trim_input($_POST['group_name']);
     $password = trim_input($_POST['password']);
     $password_check = trim_input($_POST['password_check']);
 
-    $is_email_valid = login_valid($username, $login_error);
+    $is_group_name_valid = is_group_name_valid($group_name, $group_name_error);
     $are_passwords_valid = password_valid($password, $password_check, $password_error);
-
-    if($is_email_valid && $are_passwords_valid){
+    if($is_group_name_valid && $are_passwords_valid){
         $password = md5($password);
-        if(register($username, $password, 'user')){
-            header("Location: index.php?reg=1");
+        if(register($group_name, $password, 'group')){
+            header("Location: home.php?reg=1");
+            $_SESSION['new_group'] = $group_name;
             exit();
         } else {
             die("Database error");
@@ -52,11 +52,11 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="col-sm-10">
                         <form action = "" method = "POST">
                             <div class="form-group">
-                                <label for="email"><i class="fa"></i> E-mail, <? echo $login_error; ?></label>
-                                <input type="email" class="form-control" name="username" placeholder="E-mail będzie Twoim loginem">
+                                <label for="email"><i class="fa"></i> Nazwa apteczki <? echo $group_name_error; ?></label>
+                                <input type="text" class="form-control" name="group_name" placeholder="Nazwa Twojej/Waszej apteczki">
                             </div>
                             <div class="form-group">
-                                <label for="password"><i class="fa"></i> Hasło, <? echo $password_error; ?></label>
+                                <label for="password"><i class="fa"></i> Hasło <? echo $password_error; ?></label>
                                 <input type="password" class="form-control" name="password" placeholder="Twoje hasło">
                             </div>
                             <div class="form-group">

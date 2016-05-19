@@ -55,12 +55,19 @@
 
 	}
 
-	function register_user($username, $password){
+	function register($username, $password, $option){
 
 		require("config/sql_connect.php");
 
-		$sql = "INSERT INTO users (email, password)
-			VALUES (?,?)";
+		if ($option == 'user') {
+			$sql = "INSERT INTO users (email, password)
+				VALUES (?,?)";
+		}
+
+		else if($option == 'group'){
+			$sql = "INSERT INTO groups (group_name, password)
+				VALUES (?,?)";
+		}
 
 		$stmt = mysqli_prepare($dbConnection,$sql);
 		if ($stmt === false) {
@@ -97,8 +104,19 @@
 	}
 
 	function password_basic_check($password, &$error){
+		//Funkcje mogą być w przyszłości rozbudowane
 		if (empty($password)){
 			$error = "Password cannot be empty";
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	function is_group_name_valid($group_name, &$error){
+		//Funkcje mogą być w przyszłości rozbudowane
+		if (empty($group_name)){
+			$error = "Group name cannot be empty";
 			return false;
 		} else {
 			return true;
