@@ -17,6 +17,14 @@
 		session_start();
 	}
 
+	if($_GET['reg']==1){
+		?>
+		<div class="alert alert-success">
+  		<strong>Welcome aboard!</strong> Let's talk drugs, shall we?
+		</div>
+		<?
+	}
+
 	if($_SERVER['REQUEST_METHOD'] == 'POST'){
 		//General validation of inputs
 		$username = trim_input($_POST['login']);

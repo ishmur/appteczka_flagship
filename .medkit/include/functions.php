@@ -6,13 +6,80 @@
 		$input = htmlspecialchars($input);
 		return $input;
 	}
-	
-	function check_login($login, $password){
-		if ($password == 'admin'){
+
+	function login_valid($login, &$error) {
+		if (filter_var($login, FILTER_VALIDATE_EMAIL)) {
+			if (is_login_in_database($login)) {
+				$error = "User with this name already exists";
+				return false;
+			} else {
+				return true;
+			}
+		} else {
+			if (empty($login)){
+				$error = "Login cannot be empty";
+				return false;
+			} else {
+				$error = "E-mail is invalid";
+				return false;
+			}
+		}
+	}
+
+	function password_valid($password, $password_check, &$error) {
+		if ($password != $password_check){
+			$error = "Password confirmation is different from password";
+			return false;
+		} else {
+			if (empty($password)){
+				$error = "Password cannot be empty";
+				return false;
+			} else {
+				return true;
+			}
+		}
+	}
+
+	function is_login_in_database($login){
+
+		require("config/sql_connect.php");
+		$sql = "SELECT id FROM users WHERE email = '$login'";
+		$result = mysqli_query($dbConnection, $sql);
+
+		if (mysqli_num_rows($result) > 0) {
 			return true;
 		}
-		else 
+		else {
 			return false;
+		}
+
+	}
+
+	function register_user($username, $password){
+
+		require("config/sql_connect.php");
+
+		$sql = "INSERT INTO users (email, password)
+			VALUES (?,?)";
+
+		$stmt = mysqli_prepare($dbConnection,$sql);
+		if ($stmt === false) {
+			trigger_error('Statement failed! ' . htmlspecialchars(mysqli_error($dbConnection)), E_USER_ERROR);
+		}
+
+		$bind = mysqli_stmt_bind_param($stmt, "ss", $username, $password);
+		if ($bind === false) {
+			trigger_error('Bind param failed!', E_USER_ERROR);
+		}
+
+		$exec = mysqli_stmt_execute($stmt);
+		if ($exec === false) {
+			trigger_error('Statement execute failed! ' . htmlspecialchars(mysqli_stmt_error($stmt)), E_USER_ERROR);
+		}
+
+		mysqli_stmt_close($stmt);
+		mysqli_close($dbConnection);
+		return true;
 	}
 	
 	function db_drugs_new_record($name, $price, $overdue, $username){
@@ -31,7 +98,8 @@
 		if ($bind === false) {
 			trigger_error('Bind param failed!', E_USER_ERROR);
 		}
-
+		//dlaczego "siss" a nie "sdss"
+		
 		$exec = mysqli_stmt_execute($stmt);
 		if ($exec === false) {
 			trigger_error('Statement execute failed! ' . htmlspecialchars(mysqli_stmt_error($stmt)), E_USER_ERROR);
