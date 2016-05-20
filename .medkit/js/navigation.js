@@ -3,9 +3,12 @@
 var divTopNav = document.getElementById("myNavbar");
 var btnTopNav = document.getElementsByClassName("navbar-toggle")[0];
 
-var modalDiv = document.getElementsByClassName("modal")[0];
-var modalContent = document.getElementsByClassName("modal-dialog")[0];
-var modalClose = document.getElementById("modalCancelBtn");
+var divSideNavDrugs = document.getElementsByClassName("dropdown-content")[0];
+var btnSideNavDrugs = document.getElementsByClassName("dropdown-toggle")[0];
+
+var divSideNavSettings = document.getElementsByClassName("dropdown-content")[1];
+var btnSideNavSettings = document.getElementsByClassName("dropdown-toggle")[1];
+
 
 function climbUpDOM(elem, selector) {
 // Build path from DOM 'elem' up and return true if it includes 'selector'.
@@ -37,31 +40,28 @@ function climbUpDOM(elem, selector) {
         }
     }
     return false;
-};
-
-function vertCenter(obj,objProperty) {
-	obj.style[objProperty] = (window.innerHeight - obj.clientHeight)/2 + "px";
 }
 
 btnTopNav.addEventListener('click', function(event) {
-	divTopNav.classList.toggle("show");
+    divTopNav.classList.toggle("show");
 });
 
-window.onload = function() {
-	vertCenter(modalContent, 'margin-top');
-}
 
-window.addEventListener("resize", function() {
-	vertCenter(modalContent, 'margin-top');
-})
+btnSideNavDrugs.addEventListener('click', function(event) {
+    divSideNavDrugs.classList.toggle("show");
+});
 
-modalClose.onclick = function() {
-    modalDiv.style.display = "none";
-}
+btnSideNavSettings.addEventListener('click', function(event) {
+    divSideNavSettings.classList.toggle("show");
+});
 
 window.onclick = function(event) {
-	// Function hiding the dropdown menu when clicked outside of its area
-	if (!climbUpDOM(event.target, "#myNavbar") && !climbUpDOM(event.target, ".navbar-toggle")) {
-		divTopNav.classList.remove("show");
-	}
+    // Function hiding the dropdown menu when clicked outside of its area
+    if ((!climbUpDOM(event.target, "#myNavbar") && !climbUpDOM(event.target, ".navbar-toggle")) &&
+        ((!climbUpDOM(event.target, ".dropdown-content") && !climbUpDOM(event.target, ".dropdown-toggle")))) {
+        divTopNav.classList.remove("show");
+        divSideNavDrugs.classList.remove("show");
+        divSideNavSettings.classList.remove("show");
+    }
 }
+

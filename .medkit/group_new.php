@@ -80,6 +80,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
 </div>
 
+<script src="js/navigation_settings.js"></script>
 
 </body>
 

@@ -22,8 +22,9 @@
 
 <body id="bodyTag">
 
-<?php 
-	$settings = 'class="active"'; // set "active" class for current page
+<?php
+    $settingsUser = 'class="active"'; // set "active" class for current page
+    $showDropdownSettings = "show"; // set drugs side-menu item to be permanently visible
 	$showSettings = 'style="color:white"'; // change color of settings top-navbar icon
 	$header = "Ustawienia użytkownika"; // set header string for current page
 	include("include/navigation.php"); // load template html with top-navigation bar, side-navigation bar and header
@@ -64,7 +65,7 @@
 	</div>
 </div>
 
-<script src="js/home.js"></script>
+<script src="js/navigation_settings.js"></script>
 
 </body>
 

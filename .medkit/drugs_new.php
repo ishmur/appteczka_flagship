@@ -40,7 +40,7 @@
 
 <?php 
 	$drugsNew = 'class="active"'; // set "active" class for current page
-	$showDropdown = "show"; // set drugs side-menu item to be permanently visible
+	$showDropdownDrugs = "show"; // set drugs side-menu item to be permanently visible
 	$header = "Dodaj nowy lek"; // set header string for current page
 	include("include/navigation.php"); // load template html with top-navigation bar, side-navigation bar and header
 ?>
@@ -78,7 +78,7 @@
 	</div>
 </div>
 
-<script src="js/drugs_overview.js"></script>
+<script src="js/navigation_drugs.js"></script>
 
 </body>
 

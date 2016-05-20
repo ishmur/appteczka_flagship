@@ -3,6 +3,7 @@ Variables for setting current page (set variable before inlcuding the file):
 $activity = Historia aktywności
 $drugsOverview = Przegląd leków
 $drugsNew = Dodaj nowy lek
+$drugsSpecification = Dodaj nową specyfikację leku
 $drugsOverdue = Leki przeterminowane
 $statistics = Statystyki
 $settings = Ustawienia
@@ -44,7 +45,7 @@ $settings = Ustawienia
 				<li <?php echo $activity ?> ><a href="home.php">Ostatnia aktywność</a></li>
 				<li class="dropdown">
 					<a class="dropdown-toggle">Stan apteczki</a>
-					<div class="dropdown-content col-sm-offset-2 <?php echo $showDropdown ?>">
+					<div class="dropdown-content col-sm-offset-2 <?php echo $showDropdownDrugs ?>">
 						<a <?php echo $drugsOverview ?> href="drugs_overview.php">Przegląd leków</a>
 						<a <?php echo $drugsNew ?> href="drugs_new.php">Dodaj nowy lek</a>
 						<a <?php echo $drugsSpecification ?> href="drugs_specification.php">Dodaj specyfikację leku</a>
@@ -52,7 +53,14 @@ $settings = Ustawienia
 					</div>
 				</li>
 				<li <?php echo $statistics ?> ><a href="statistics.php">Statystyki</a></li>
-				<li <?php echo $settings ?> ><a href="settings.php">Ustawienia użytkownika</a></li>
+				<li class="dropdown">
+					<a class="dropdown-toggle">Ustawienia</a>
+					<div class="dropdown-content col-sm-offset-2 <?php echo $showDropdownSettings ?>">
+						<a <?php echo $settingsUser ?> href="settings.php">Ustawienia użytkownika</a>
+						<a <?php echo $settingsGroupJoin ?> href="group_join.php">Dołącz do grupy</a>
+						<a <?php echo $settingsGroupNew ?> href="group_new.php">Stwórz grupę</a>
+					</div>
+				</li>
 				<li><a href="index.php?logout=1">Wyloguj</a></li>
 			</ul><br>
 		</div>
@@ -67,3 +75,5 @@ $settings = Ustawienia
 		
 	</div>
 </div>
+
+<script src="js/navigation.js"></script>
