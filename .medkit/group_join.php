@@ -3,26 +3,19 @@ session_start();
 
 require_once("include/functions.php");
 
-if(!isset($_SESSION['username'])){
-    header("Location: index.php?logout=1");
-    exit();
-}
-
 $group_name_error;
 $password_error;
 
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
     $group_name = trim_input($_POST['group_name']);
     $password = trim_input($_POST['password']);
-    $password_check = trim_input($_POST['password_check']);
 
-    $is_group_name_valid = is_group_name_valid($group_name, $group_name_error);
-    $are_passwords_valid = password_valid($password, $password_check, $password_error);
-    if($is_group_name_valid && $are_passwords_valid){
+    $group_exists = does_group_exist($group_name, $group_name_error);
+    $is_password_correct = correct_password_group($group_name, $password, $password_error);
+    if($group_exists && $is_password_correct){
         $password = md5($password);
-        if(register($group_name, $password, 'group')){
-            give_admin_rights($group_name, $_SESSION['username']);
-            header("Location: home.php?reg=1");
+        if(add_to_group($group_name, $_SESSION['username'])){
+            header("Location: home.php?reg=2");
             $_SESSION['new_group'] = $group_name;
             exit();
         } else {
@@ -58,19 +51,23 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="col-sm-10">
                         <form action = "" method = "POST">
                             <div class="form-group">
-                                <label for="email"><i class="fa"></i> Nazwa apteczki <? echo $group_name_error; ?></label>
-                                <input type="text" class="form-control" name="group_name" placeholder="Nazwa Twojej/Waszej apteczki">
+                                <label for="email"><i class="fa"></i> Wybierz apteczkę <? echo $group_name_error; ?></label>
+                                <input name="group_name" id="choose_group" list="group_list">
+                                <datalist id="group_list">
+                                    <?php
+                                        $result = get_all_groups();
+                                        while ($row = mysqli_fetch_assoc($result)) {
+                                        echo "<option value=" .$row['group_name']. "></option>";
+                                    }
+                                    ?>
+                                </datalist>
                             </div>
                             <div class="form-group">
                                 <label for="password"><i class="fa"></i> Hasło <? echo $password_error; ?></label>
                                 <input type="password" class="form-control" name="password" placeholder="Twoje hasło">
                             </div>
-                            <div class="form-group">
-                                <label for="password_check"><i class="fa"></i> Powtórz hasło</label>
-                                <input type="password" class="form-control" name="password_check" placeholder="Podaj ponownie Twoje hasło">
-                            </div>
                             <br />
-                            <button type="submit" class="btn btn-col btn-block">Zarejestruj się!</button>
+                            <button type="submit" class="btn btn-col btn-block">Dołącz do grupy!</button>
                         </form>
                     </div>
                 </div>

@@ -32,6 +32,15 @@
 		<?
 		$_SESSION['new_group'] = "";
 	}
+
+	if($_GET['reg']==2){
+		?>
+		<div class="alert alert-success">
+			You've just joined a virtual medical kit called <strong><? echo $_SESSION['new_group']?></strong>! Cheers mate!
+		</div>
+		<?
+		$_SESSION['new_group'] = "";
+	}
 ?>
 
 <!DOCTYPE html>
