@@ -40,37 +40,49 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="css/home.css">
-    <link rel="stylesheet" type="text/css" href="css/modal.css">
     <link rel="stylesheet" type="text/css" href="css/navigation.css">
 </head>
 
 <body id="bodyTag">
 
-<br />
+<?php
+    $settingsGroupNew = 'class="active"'; // set "active" class for current page
+    $showDropdownSettings = "show"; // set drugs side-menu item to be permanently visible
+    $showSettings = 'style="color:white"'; // change color of settings top-navbar icon
+    $header = "Utwórz grupę"; // set header string for current page
+    include("include/navigation.php"); // load template html with top-navigation bar, side-navigation bar and header
+?>
+
+<br/><br/><br/><br/>
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-9 col-sm-offset-3">
 
-            <div class="col-sm-10">
+            <div class="col-sm-3 inline-element-center">
+                <h2>Członkostwo w grupie</h2>
+                <h4>sprawdza się w sytuacji, gdy wiele osób ma dostęp do wspólnej apteczki <br/>(np. w mieszkaniu). <br/><br/>
+                    Dzięki członkostwu możliwe jest dzielenie się zasobami - system sam poinformuje pozostałych użytkowników o zaistniałych zmianach!</h4><br/>
+            </div>
+
+            <div class="col-sm-9">
                 <div class="container-fluid">
-                    <div class="col-sm-10">
+                    <div class="col-sm-8">
                         <form action = "" method = "POST">
                             <div class="form-group">
                                 <label for="email"><i class="fa"></i> Nazwa apteczki <? echo $group_name_error; ?></label>
-                                <input type="text" class="form-control" name="group_name" placeholder="Nazwa Twojej/Waszej apteczki">
+                                <input type="text" class="form-control" name="group_name" placeholder="Wprowadź nazwę nowej grupy">
                             </div>
                             <div class="form-group">
                                 <label for="password"><i class="fa"></i> Hasło <? echo $password_error; ?></label>
-                                <input type="password" class="form-control" name="password" placeholder="Twoje hasło">
+                                <input type="password" class="form-control" name="password" placeholder="Wprowadź hasło grupy">
                             </div>
                             <div class="form-group">
                                 <label for="password_check"><i class="fa"></i> Powtórz hasło</label>
-                                <input type="password" class="form-control" name="password_check" placeholder="Podaj ponownie Twoje hasło">
+                                <input type="password" class="form-control" name="password_check" placeholder="Powtórz hasło grupy">
                             </div>
                             <br />
-                            <button type="submit" class="btn btn-col btn-block">Zarejestruj się!</button>
+                            <button type="submit" class="btn btn-col btn-block">Utwórz grupę!</button>
                         </form>
                     </div>
                 </div>
@@ -79,7 +91,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </div>
 </div>
-
 
 </body>
 

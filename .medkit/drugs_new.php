@@ -31,8 +31,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-  <link rel="stylesheet" type="text/css" href="css/home.css">
-  <link rel="stylesheet" type="text/css" href="css/modal.css">
   <link rel="stylesheet" type="text/css" href="css/navigation.css">
 </head>
 
@@ -40,7 +38,7 @@
 
 <?php 
 	$drugsNew = 'class="active"'; // set "active" class for current page
-	$showDropdown = "show"; // set drugs side-menu item to be permanently visible
+	$showDropdownDrugs = "show"; // set drugs side-menu item to be permanently visible
 	$header = "Dodaj nowy lek"; // set header string for current page
 	include("include/navigation.php"); // load template html with top-navigation bar, side-navigation bar and header
 ?>
@@ -78,7 +76,7 @@
 	</div>
 </div>
 
-<script src="js/drugs_overview.js"></script>
+
 
 </body>
 
