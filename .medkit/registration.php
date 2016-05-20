@@ -11,18 +11,15 @@
         $is_email_valid = login_valid($username, $login_error);
         $are_passwords_valid = password_valid($password, $password_check, $password_error);
 
-        $password = md5($password);
-        $password_check = md5($password_check);
-
-        if($is_email_valid && $are_passwords_valid){
-            if(register_user($username, $password)){
+        if($is_email_valid && $are_passwords_valid) {
+            $password = md5($password);
+            if (register($username, $password, 'user')) {
                 header("Location: index.php?reg=1");
                 exit();
             } else {
                 die("Database error");
             }
-        }
-        else {
+        } else {
             $form_style = "has-error";
         }
     }
