@@ -357,7 +357,7 @@
 			while ($row = mysqli_fetch_assoc($result)) {
 				echo
 					"<tr>".
-						"<td class=''>" . "<input type='checkbox' name='drugs[]' value='".$row["id"]."'></td>" .
+						"<td>" .$row["id"]. "</td>" .
 						"<td>" . $row["name"] . "</td>" .
 						"<td>" . $row["price"] . "</td>" .
 						"<td>" . $row["amount"] . "</td>" .

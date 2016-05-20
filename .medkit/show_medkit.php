@@ -71,18 +71,20 @@ if(!isset($_SESSION['username'])){
                             <button type="submit" class="btn btn-col btn-block">Go there</button>
                         </form>
                     </div>
-                
-                    <div class="col-sm-10">
-                        <?
-                            if(isset($_SESSION['medkit'])){
-                                db_drugs_print_table($_SESSION['medkit']);
-                            }
-                        ?>
-                        
+
+                <div class="col-sm-10">
+                    <div class="container-fluid">
+                            <br /><h2>Wyniki wyszukiwania</h2><hr />
+                            <table class="table table-hover">
+                                <?
+                                if(isset($_SESSION['medkit'])){
+                                    db_drugs_print_table($_SESSION['medkit']);
+                                }
+                                ?>
+                            </table>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
