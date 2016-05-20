@@ -9,18 +9,19 @@
 
 	function login_valid($login, &$error) {
 		if (filter_var($login, FILTER_VALIDATE_EMAIL)) {
-			if (is_in_database($login, 'users')) {
-				$error = "User with this name already exists";
+
+			if (is_login_in_database($login)) {
+				$error = "Podany adres email jest już przypisany do konta";
 				return false;
 			} else {
 				return true;
 			}
 		} else {
 			if (empty($login)){
-				$error = "Login cannot be empty";
+				$error = "Pole nie może być puste";
 				return false;
 			} else {
-				$error = "E-mail is invalid";
+				$error = "Nieprawidłowy adres email";
 				return false;
 			}
 		}
@@ -28,11 +29,11 @@
 
 	function password_valid($password, $password_check, &$error) {
 		if ($password != $password_check){
-			$error = "Password confirmation is different from password";
+			$error = "Wartości obu pól haseł muszą być identyczne";
 			return false;
 		} else {
 			if (empty($password)){
-				$error = "Password cannot be empty";
+				$error = "Pole nie może być puste";
 				return false;
 			} else {
 				return true;
@@ -43,12 +44,14 @@
 	function is_in_database($entity, $db){
 
 		require("config/sql_connect.php");
+
 		if ($db == 'users') {
 			$sql = "SELECT id FROM users WHERE email = '$entity'";
 		}
 		else if ($db == 'groups'){
 			$sql = "SELECT id FROM groups WHERE group_name = '$entity'";
 		}
+
 		$result = mysqli_query($dbConnection, $sql);
 
 		if (mysqli_num_rows($result) > 0) {
@@ -99,10 +102,10 @@
 			return true;
 		} else {
 			if (empty($login)){
-				$error = "Login cannot be empty";
+				$error = "Pole nie może być puste";
 				return false;
 			} else {
-				$error = "Login is invalid";
+				$error = "Nieprawidłowa nazwa użytkownika";
 				return false;
 			}
 		}
@@ -111,7 +114,7 @@
 	function password_basic_check($password, &$error){
 		//Funkcje mogą być w przyszłości rozbudowane
 		if (empty($password)){
-			$error = "Password cannot be empty";
+			$error = "Pole nie może być puste";
 			return false;
 		} else {
 			return true;
@@ -211,11 +214,11 @@
 	function is_group_name_valid($group_name, &$error){
 		//Funkcje mogą być w przyszłości rozbudowane
 		if (empty($group_name)){
-			$error = "Group name cannot be empty";
+			$error = "Grupa musi mieć nazwę";
 			return false;
 		} else {
 			if(is_in_database($group_name, 'groups')){
-				$error = "This group name is already used. Please choose different one";
+				$error = "Grupa o podanej nazwie już istnieje";
 				return false;
 			}
 			return true;
@@ -224,11 +227,11 @@
 
 	function does_group_exist($group_name, &$error){
 		if (empty($group_name)){
-			$error = "Group name cannot be empty";
+			$error = "Grupa musi mieć nazwę";
 			return false;
 		} else {
 			if(!is_in_database($group_name, 'groups')){
-				$error = "This group does not exist";
+				$error = "Grupa o podanej nazwie nie istnieje";
 				return false;
 			}
 			return true;
@@ -245,13 +248,14 @@
 			return true;
 		}
 		else {
-			$error = "Group name or password incorrect";
+			$error = "Nieprawdiłowe dane logowania do grupy";
 			return false;
 		}
 	}
 		
 	function correct_password($username, $password){
 		require("config/sql_connect.php");
+		
 		$sql = "SELECT id FROM users WHERE email = '$username' and password = '$password'";
 		$result = mysqli_query($dbConnection, $sql);
 

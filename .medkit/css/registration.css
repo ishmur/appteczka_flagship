@@ -1,0 +1,35 @@
+#bodyTag {
+    background-color: rgba(217,217,238,1)
+}
+
+#contentContainer {
+    padding-top: 100px
+}
+
+#btnHome {
+    margin: 10px 0px
+}
+
+.jumbotron {
+    height: 100px;
+    margin-bottom: 10px;
+}
+
+.jumbo-text {
+    background-color: #7878ce;
+    color: #fff;
+    padding: 25px 25px;
+    font-family: Montserrat, sans-serif;
+    text-shadow: 3px 3px 3px #192C30;
+    border-radius: 6px;
+}
+
+.jumbo-text > ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+li {
+    padding: 5px;
+}

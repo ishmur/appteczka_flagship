@@ -3,23 +3,20 @@
 
 	require_once("include/functions.php");
 
-	$user_error_message;
-	$password_error_message;
-	$show_modal;
-
-
 	if($_GET['logout']==1){
 		setcookie('username', "", 1);
 		setcookie('password', "", 1);
 		session_destroy();
 		session_start();
 		header("Location: index.php");
+		exit();
 	}
 
 	else if (isset($_COOKIE['username']) && isset($_COOKIE['password'])){
 		if (correct_password($_COOKIE['username'], $_COOKIE['password'])) {
-			header("Location: home.php");
 			$_SESSION['username'] = $_COOKIE['username'];
+			header("Location: home.php");
+			exit();
 		}
 	}
 
@@ -32,7 +29,6 @@
 		$user_check = login_basic_check($username, $user_error_message);
 		$password_check = password_basic_check($password, $password_error_message);
 
-		
 		// Proceed if no errors
 		if($user_check && $password_check){
 			$password = md5($password);
@@ -48,8 +44,8 @@
 					exit();
 				}
 			} else {
-				$user_error_message = "Incorrect user/password";
-				$password_error_message = "Incorrect user/password";
+				$user_error_message = "Nieprawidłowe dane logowania";
+				$password_error_message = "Nieprawidłowe dane logowania";
 				$show_modal = "style='display:block'";
 				$form_style = "has-error";
 			}
@@ -159,7 +155,7 @@
           <div class="container-fluid">
             <!-- This button is temporary until login functionality has been implemented -->
             <form action="" method="POST">
-				<input type="hidden" name="login" value="admin">
+				<input type="hidden" name="email" value="admin@a.pl">
 				<input type="hidden" name="password" value="admin">
 				<button type="submit" class="btn btn-lg btn-block btn-col" id="btnHome">Zaloguj jako admin</button>
 			</form>
