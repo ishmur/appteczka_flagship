@@ -17,13 +17,17 @@ $settings = Ustawienia
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-	  <a <?php echo $showSettings ?> href="settings.php" class="navbar-button" ><i class="fa fa-cogs"></i></a>
+
+		<button type="button" class="navbar-toggle navbar-button" <?php echo $showSettings ?> id="Settings-Btn">
+		  <i class="fa fa-cogs"></i>
+		</button>
+
 	  <a href="index.php?logout=1" class="navbar-button"><i class="fa fa-sign-out"></i></a>
       <p class="navbar-brand inline-element-center">
-		<i class="fa fa-medkit" style="font-size:20px"></i>	App.teczka
+		<i class="fa fa-medkit" style="font-size:30px"></i>	App.teczka
 	  </p>
     </div>
-    <div class="collapse navbar-collapse" id="myNavbar">
+    <div class="collapse navbar-collapse" id="NavbarTopMain">
       <ul class="nav navbar-nav">
         <li <?php echo $activity ?> ><a href="home.php">Ostatnia aktywność</a></li>
         <li <?php echo $drugsOverview ?> ><a href="drugs_overview.php">Przegląd leków</a></li>
@@ -33,6 +37,13 @@ $settings = Ustawienia
 		<li <?php echo $statistics ?> ><a href="statistics.php">Statystyki</a></li>
       </ul>
     </div>
+	<div class="collapse navbar-collapse" id="NavbarTopSettings">
+	  <ul class="nav navbar-nav">
+		  <li <?php echo $settingsUser ?> ><a href="settings.php">Ustawienia użytkownika</a></li>
+		  <li <?php echo $settingsGroupJoin ?> ><a href="group_join.php">Dołącz do grupy</a></li>
+		  <li <?php echo $settingsGroupNew ?> ><a href="group_new.php">Utwórz grupę</a></li>
+	  </ul>
+	</div>
   </div>
 </nav>
 
@@ -58,7 +69,7 @@ $settings = Ustawienia
 					<div class="dropdown-content col-sm-offset-2 <?php echo $showDropdownSettings ?>">
 						<a <?php echo $settingsUser ?> href="settings.php">Ustawienia użytkownika</a>
 						<a <?php echo $settingsGroupJoin ?> href="group_join.php">Dołącz do grupy</a>
-						<a <?php echo $settingsGroupNew ?> href="group_new.php">Stwórz grupę</a>
+						<a <?php echo $settingsGroupNew ?> href="group_new.php">Utwórz grupę</a>
 					</div>
 				</li>
 				<li><a href="index.php?logout=1">Wyloguj</a></li>
@@ -77,3 +88,11 @@ $settings = Ustawienia
 </div>
 
 <script src="js/navigation.js"></script>
+<?php
+	if(isset($showDropdownDrugs)){
+		echo "<script src=\"js/navigation_drugs.js\"></script>";
+	}
+	elseif (isset($showDropdownSettings)){
+		echo "<script src=\"js/navigation_settings.js\"></script>";
+	}
+?>

@@ -5,6 +5,7 @@ window.onclick = function(event) {
     if ((!climbUpDOM(event.target, "#myNavbar") && !climbUpDOM(event.target, ".navbar-toggle")) &&
         ((!climbUpDOM(event.target, ".dropdown-content") && !climbUpDOM(event.target, ".dropdown-toggle")))) {
         divTopNav.classList.remove("show");
+        divTopNavSettings.classList.remove("show");
         divSideNavDrugs.classList.remove("show");
     }
 }

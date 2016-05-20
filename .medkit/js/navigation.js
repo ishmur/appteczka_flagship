@@ -1,7 +1,10 @@
 'use strict';
 
-var divTopNav = document.getElementById("myNavbar");
+var divTopNav = document.getElementById("NavbarTopMain");
 var btnTopNav = document.getElementsByClassName("navbar-toggle")[0];
+
+var divTopNavSettings = document.getElementById("NavbarTopSettings");
+var btnTopNavSettings = document.getElementsByClassName("navbar-toggle")[1];
 
 var divSideNavDrugs = document.getElementsByClassName("dropdown-content")[0];
 var btnSideNavDrugs = document.getElementsByClassName("dropdown-toggle")[0];
@@ -44,8 +47,13 @@ function climbUpDOM(elem, selector) {
 
 btnTopNav.addEventListener('click', function(event) {
     divTopNav.classList.toggle("show");
+    divTopNavSettings.classList.remove("show");
 });
 
+btnTopNavSettings.addEventListener('click', function(event) {
+    divTopNavSettings.classList.toggle("show");
+    divTopNav.classList.remove("show");
+});
 
 btnSideNavDrugs.addEventListener('click', function(event) {
     divSideNavDrugs.classList.toggle("show");
@@ -60,6 +68,7 @@ window.onclick = function(event) {
     if ((!climbUpDOM(event.target, "#myNavbar") && !climbUpDOM(event.target, ".navbar-toggle")) &&
         ((!climbUpDOM(event.target, ".dropdown-content") && !climbUpDOM(event.target, ".dropdown-toggle")))) {
         divTopNav.classList.remove("show");
+        divTopNavSettings.classList.remove("show");
         divSideNavDrugs.classList.remove("show");
         divSideNavSettings.classList.remove("show");
     }

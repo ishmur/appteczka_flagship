@@ -15,8 +15,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-  <link rel="stylesheet" type="text/css" href="css/home.css">
-  <link rel="stylesheet" type="text/css" href="css/modal.css">
   <link rel="stylesheet" type="text/css" href="css/navigation.css">
 </head>
 
@@ -34,13 +32,13 @@
 	<div class="row">
 		<div class="col-sm-9 col-sm-offset-3">
 		
-			<div class="col-sm-2 inline-element-center">
+			<div class="col-sm-3 inline-element-center">
 				<h2>Zmiana hasła</h2><br />
 			</div>
 		
-			<div class="col-sm-10 col-sm-offset-2">
+			<div class="col-sm-9 col-sm-offset-3">
 				<div class="container-fluid">
-					<div class="col-sm-10">
+					<div class="col-sm-8">
 						<form class="action="#">
 							<div class="form-group">
 								<label for="pswOld"><i class="fa fa-lock"></i> Stare hasło</label>
@@ -64,8 +62,6 @@
 		</div>
 	</div>
 </div>
-
-<script src="js/navigation_settings.js"></script>
 
 </body>
 
