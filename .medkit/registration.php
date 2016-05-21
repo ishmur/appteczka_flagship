@@ -33,21 +33,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="css/index.css">
     <link rel="stylesheet" type="text/css" href="css/navigation.css">
     <link rel="stylesheet" type="text/css" href="css/registration.css">
 </head>
 
-<body id="bodyTag">
+<body id="bodyIndex">
 
-<div class="container" id="contentContainer">
+<?php
+    include("include/index_header.php");
+?>
 
-    <div class="row">
-        <div class="col-sm-7">
+<div class="container">
 
-            <div class="col-sm-11">
+    <div class="row" id="contentContainer">
+        <div class="col-sm-6">
+
+            <div class="col-sm-11 col-sm-offset-1">
                 <div class="container-fluid">
-                    <div class="col-sm-11">
-                        <form action = "" method = "POST">
+                    <div class="col-sm-12">
+                        <form action = "" method = "POST" id="RegistrationForm">
                             <div class="form-group <? echo $form_style; ?>">
                                 <label for="email"><span class="glyphicon glyphicon-user"></span> E-mail </label>
                                 <p style="color:red"><?php echo $login_error ?></p>
@@ -63,8 +68,18 @@
                                 <input type="password" class="form-control" name="password_check" placeholder="Powtórz hasło">
                             </div>
                             <br />
-                            <button type="submit" class="btn btn-col btn-block">Zarejestruj się!</button>
                         </form>
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <button type="submit" form="RegistrationForm" class="btn btn-col btn-block">Zarejestruj się!</button>
+                            </div>
+                            <div class="col-sm-6">
+                                <a href="index.php">
+                                    <button type="button" class="btn btn-col btn-block">Powrót</button>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -86,15 +101,21 @@
                         <ul>
                             <li>porządek w domowej apteczce</li>
                             <li>przypomnienie o przeterminowanych lekach</li>
-                            <li>robi wyśmienite latte macchiato</li>
+                            <li>darmowe przepisy na wyśmienite latte macchiato</li>
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 </div>
 
+<script src="js/index_contentCentering.js"></script>
+
+<?php
+    include("include/index_footer.php");
+?>
 
 </body>
 

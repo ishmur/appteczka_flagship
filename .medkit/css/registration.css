@@ -2,10 +2,6 @@
     background-color: rgba(217,217,238,1)
 }
 
-#contentContainer {
-    padding-top: 100px
-}
-
 #btnHome {
     margin: 10px 0px
 }
@@ -24,12 +20,6 @@
     border-radius: 6px;
 }
 
-.jumbo-text > ul {
-    padding: 0;
-    margin: 0;
-    list-style: none;
-}
-
-li {
+.jumbotron > li {
     padding: 5px;
 }

@@ -54,14 +54,6 @@
 			$form_style = "has-error";
 		}
 	}
-
-	if($_GET['reg']==1){
-		?>
-		<div class="alert alert-success">
-			<strong>Welcome aboard!</strong> Let's talk drugs, shall we?
-		</div>
-		<?
-	}
 ?>
 
 <!DOCTYPE html>
@@ -77,96 +69,113 @@
   <link rel="stylesheet" type="text/css" href="css/navigation.css">
 
 </head>
-<body id="bodyTag">
 
-<div class="container" id="contentContainer">
+<body id="bodyIndex">
 
-  <div class="row">
+<?php
+	include("include/index_header.php");
+?>
 
-    <div class="col-sm-7">
-      <div class="container-fluid inline-element-center">
-        <i class="fa fa-user-md" style="font-size:300px"></i>
-      </div>
-    </div>
+<div class="container" >
 
-    <div class="col-sm-5">
+	<div class="row" id="contentContainer">
 
-      <div class="container-fluid">
-        <div class="row">
-          <div class="container-fluid jumbotron inline-element-center">
-		  <h1 style="font-size:25px">
-			<i class="fa fa-medkit" ></i> App.teczka<br /><br />
-			System zarządzania <br />domową apteczką</h1>
-          </div>
-        </div>
-      </div>
+		<div class="col-sm-5">
+			<div class="container-fluid inline-element-center">
+				<i class="fa fa-user-md" style="font-size:300px"></i>
+			</div>
+		</div>
 
-        <div class="row">
-          <div class="container-fluid">
+		<div class="col-sm-6">
 
-            <button type="button" class="btn btn-lg btn-block btn-col" id="btnLogin">Logowanie</button>
+			<div class="container-fluid">
+				<div class="row">
+					<div class="container-fluid jumbotron inline-element-center">
+						<h1 style="font-size:25px">
+							<i class="fa fa-medkit" ></i> App.teczka<br /><br />
+							System zarządzania <br />domową apteczką</h1>
+					</div>
+				</div>
+			</div>
 
-            <!-- Modal -->
-            <div class="modal" role="dialog" <?php echo $show_modal ?> >
-              <div class="modal-dialog">
+			<div class="row">
+				<div class="container-fluid">
 
-                <!-- Modal content-->
-                <div class="modal-content">
+					<button type="button" class="btn btn-lg btn-block btn-col" id="btnLogin">Logowanie</button>
 
-                <div class="modal-header">
-                  <button type="button" class="close">&times;</button>
-                  <h4 style="color:white;"><span class="glyphicon glyphicon-home"></span> Logowanie</h4>
-                </div>
+					<!-- Modal -->
+					<div class="modal" role="dialog" <?php echo $show_modal ?> >
+						<div class="modal-dialog">
 
-                  <div class="modal-body">
-                    <form action="" method="POST">
-						<div class="form-group <? echo $form_style; ?>">
-							<label for="usrname"><span class="glyphicon glyphicon-user"></span> Nazwa użytkownika</label>
-							<p style="color:red"><?php echo $user_error_message ?></p>
-							<input type="email" name="email" class="form-control" id="usrname" placeholder="Nazwa użytkownika" value=<?php echo "$username" ?>>
+							<!-- Modal content-->
+							<div class="modal-content">
+
+								<div class="modal-header">
+									<button type="button" class="close">&times;</button>
+									<h4 style="color:white;"><span class="glyphicon glyphicon-home"></span> Logowanie</h4>
+								</div>
+
+								<div class="modal-body">
+									<form action="" method="POST">
+										<div class="form-group <? echo $form_style; ?>">
+											<label for="usrname"><span class="glyphicon glyphicon-user"></span> Nazwa użytkownika</label>
+											<p style="color:red"><?php echo $user_error_message ?></p>
+											<input type="email" name="email" class="form-control" id="usrname" placeholder="Nazwa użytkownika" value=<?php echo "$username" ?>>
+										</div>
+										<div class="form-group <? echo $form_style; ?>">
+											<label for="psw"><span class="glyphicon glyphicon-lock"></span> Hasło</label>
+											<p style="color:red"><?php echo $password_error_message ?></p>
+											<input type="password" name="password" class="form-control" id="psw" placeholder="Hasło">
+										</div>
+										<div class="checkbox">
+											<label><input type="checkbox" name="remember" value="" checked>Zapamiętaj mnie</label>
+										</div>
+										<button type="submit" class="btn btn-col btn-block"><span class="glyphicon glyphicon-off"></span> Zaloguj</button>
+									</form>
+								</div>
+
+								<div class="modal-footer">
+									<button type="button" class="btn btn-default btn-default pull-left" id="modalCancelBtn">
+										<span class="glyphicon glyphicon-remove"></span> Cofnij
+									</button>
+									<p><a href="#">Zapomniałem hasła</a></p>
+								</div>
+
+							</div>
 						</div>
-						<div class="form-group <? echo $form_style; ?>">
-							<label for="psw"><span class="glyphicon glyphicon-lock"></span> Hasło</label>
-							<p style="color:red"><?php echo $password_error_message ?></p>
-							<input type="password" name="password" class="form-control" id="psw" placeholder="Hasło">
-						</div>
-						<div class="checkbox">
-							<label><input type="checkbox" name="remember" value="" checked>Zapamiętaj mnie</label>
-						</div>
-						<button type="submit" class="btn btn-col btn-block"><span class="glyphicon glyphicon-off"></span> Zaloguj</button>
-                    </form>
-                  </div>
+					</div>
+				</div>
+			</div>
 
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-default btn-default pull-left" id="modalCancelBtn">
-						<span class="glyphicon glyphicon-remove"></span> Cofnij
-					</button>
-                    <p><a href="registration.php">Zarejestruj się</a></p>
-                    <p><a href="#">Zapomniałem hasła</a></p>
-                  </div>
+			<div class="row">
+				<div class="container-fluid">
+					<a href="registration.php">
+						<button type="button" class="btn btn-lg btn-block btn-col index-btn">Zarejestruj się</button>
+					</a>
+				</div>
+			</div>
 
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+			<div class="row">
+				<div class="container-fluid">
+					<!-- This button is temporary until login functionality has been implemented -->
+					<form action="" method="POST">
+						<input type="hidden" name="email" value="admin@a.pl">
+						<input type="hidden" name="password" value="admin">
+						<button type="submit" class="btn btn-lg btn-block btn-col index-btn">Zaloguj jako admin</button>
+					</form>
+				</div>
+			</div>
 
-        <div class="row">
-          <div class="container-fluid">
-            <!-- This button is temporary until login functionality has been implemented -->
-            <form action="" method="POST">
-				<input type="hidden" name="email" value="admin@a.pl">
-				<input type="hidden" name="password" value="admin">
-				<button type="submit" class="btn btn-lg btn-block btn-col" id="btnHome">Zaloguj jako admin</button>
-			</form>
-          </div>
-        </div>
+		</div>
+	</div>
 
-      </div>
-    </div>
-
-  </div>
 </div>
+
+<script src="js/index_contentCentering.js"></script>
+
+<?php
+	include("include/index_footer.php");
+?>
 
 <script src="js/index.js"></script>
 

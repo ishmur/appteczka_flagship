@@ -1,6 +1,5 @@
 'use strict';
 
-var contentContainer = document.getElementById("contentContainer");
 var btnLogin = document.getElementById("btnLogin");
 var btnCancelLogin = document.getElementById("modalCancelBtn");
 var modalDiv = document.getElementsByClassName("modal")[0];
@@ -13,7 +12,6 @@ function vertCenter(obj,objProperty) {
 
 window.addEventListener("resize", function() {
 	vertCenter(modalDialog, 'margin-top');
-	vertCenter(contentContainer, 'padding-top');
 })
 
 btnLogin.onclick = function() {
