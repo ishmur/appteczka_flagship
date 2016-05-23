@@ -10,7 +10,7 @@
 	function login_valid($login, &$error) {
 		if (filter_var($login, FILTER_VALIDATE_EMAIL)) {
 
-			if (is_login_in_database($login)) {
+			if (is_in_database($login, 'users')) {
 				$error = "Podany adres email jest już przypisany do konta";
 				return false;
 			} else {
