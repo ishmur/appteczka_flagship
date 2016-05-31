@@ -54,6 +54,7 @@
 			$form_style = "has-error";
 		}
 	}
+
 ?>
 
 <!DOCTYPE html>
@@ -74,6 +75,14 @@
 
 <?php
 	include("include/index_header.php");
+
+	if($_GET['reg']==1){
+		?>
+		<div class="alert alert-success overlay">
+			Welcome aboard the <strong>HMS App.teczka</strong>! Let's talk drugs, shall we?
+		</div>
+		<?
+	}
 ?>
 
 <div class="container" >

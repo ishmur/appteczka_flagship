@@ -18,6 +18,8 @@
                     <li>studenci Inżynierii Biomedycznej</li>
                     <li>niezbyt zaradni życiowo</li>
                     <li>party animals</li>
+					<li>hehe</li>
+					<li>he</li>
                 </ul>
             </div>
         </div>

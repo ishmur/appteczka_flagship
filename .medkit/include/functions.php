@@ -271,14 +271,19 @@
 		
 		require("config/sql_connect.php");
 
+		/*
 		$sql = "INSERT INTO DrugsDB (name, price, overdue, username)
 		VALUES (?,?,?,?)";
+		*/
+		
+		$sql = "INSERT INTO DrugsDB (group_id, name, price, amount, overdue, user_added)
+		VALUES (23,?,?,10,?,?)";
 
 		$stmt = mysqli_prepare($dbConnection,$sql);
 		if ($stmt === false) {
 			trigger_error('Statement failed! ' . htmlspecialchars(mysqli_error($dbConnection)), E_USER_ERROR);
 		}
-
+	
 		$bind = mysqli_stmt_bind_param($stmt, "siss", $name, $price, $overdue, $username);
 		if ($bind === false) {
 			trigger_error('Bind param failed!', E_USER_ERROR);
