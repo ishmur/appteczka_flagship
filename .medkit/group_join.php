@@ -76,7 +76,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
                             <div class="form-group">
                                 <label for="password"><i class="fa"></i> Hasło <? echo $password_error; ?></label>
-                                <input type="password" class="form-control" name="password" placeholder="Twoje hasło">
+                                <input type="password" class="form-control" name="password" placeholder="Hasło grupy">
                             </div>
                             <br />
                             <button type="submit" class="btn btn-col btn-block">Dołącz do grupy!</button>

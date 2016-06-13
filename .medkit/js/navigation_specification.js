@@ -8,6 +8,6 @@ window.onclick = function(event) {
         divTopNavSpecification.classList.remove("show");
         divTopNavSettings.classList.remove("show");
         divSideNavDrugs.classList.remove("show");
-        divSideNavSpecification.classList.remove("show");
+        divSideNavSettings.classList.remove("show");
     }
 }

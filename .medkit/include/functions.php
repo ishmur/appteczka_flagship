@@ -1,5 +1,5 @@
 <?php
-	
+
 	function trim_input($input){
 		$input = trim($input);
 		$input = stripcslashes($input);
@@ -252,10 +252,10 @@
 			return false;
 		}
 	}
-		
+
 	function correct_password($username, $password){
 		require("config/sql_connect.php");
-		
+
 		$sql = "SELECT id FROM users WHERE email = '$username' and password = '$password'";
 		$result = mysqli_query($dbConnection, $sql);
 
@@ -266,16 +266,16 @@
 			return false;
 		}
 	}
-	
+
 	function db_drugs_new_record($name, $price, $overdue, $username){
-		
+
 		require("config/sql_connect.php");
 
 		/*
 		$sql = "INSERT INTO DrugsDB (name, price, overdue, username)
 		VALUES (?,?,?,?)";
 		*/
-		
+
 		$sql = "INSERT INTO DrugsDB (group_id, name, price, amount, overdue, user_added)
 		VALUES (23,?,?,10,?,?)";
 
@@ -283,13 +283,13 @@
 		if ($stmt === false) {
 			trigger_error('Statement failed! ' . htmlspecialchars(mysqli_error($dbConnection)), E_USER_ERROR);
 		}
-	
+
 		$bind = mysqli_stmt_bind_param($stmt, "siss", $name, $price, $overdue, $username);
 		if ($bind === false) {
 			trigger_error('Bind param failed!', E_USER_ERROR);
 		}
 		//dlaczego "siss" a nie "sdss"
-		
+
 		$exec = mysqli_stmt_execute($stmt);
 		if ($exec === false) {
 			trigger_error('Statement execute failed! ' . htmlspecialchars(mysqli_stmt_error($stmt)), E_USER_ERROR);
@@ -310,13 +310,13 @@
 	function get_users_groups($user){
 		require("config/sql_connect.php");
 
-		$sql = "SELECT group_name FROM groups WHERE id IN (SELECT group_id FROM `connections` WHERE user_id IN (SELECT id FROM `users` WHERE email = '$user'))";
+		$sql = "SELECT group_name, id FROM groups WHERE id IN (SELECT group_id FROM `connections` WHERE user_id IN (SELECT id FROM `users` WHERE email = '$user'))";
 		$result = mysqli_query($dbConnection, $sql);
 		return $result;
 	}
-	
+
 	function db_drugs_new_specification($drugName, $drugEAN, $drugUnit, $drugSize, $drugActive){
-		
+
 		require("config/sql_connect.php");
 
 		$sql = "INSERT INTO drugs_specification (name, ean, unit, package_size, active)
@@ -346,7 +346,7 @@
 
 		$sql = "SELECT name, price, amount, overdue, user_added FROM DrugsDB WHERE group_id = (SELECT id FROM groups WHERE group_name = '$group_name')";
 		$result = mysqli_query($dbConnection, $sql);
-		
+
 		if (mysqli_num_rows($result) > 0) {
 
 			echo
@@ -375,13 +375,13 @@
 					"</tr>";
 			}
 		}
-		
+
 		echo
 			"</tbody>";
-		
+
 		mysqli_close($dbConnection);
 	}
-	
+
 	function db_drugs_print_table_specif(){
 		require("config/sql_connect.php");
 
@@ -400,7 +400,7 @@
 			  </tr>
 			</thead>
 			<tbody>";
-		
+
 		if (mysqli_num_rows($result) > 0) {
 			// output data of each row
 			while ($row = mysqli_fetch_assoc($result)) {
@@ -415,10 +415,10 @@
 					"</tr>";
 			}
 		}
-		
+
 		echo
 			"</tbody>";
-		
+
 		mysqli_close($dbConnection);
 	}
 
@@ -435,6 +435,71 @@
 		}
 
 		$bind = mysqli_stmt_bind_param($stmt, "i", $drugID);
+		if ($bind === false) {
+			trigger_error('Bind param failed!', E_USER_ERROR);
+		}
+
+		$exec = mysqli_stmt_execute($stmt);
+		if ($exec === false) {
+			trigger_error('Statement execute failed! ' . htmlspecialchars(mysqli_stmt_error($stmt)), E_USER_ERROR);
+		}
+
+		mysqli_stmt_close($stmt);
+		mysqli_close($dbConnection);
+
+	}
+
+	function groups_print_table($user){
+		require("config/sql_connect.php");
+
+		$result = get_users_groups($user);
+
+		echo
+			"<thead>
+		 		 <tr>
+					<th></th>
+					<th>Nazwa grupy</th>
+					<th></th>
+				  </tr>
+			</thead>
+			<tbody>";
+
+		if (mysqli_num_rows($result) > 0) {
+			// output data of each row
+			while ($row = mysqli_fetch_assoc($result)) {
+				$redirectUrl = "'group_change.php?" . $row["id"] . "'";
+				echo
+					"<tr>".
+					"<td class=''>" . "<input type='checkbox' name='groups[]' value='".$row["id"]."'></td>" .
+					"<td>" . $row["group_name"] . "</td>" .
+					"<td>" . "<a href=$redirectUrl>Wybierz</a>" . "</td>" .
+					"</tr>";
+			}
+		}
+
+		echo
+		"</tbody>";
+
+		mysqli_close($dbConnection);
+	}
+
+	function groups_leave($groupID, $username){
+
+		require("config/sql_connect.php");
+
+		$sql = "DELETE FROM connections 
+			WHERE group_id = ?
+			AND user_id = 
+				(SELECT id 
+				FROM users 
+				WHERE email = ?)";
+
+		$stmt = mysqli_prepare($dbConnection,$sql);
+		if ($stmt === false) {
+			trigger_error('Statement failed! ' . htmlspecialchars(mysqli_error($dbConnection)), E_USER_ERROR);
+		}
+
+		$bind = mysqli_stmt_bind_param($stmt, "is", $groupID, $username);
 		if ($bind === false) {
 			trigger_error('Bind param failed!', E_USER_ERROR);
 		}
