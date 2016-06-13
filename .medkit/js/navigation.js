@@ -3,14 +3,21 @@
 var divTopNav = document.getElementById("NavbarTopMain");
 var btnTopNav = document.getElementsByClassName("navbar-toggle")[0];
 
+var divTopNavSpecification = document.getElementById("NavbarTopSpecification");
+var btnTopNavSpecification = document.getElementsByClassName("navbar-toggle")[1];
+
 var divTopNavSettings = document.getElementById("NavbarTopSettings");
-var btnTopNavSettings = document.getElementsByClassName("navbar-toggle")[1];
+var btnTopNavSettings = document.getElementsByClassName("navbar-toggle")[2];
 
 var divSideNavDrugs = document.getElementsByClassName("dropdown-content")[0];
 var btnSideNavDrugs = document.getElementsByClassName("dropdown-toggle")[0];
 
-var divSideNavSettings = document.getElementsByClassName("dropdown-content")[1];
-var btnSideNavSettings = document.getElementsByClassName("dropdown-toggle")[1];
+var divSideNavSpecification = document.getElementsByClassName("dropdown-content")[1];
+var btnSideNavSpecification = document.getElementsByClassName("dropdown-toggle")[1];
+
+var divSideNavSettings = document.getElementsByClassName("dropdown-content")[2];
+var btnSideNavSettings = document.getElementsByClassName("dropdown-toggle")[2];
+
 
 
 function climbUpDOM(elem, selector) {
@@ -48,15 +55,27 @@ function climbUpDOM(elem, selector) {
 btnTopNav.addEventListener('click', function(event) {
     divTopNav.classList.toggle("show");
     divTopNavSettings.classList.remove("show");
+    divTopNavSpecification.classList.remove("show");
+});
+
+btnTopNavSpecification.addEventListener('click', function(event) {
+    divTopNavSpecification.classList.toggle("show");
+    divTopNav.classList.remove("show");
+    divTopNavSettings.classList.remove("show");
 });
 
 btnTopNavSettings.addEventListener('click', function(event) {
     divTopNavSettings.classList.toggle("show");
     divTopNav.classList.remove("show");
+    divTopNavSpecification.classList.remove("show");
 });
 
 btnSideNavDrugs.addEventListener('click', function(event) {
     divSideNavDrugs.classList.toggle("show");
+});
+
+btnSideNavSpecification.addEventListener('click', function(event) {
+    divSideNavSpecification.classList.toggle("show");
 });
 
 btnSideNavSettings.addEventListener('click', function(event) {
@@ -68,8 +87,10 @@ window.onclick = function(event) {
     if ((!climbUpDOM(event.target, "#myNavbar") && !climbUpDOM(event.target, ".navbar-toggle")) &&
         ((!climbUpDOM(event.target, ".dropdown-content") && !climbUpDOM(event.target, ".dropdown-toggle")))) {
         divTopNav.classList.remove("show");
+        divTopNavSpecification.classList.remove("show");
         divTopNavSettings.classList.remove("show");
         divSideNavDrugs.classList.remove("show");
+        divSideNavSpecification.classList.remove("show");
         divSideNavSettings.classList.remove("show");
     }
 }

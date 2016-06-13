@@ -19,7 +19,7 @@
 
 		db_drugs_new_specification($drugName, $drugEAN, $drugUnit, $drugSize, $drugActive);
 
-		header("Location: drugs_specification.php");
+		header("Location: specif_new.php");
 		exit();
 	}
 
@@ -40,7 +40,8 @@
 
 <?php 
 	$drugsSpecification = 'class="active"'; // set "active" class for current page
-	$showDropdownDrugs = "show"; // set drugs side-menu item to be permanently visible
+	$showDropdownSpecification = "show"; // set drugs side-menu item to be permanently visible
+	$showSpecification = 'style="color:white"'; // change color of settings top-navbar icon
 	$header = "Dodaj specyfikację leku"; // set header string for current page
 	include("include/navigation.php"); // load template html with top-navigation bar, side-navigation bar and header
 ?>

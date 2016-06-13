@@ -18,6 +18,10 @@ $settings = Ustawienia
         <span class="icon-bar"></span>
       </button>
 
+		<button type="button" class="navbar-toggle navbar-button" <?php echo $showSpecification ?> id="Specification-Btn">
+			<i class="fa fa-h-square"></i>
+		</button>
+
 		<button type="button" class="navbar-toggle navbar-button" <?php echo $showSettings ?> id="Settings-Btn">
 		  <i class="fa fa-cogs"></i>
 		</button>
@@ -32,11 +36,15 @@ $settings = Ustawienia
         <li <?php echo $activity ?> ><a href="home.php">Ostatnia aktywność</a></li>
         <li <?php echo $drugsOverview ?> ><a href="drugs_overview.php">Przegląd leków</a></li>
         <li <?php echo $drugsNew ?> ><a href="drugs_new.php">Dodaj nowy lek</a></li>
-		<li <?php echo $drugsSpecification ?> ><a href="drugs_specification.php">Dodaj specyfikację leku</a></li>
-        <li <?php echo $drugsOverdue ?> ><a href="drugs_overdue.php">Lista leków przeterminowanych</a></li>
+		<li <?php echo $drugsOverdue ?> ><a href="drugs_overdue.php">Lista leków przeterminowanych</a></li>
 		<li <?php echo $statistics ?> ><a href="statistics.php">Statystyki</a></li>
       </ul>
     </div>
+	  <div class="collapse navbar-collapse" id="NavbarTopSpecification">
+		  <ul class="nav navbar-nav">
+			  <li <?php echo $drugsSpecification ?> ><a href="specif_new.php">Dodaj specyfikację leku</a></li>
+		  </ul>
+	  </div>
 	<div class="collapse navbar-collapse" id="NavbarTopSettings">
 	  <ul class="nav navbar-nav">
 		  <li <?php echo $settingsUser ?> ><a href="settings.php">Ustawienia użytkownika</a></li>
@@ -59,8 +67,13 @@ $settings = Ustawienia
 					<div class="dropdown-content col-sm-offset-2 <?php echo $showDropdownDrugs ?>">
 						<a <?php echo $drugsOverview ?> href="drugs_overview.php">Przegląd leków</a>
 						<a <?php echo $drugsNew ?> href="drugs_new.php">Dodaj nowy lek</a>
-						<a <?php echo $drugsSpecification ?> href="drugs_specification.php">Dodaj specyfikację leku</a>
 						<a <?php echo $drugsOverdue ?> href="drugs_overdue.php">Lista leków przeterminowanych</a>
+					</div>
+				</li>
+				<li class="dropdown">
+					<a class="dropdown-toggle">Specyfikacje leków</a>
+					<div class="dropdown-content col-sm-offset-2 <?php echo $showDropdownSpecification ?>">
+						<a <?php echo $drugsSpecification ?> href="specif_new.php">Dodaj specyfikację leku</a>
 					</div>
 				</li>
 				<li <?php echo $statistics ?> ><a href="statistics.php">Statystyki</a></li>
@@ -91,6 +104,9 @@ $settings = Ustawienia
 <?php
 	if(isset($showDropdownDrugs)){
 		echo "<script src=\"js/navigation_drugs.js\"></script>";
+	}
+	if(isset($showDropdownSpecification)){
+		echo "<script src=\"js/navigation_specification.js\"></script>";
 	}
 	elseif (isset($showDropdownSettings)){
 		echo "<script src=\"js/navigation_settings.js\"></script>";
