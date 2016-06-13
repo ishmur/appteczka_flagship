@@ -1,9 +1,9 @@
 <!--
-Variables for setting current page (set variable before inlcuding the file):
+Variables for setting current page (set variable before including the file):
 $activity = Historia aktywności
 $drugsOverview = Przegląd leków
 $drugsNew = Dodaj nowy lek
-$drugsSpecification = Dodaj nową specyfikację leku
+$specificationOverview = Dodaj nową specyfikację leku
 $drugsOverdue = Leki przeterminowane
 $statistics = Statystyki
 $settings = Ustawienia
@@ -42,12 +42,14 @@ $settings = Ustawienia
     </div>
 	  <div class="collapse navbar-collapse" id="NavbarTopSpecification">
 		  <ul class="nav navbar-nav">
-			  <li <?php echo $drugsSpecification ?> ><a href="specif_new.php">Dodaj specyfikację leku</a></li>
+			  <li <?php echo $specificationOverview ?> ><a href="specif_overview.php">Przegląd specyfikacji leków</a></li>
+			  <li <?php echo $specificationNew ?> ><a href="specif_new.php">Dodaj specyfikację leku</a></li>
 		  </ul>
 	  </div>
 	<div class="collapse navbar-collapse" id="NavbarTopSettings">
 	  <ul class="nav navbar-nav">
 		  <li <?php echo $settingsUser ?> ><a href="settings.php">Ustawienia użytkownika</a></li>
+		  <li <?php echo $settingsGroupChoose ?> ><a href="group_choose.php">Wybierz grupę</a></li>
 		  <li <?php echo $settingsGroupJoin ?> ><a href="group_join.php">Dołącz do grupy</a></li>
 		  <li <?php echo $settingsGroupNew ?> ><a href="group_new.php">Utwórz grupę</a></li>
 	  </ul>
@@ -73,7 +75,8 @@ $settings = Ustawienia
 				<li class="dropdown">
 					<a class="dropdown-toggle">Specyfikacje leków</a>
 					<div class="dropdown-content col-sm-offset-2 <?php echo $showDropdownSpecification ?>">
-						<a <?php echo $drugsSpecification ?> href="specif_new.php">Dodaj specyfikację leku</a>
+						<a <?php echo $specificationOverview ?> href="specif_overview.php">Przegląd specyfikacji leków</a>
+						<a <?php echo $specificationNew ?> href="specif_new.php">Dodaj specyfikację leku</a>
 					</div>
 				</li>
 				<li <?php echo $statistics ?> ><a href="statistics.php">Statystyki</a></li>
@@ -81,6 +84,7 @@ $settings = Ustawienia
 					<a class="dropdown-toggle">Ustawienia</a>
 					<div class="dropdown-content col-sm-offset-2 <?php echo $showDropdownSettings ?>">
 						<a <?php echo $settingsUser ?> href="settings.php">Ustawienia użytkownika</a>
+						<a <?php echo $settingsGroupChoose ?> href="group_choose.php">Wybierz grupę</a>
 						<a <?php echo $settingsGroupJoin ?> href="group_join.php">Dołącz do grupy</a>
 						<a <?php echo $settingsGroupNew ?> href="group_new.php">Utwórz grupę</a>
 					</div>
@@ -94,6 +98,7 @@ $settings = Ustawienia
 			<div class="jumbotron text-center">
 				<h1><?php echo $header ?></h1> 
 				<h2><br \><?php echo "Zalogowany jako: " . $_SESSION['username'] ?></h2>
+				<h2><br \><?php echo "Wybrana apteczka: " . $_SESSION['username'] ?></h2>
 			</div>
 		</div>
 		

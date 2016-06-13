@@ -310,7 +310,7 @@
 	function get_users_groups($user){
 		require("config/sql_connect.php");
 
-		$sql = "SELECT group_name FROM groups WHERE id IN (SELECT group_id FROM `connections` WHERE user_id IN (SELECT id FROM `users` WHERE email = '$user'))";
+		$sql = "SELECT group_name, id FROM groups WHERE id IN (SELECT group_id FROM `connections` WHERE user_id IN (SELECT id FROM `users` WHERE email = '$user'))";
 		$result = mysqli_query($dbConnection, $sql);
 		return $result;
 	}
@@ -435,6 +435,70 @@
 		}
 
 		$bind = mysqli_stmt_bind_param($stmt, "i", $drugID);
+		if ($bind === false) {
+			trigger_error('Bind param failed!', E_USER_ERROR);
+		}
+
+		$exec = mysqli_stmt_execute($stmt);
+		if ($exec === false) {
+			trigger_error('Statement execute failed! ' . htmlspecialchars(mysqli_stmt_error($stmt)), E_USER_ERROR);
+		}
+
+		mysqli_stmt_close($stmt);
+		mysqli_close($dbConnection);
+
+	}
+
+	function groups_print_table($user){
+		require("config/sql_connect.php");
+
+		$result = get_users_groups($user);
+
+		echo
+		"<thead>
+					  <tr>
+						<th></th>
+						<th>Nazwa grupy (apteczki)</th>
+						<th></th>
+					  </tr>
+					</thead>
+					<tbody>";
+
+		if (mysqli_num_rows($result) > 0) {
+			// output data of each row
+			while ($row = mysqli_fetch_assoc($result)) {
+				echo
+					"<tr>".
+					"<td class=''>" . "<input type='checkbox' name='groups[]' value='".$row["id"]."'></td>" .
+					"<td>" . $row["group_name"] . "</td>" .
+					"<td>" . "Wybierz" . "</td>" .
+					"</tr>";
+			}
+		}
+
+		echo
+		"</tbody>";
+
+		mysqli_close($dbConnection);
+	}
+
+	function groups_leave($groupID, $username){
+
+		require("config/sql_connect.php");
+
+		$sql = "DELETE FROM connections 
+			WHERE group_id = ?
+			AND user_id = 
+				(SELECT id 
+				FROM users 
+				WHERE email = ?)";
+
+		$stmt = mysqli_prepare($dbConnection,$sql);
+		if ($stmt === false) {
+			trigger_error('Statement failed! ' . htmlspecialchars(mysqli_error($dbConnection)), E_USER_ERROR);
+		}
+
+		$bind = mysqli_stmt_bind_param($stmt, "is", $groupID, $username);
 		if ($bind === false) {
 			trigger_error('Bind param failed!', E_USER_ERROR);
 		}

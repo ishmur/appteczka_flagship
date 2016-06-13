@@ -30,11 +30,14 @@ h2 {
 }
 
 .jumbotron > h1 {
-	position: relative;
-	top: 50%;
-	transform: translateY(-50%); 
 	margin: 0;
-	font-size: 40px;
+	font-size: 50px;
+}
+
+.jumbotron > h2 {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0;
 }
 
 .inline-element-center {

@@ -32,7 +32,7 @@
 <?php 
 	$drugsOverview = 'class="active"'; // set "active" class for current page
 	$showDropdownDrugs = "show"; // set drugs side-menu item to be permanently visible
-	$header = "Przegląd leków (specyfikacje!)"; // set header string for current page
+	$header = "Przegląd leków"; // set header string for current page
 	include("include/navigation.php"); // load template html with top-navigation bar, side-navigation bar and header
 ?>
 
@@ -59,7 +59,7 @@
 							  <table class="table table-hover">
 								
 									<?php
-										db_drugs_print_table_specif();
+										db_drugs_print_table();
 									?>
 
 							  </table>

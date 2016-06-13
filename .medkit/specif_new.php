@@ -39,7 +39,7 @@
 <body id="bodyTag">
 
 <?php 
-	$drugsSpecification = 'class="active"'; // set "active" class for current page
+	$specificationNew = 'class="active"'; // set "active" class for current page
 	$showDropdownSpecification = "show"; // set drugs side-menu item to be permanently visible
 	$showSpecification = 'style="color:white"'; // change color of settings top-navbar icon
 	$header = "Dodaj specyfikację leku"; // set header string for current page
