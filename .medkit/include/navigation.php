@@ -98,7 +98,7 @@ $settings = Ustawienia
 			<div class="jumbotron text-center">
 				<h1><?php echo $header ?></h1> 
 				<h2><br \><?php echo "Zalogowany jako: " . $_SESSION['username'] ?></h2>
-				<h2><br \><?php echo "Wybrana apteczka: " . $_SESSION['username'] ?></h2>
+				<h2><br \><?php echo "Wybrana apteczka: " . $_SESSION["groupName"] ?></h2>
 			</div>
 		</div>
 		

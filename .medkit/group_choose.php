@@ -10,10 +10,42 @@
 
     $username = $_SESSION['username'];
 
+    if($_SERVER['REQUEST_METHOD'] == 'GET') {
+        $groupID = $_GET['change'];
+        $result = groups_change($groupID, $username);
+        if ($result){
+            $_SESSION["groupID"] = $groupID;
+            $_SESSION["groupName"] = groups_get_name($groupID);
+        }
+    }
+
     if($_SERVER['REQUEST_METHOD'] == 'POST') {
         foreach ($_POST['groups'] as $groupID) {
+            if ($groupID == $_SESSION["groupID"]){
+                $result = groups_change($groupID, $username, true); // true = setNULL
+                $_SESSION["groupID"] = null;
+                $_SESSION["groupName"] = null;
+            }
             groups_leave($groupID, $username);
         }
+    }
+
+    if($_GET['reg']==1){
+        ?>
+        <div class="alert alert-success">
+            You've just created new virtual medical kit called <strong><? echo $_SESSION['new_group']?></strong>! Good for you!
+        </div>
+        <?
+        $_SESSION['new_group'] = "";
+    }
+
+    if($_GET['reg']==2){
+        ?>
+        <div class="alert alert-success">
+            You've just joined a virtual medical kit called <strong><? echo $_SESSION['new_group']?></strong>! Cheers mate!
+        </div>
+        <?
+        $_SESSION['new_group'] = "";
     }
 
 ?>
