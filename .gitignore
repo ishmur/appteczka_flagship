@@ -1,2 +1,5 @@
 #PHP Storm IDE folder
 .idea/
+
+#Database connection
+.medkit/config/sql_connect.php
