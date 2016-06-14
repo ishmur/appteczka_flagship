@@ -76,7 +76,7 @@ if(!isset($_SESSION['username'])){
                             <table class="table table-hover">
                                 <?
                                 if(isset($_SESSION['medkit'])){
-                                    db_drugs_print_table($_SESSION['medkit']);
+                                    drugs_print_table($_SESSION['medkit']);
                                 }
                                 ?>
                             </table>

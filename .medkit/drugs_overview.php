@@ -1,6 +1,8 @@
 <?php
 	session_start();
 
+	$groupID = $_SESSION["groupID"];
+
 	require_once("include/functions.php");
 	
 	if(!isset($_SESSION['username'])){
@@ -10,7 +12,7 @@
 
 	if($_SERVER['REQUEST_METHOD'] == 'POST') {
 		foreach ($_POST['drugs'] as $drugID) {
-			db_drugs_delete_record($drugID);
+			drugs_delete_record($drugID, $groupID);
 		}
 	}
 
@@ -59,7 +61,7 @@
 							  <table class="table table-hover">
 								
 									<?php
-										db_drugs_print_table();
+										drugs_print_table($groupID);
 									?>
 
 							  </table>

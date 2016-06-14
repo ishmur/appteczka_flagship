@@ -17,7 +17,7 @@
 
 		//Validate inputs - TBA
 
-		db_drugs_new_specification($drugName, $drugEAN, $drugUnit, $drugSize, $drugActive);
+		specif_new_record($drugName, $drugEAN, $drugUnit, $drugSize, $drugActive);
 
 		header("Location: specif_new.php");
 		exit();

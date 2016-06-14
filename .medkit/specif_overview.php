@@ -9,8 +9,8 @@ if(!isset($_SESSION['username'])){
 }
 
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
-    foreach ($_POST['drugs'] as $drugID) {
-        db_drugs_delete_record($drugID);
+    foreach ($_POST['specif'] as $specifID) {
+        specif_delete_record($specifID);
     }
 }
 
@@ -60,7 +60,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <table class="table table-hover">
 
                                     <?php
-                                    db_drugs_print_table_specif();
+                                        specif_print_table();
                                     ?>
 
                                 </table>

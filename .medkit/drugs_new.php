@@ -13,10 +13,11 @@
 		$drugPrice = $_POST['drugPrice'];
 		$drugDate = $_POST['drugDate'];
 		$username = $_SESSION['username'];
+		$groupID = $_SESSION["groupID"];
 
 		//Validate inputs - TBA
 
-		db_drugs_new_record($drugName, $drugPrice, $drugDate, $username);
+		drugs_new_record($drugName, $drugPrice, $drugDate, $username, $groupID);
 
 		header("Location: drugs_new.php");
 		exit();
