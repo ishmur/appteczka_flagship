@@ -449,10 +449,10 @@
 
 	}
 
-	function groups_print_table($user){
+	function groups_print_table($username){
 		require("config/sql_connect.php");
 
-		$result = get_users_groups($user);
+		$result = get_users_groups($username);
 
 		echo
 			"<thead>
@@ -467,7 +467,7 @@
 		if (mysqli_num_rows($result) > 0) {
 			// output data of each row
 			while ($row = mysqli_fetch_assoc($result)) {
-				$redirectUrl = "'group_change.php?" . $row["id"] . "'";
+				$redirectUrl = "'group_choose.php?change=" . $row["id"] . "'";
 				echo
 					"<tr>".
 					"<td class=''>" . "<input type='checkbox' name='groups[]' value='".$row["id"]."'></td>" .
@@ -511,6 +511,90 @@
 
 		mysqli_stmt_close($stmt);
 		mysqli_close($dbConnection);
+
+	}
+
+	function groups_change($groupID, $username, $setNULL=false){
+
+		require("config/sql_connect.php");
+
+		$result = get_users_groups($username);
+		$changed = false;
+
+		if (mysqli_num_rows($result) > 0) {
+			while ($row = mysqli_fetch_assoc($result)) {
+				if ($row["id"] == $groupID) {
+
+					$sql = "UPDATE users 
+							SET show_group_id = ?
+							WHERE email = ?";
+
+					$stmt = mysqli_prepare($dbConnection,$sql);
+					if ($stmt === false) {
+						trigger_error('Statement failed! ' . htmlspecialchars(mysqli_error($dbConnection)), E_USER_ERROR);
+					}
+
+					$bind = mysqli_stmt_bind_param($stmt, "is", $groupID, $username);
+					if ($bind === false) {
+						trigger_error('Bind param failed!', E_USER_ERROR);
+					}
+
+					if ($setNULL == true) {
+						$groupID = null;
+					}
+
+					$exec = mysqli_stmt_execute($stmt);
+					if ($exec === false) {
+						trigger_error('Statement execute failed! ' . htmlspecialchars(mysqli_stmt_error($stmt)), E_USER_ERROR);
+					}
+
+					mysqli_stmt_close($stmt);
+					$changed = true;
+
+					break;
+				}
+			}
+		}
+
+		mysqli_close($dbConnection);
+
+		return $changed;
+	}
+
+	function groups_get_name($groupID){
+
+		require("config/sql_connect.php");
+
+		$sql = "SELECT group_name
+ 				FROM groups
+				WHERE id = ?";
+
+		$stmt = mysqli_prepare($dbConnection,$sql);
+		if ($stmt === false) {
+			trigger_error('Statement failed! ' . htmlspecialchars(mysqli_error($dbConnection)), E_USER_ERROR);
+		}
+
+		$bind = mysqli_stmt_bind_param($stmt, "i", $groupID);
+		if ($bind === false) {
+			trigger_error('Bind param failed!', E_USER_ERROR);
+		}
+
+		$exec = mysqli_stmt_execute($stmt);
+		if ($exec === false) {
+			trigger_error('Statement execute failed! ' . htmlspecialchars(mysqli_stmt_error($stmt)), E_USER_ERROR);
+		}
+		else {
+			$result = mysqli_stmt_get_result($stmt);
+			if (mysqli_num_rows($result) == 1) {
+				$row = mysqli_fetch_assoc($result);
+				$groupName = $row["group_name"];
+			}
+		}
+
+		mysqli_stmt_close($stmt);
+		mysqli_close($dbConnection);
+
+		return $groupName;
 
 	}
 

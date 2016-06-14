@@ -10,8 +10,22 @@
 
     $username = $_SESSION['username'];
 
+    if($_SERVER['REQUEST_METHOD'] == 'GET') {
+        $groupID = $_GET['change'];
+        $result = groups_change($groupID, $username);
+        if ($result){
+            $_SESSION["groupID"] = $groupID;
+            $_SESSION["groupName"] = groups_get_name($groupID);
+        }
+    }
+
     if($_SERVER['REQUEST_METHOD'] == 'POST') {
         foreach ($_POST['groups'] as $groupID) {
+            if ($groupID == $_SESSION["groupID"]){
+                $result = groups_change($groupID, $username, true); // true = setNULL
+                $_SESSION["groupID"] = null;
+                $_SESSION["groupName"] = null;
+            }
             groups_leave($groupID, $username);
         }
     }
