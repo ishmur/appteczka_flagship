@@ -69,16 +69,19 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="container-fluid">
                     <div class="col-sm-8">
                         <form action = "" method = "POST">
-                            <div class="form-group">
-                                <label for="email"><i class="fa"></i> Nazwa apteczki <? echo $group_name_error; ?></label>
+                            <div class="form-group <? echo $form_style; ?>">
+                                <label for="email"><i class="fa"></i>Nazwa apteczki</label>
+                                <p style="color:red"><?php echo $group_name_error ?></p>
                                 <input type="text" class="form-control" name="group_name" placeholder="Wprowadź nazwę nowej grupy">
                             </div>
-                            <div class="form-group">
-                                <label for="password"><i class="fa"></i> Hasło <? echo $password_error; ?></label>
+                            <div class="form-group <? echo $form_style; ?>">
+                                <label for="password"><i class="fa"></i>Hasło</label>
+                                <p style="color:red"><?php echo $password_error ?></p>
                                 <input type="password" class="form-control" name="password" placeholder="Wprowadź hasło grupy">
                             </div>
-                            <div class="form-group">
-                                <label for="password_check"><i class="fa"></i> Powtórz hasło</label>
+                            <div class="form-group <? echo $form_style; ?>">
+                                <label for="password_check"><i class="fa"></i>Powtórz hasło</label>
+                                <p style="color:red"><?php echo $password_error ?></p>
                                 <input type="password" class="form-control" name="password_check" placeholder="Powtórz hasło grupy">
                             </div>
                             <br />

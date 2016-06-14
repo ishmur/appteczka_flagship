@@ -12,6 +12,11 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $group_exists = does_group_exist($group_name, $group_name_error);
     $is_password_correct = correct_password_group($group_name, $password, $password_error);
+
+    if(isset($group_name_error) || isset($password_error)){
+        $form_style = "has-error";
+    }
+
     if($group_exists && $is_password_correct){
         $password = md5($password);
         if(add_to_group($group_name, $_SESSION['username'])){
@@ -62,8 +67,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="container-fluid">
                     <div class="col-sm-8">
                         <form action = "" method = "POST">
-                            <div class="form-group">
-                                <label for="email"><i class="fa"></i> Wybierz apteczkę <? echo $group_name_error; ?></label><br/>
+                            <div class="form-group <? echo $form_style; ?>">
+                                <label for="email"><i class="fa"></i>Wybierz apteczkę</label><br/>
+                                <p style="color:red"><?php echo $group_name_error ?></p>
                                 <input name="group_name" id="choose_group" list="group_list" placeholder="Wprowadź nazwę grupy" class="form-control">
                                 <datalist id="group_list">
                                     <?php
@@ -74,8 +80,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     ?>
                                 </datalist>
                             </div>
-                            <div class="form-group">
-                                <label for="password"><i class="fa"></i> Hasło <? echo $password_error; ?></label>
+                            <div class="form-group <? echo $form_style; ?>">
+                                <label for="password"><i class="fa"></i>Hasło </label>
+                                <p style="color:red"><?php echo $password_error ?></p>
                                 <input type="password" class="form-control" name="password" placeholder="Hasło grupy">
                             </div>
                             <br />
