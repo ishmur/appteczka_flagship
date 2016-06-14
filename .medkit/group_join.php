@@ -20,7 +20,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     if($group_exists && $is_password_correct){
         $password = md5($password);
         if(add_to_group($group_name, $_SESSION['username'])){
-            header("Location: home.php?reg=2");
+            header("Location: group_choose.php?reg=2");
             $_SESSION['new_group'] = $group_name;
             exit();
         } else {

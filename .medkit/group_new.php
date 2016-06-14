@@ -22,7 +22,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         $password = md5($password);
         if(register($group_name, $password, 'group')){
             give_admin_rights($group_name, $_SESSION['username']);
-            header("Location: home.php?reg=1");
+            header("Location: group_choose.php?reg=1");
             $_SESSION['new_group'] = $group_name;
             exit();
         } else {
