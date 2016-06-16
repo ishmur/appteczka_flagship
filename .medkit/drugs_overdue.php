@@ -1,10 +1,14 @@
 <?php
 	session_start();
+
+	require_once("include/functions.php");
 	
 	if(!isset($_SESSION['username'])){
 		header("Location: index.php?logout=1");
 		exit();
 	}
+
+	$groupID = $_SESSION["groupID"];
 ?>
 
 <!DOCTYPE html>
@@ -35,25 +39,14 @@
 				<div class="container-fluid">
 					<div class="col-md-12">
 						<div class="container-fluid">
-							  <br /><h2>Lista przeterminowanych leków w apteczce:</h2><hr />					  
-							  <table class="table table-hover">
-								<thead>
-								  <tr>
-									<th>Nazwa leku</th>
-								  </tr>
-								</thead>
-								<tbody>
-								  <tr>
-									<td>Apap</td>
-								  </tr>
-								  <tr>
-									<td>Acodin</td>
-								  </tr>
-								  <tr>
-									<td>Zyrtec</td>
-								  </tr>
-								</tbody>
-							  </table>
+							  <br /><h2>Lista przeterminowanych leków w apteczce:</h2><hr />
+								<table class="table table-hover">
+
+									<?php
+										drugs_overdue_print_table($groupID);
+									?>
+
+								</table>
 							  <button class="btn btn-col btn-block">Usuń leki z bazy</button>
 						</div>
 					</div>
@@ -64,29 +57,15 @@
 				<div class="container-fluid">
 					<div class="col-md-12">
 						<div class="container-fluid">
-							  <br /><h2>Lista leków, których termin ważności wkrótce minie:</h2><hr />					  
-							  <table class="table table-hover">
-								<thead>
-								  <tr>
-									<th>Nazwa leku</th>
-									<th>Termin ważności</th>
-								  </tr>
-								</thead>
-								<tbody>
-								  <tr>
-									<td>Apap</td>
-									<td>13.04.2018</td>
-								  </tr>
-								  <tr>
-									<td>Acodin</td>
-									<td>13.04.2018</td>
-								  </tr>
-								  <tr>
-									<td>Zyrtec</td>
-									<td>13.04.2018</td>
-								  </tr>
-								</tbody>
-							  </table>
+							  <br /><h2>Lista leków, których termin ważności wkrótce minie:</h2><hr />
+							<table class="table table-hover">
+
+								<?php
+								$soon = true; //print drugs that will be overdue in X days
+								drugs_overdue_print_table($groupID, $soon);
+								?>
+
+							</table>
 						</div>
 					</div>
 				</div>

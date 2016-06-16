@@ -335,6 +335,43 @@
 		return $result;
 	}
 
+	function users_get_group_id($username){
+
+		require("config/sql_connect.php");
+
+		$sql = "SELECT show_group_id
+					FROM users
+					WHERE email = ?";
+
+		$stmt = mysqli_prepare($dbConnection,$sql);
+		if ($stmt === false) {
+			trigger_error('Statement failed! ' . htmlspecialchars(mysqli_error($dbConnection)), E_USER_ERROR);
+		}
+
+		$bind = mysqli_stmt_bind_param($stmt, "s", $username);
+		if ($bind === false) {
+			trigger_error('Bind param failed!', E_USER_ERROR);
+		}
+
+		$exec = mysqli_stmt_execute($stmt);
+		if ($exec === false) {
+			trigger_error('Statement execute failed! ' . htmlspecialchars(mysqli_stmt_error($stmt)), E_USER_ERROR);
+		}
+		else {
+			$result = mysqli_stmt_get_result($stmt);
+			if (mysqli_num_rows($result) == 1) {
+				$row = mysqli_fetch_assoc($result);
+				$groupID = $row["show_group_id"];
+			}
+		}
+
+		mysqli_stmt_close($stmt);
+		mysqli_close($dbConnection);
+
+		return $groupID;
+
+	}
+
 	function drugs_new_record($drugName, $drugPrice, $drugDate, $username, $groupID){
 
 		require("config/sql_connect.php");
@@ -433,6 +470,70 @@
 		mysqli_stmt_close($stmt);
 		mysqli_close($dbConnection);
 
+	}
+
+	function drugs_overdue_print_table($groupID, $soon=false){
+
+		require("config/sql_connect.php");
+
+		$sql = "SELECT id, name, overdue
+				FROM DrugsDB 
+				WHERE group_id = $groupID";
+
+		$result = mysqli_query($dbConnection, $sql);
+
+		if (mysqli_num_rows($result) > 0) {
+
+			if ($soon){
+
+				echo
+				"<thead>
+				  <tr>
+					<th></th>
+					<th>Nazwa leku</th>
+					<th>Data ważności</th>
+				  </tr>
+				</thead>
+				<tbody>";
+
+				// output data of each row
+				while ($row = mysqli_fetch_assoc($result)) {
+					echo
+						"<tr>".
+						"<td class=''>" . "<input type='checkbox' name='overdue[]' value='".$row["id"]."'></td>" .
+						"<td>" . $row["name"] . "</td>" .
+						"<td>" . $row["overdue"] . "</td>" .
+						"</tr>";
+				}
+
+			} else {
+
+				echo
+				"<thead>
+				  <tr>
+					<th></th>
+					<th>Nazwa leku</th>
+				  </tr>
+				</thead>
+				<tbody>";
+
+				// output data of each row
+				while ($row = mysqli_fetch_assoc($result)) {
+					echo
+						"<tr>".
+						"<td class=''>" . "<input type='checkbox' name='overdue[]' value='".$row["id"]."'></td>" .
+						"<td>" . $row["name"] . "</td>" .
+						"</tr>";
+				}
+
+			}
+
+		}
+
+		echo
+		"</tbody>";
+
+		mysqli_close($dbConnection);
 	}
 
 	function specif_new_record($drugName, $drugEAN, $drugUnit, $drugSize, $drugActive){
@@ -639,43 +740,6 @@
 		mysqli_close($dbConnection);
 
 		return $changed;
-	}
-
-	function user_get_group_id($username){
-
-		require("config/sql_connect.php");
-
-		$sql = "SELECT show_group_id
-				FROM users
-				WHERE email = ?";
-
-		$stmt = mysqli_prepare($dbConnection,$sql);
-		if ($stmt === false) {
-			trigger_error('Statement failed! ' . htmlspecialchars(mysqli_error($dbConnection)), E_USER_ERROR);
-		}
-
-		$bind = mysqli_stmt_bind_param($stmt, "s", $username);
-		if ($bind === false) {
-			trigger_error('Bind param failed!', E_USER_ERROR);
-		}
-
-		$exec = mysqli_stmt_execute($stmt);
-		if ($exec === false) {
-			trigger_error('Statement execute failed! ' . htmlspecialchars(mysqli_stmt_error($stmt)), E_USER_ERROR);
-		}
-		else {
-			$result = mysqli_stmt_get_result($stmt);
-			if (mysqli_num_rows($result) == 1) {
-				$row = mysqli_fetch_assoc($result);
-				$groupID = $row["show_group_id"];
-			}
-		}
-
-		mysqli_stmt_close($stmt);
-		mysqli_close($dbConnection);
-
-		return $groupID;
-
 	}
 
 	function groups_get_name($groupID){

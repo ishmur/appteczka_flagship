@@ -1,14 +1,14 @@
 <?php
 	session_start();
 
-	$groupID = $_SESSION["groupID"];
-
 	require_once("include/functions.php");
 	
 	if(!isset($_SESSION['username'])){
 		header("Location: index.php?logout=1");
 		exit();
 	}
+
+	$groupID = $_SESSION["groupID"];
 
 	if($_SERVER['REQUEST_METHOD'] == 'POST') {
 		foreach ($_POST['drugs'] as $drugID) {
