@@ -432,7 +432,7 @@
 						"<td>" . $row["name"] . "</td>" .
 						"<td>" . $row["price"] . "</td>" .
 						"<td>" . $row["amount"] . "</td>" .
-						"<td>" . $row["overdue"] . "</td>" .
+						"<td>" . date("d-m-Y", strtotime($row["overdue"])). "</td>" .
 						"<td>" . $row["user_added"] . "</td>" .
 					"</tr>";
 			}
@@ -472,11 +472,50 @@
 
 	}
 
-	function drugs_overdue_print_table($groupID, $soon=false){
+	function drugs_overdue_check_date($groupID){
 
 		require("config/sql_connect.php");
 
-		$sql = "SELECT id, name, overdue
+		$dateNow = date_create(date('d-m-Y'));
+
+		$sql = "SELECT overdue
+				FROM DrugsDB 
+				WHERE group_id = $groupID";
+
+		$result = mysqli_query($dbConnection, $sql);
+
+		if (mysqli_num_rows($result) > 0){
+
+			while ($row = mysqli_fetch_assoc($result)){
+
+				$dateOverdue = date_create(date("d-m-Y", strtotime($row["overdue"])));
+				$dateDiffInterval = date_diff($dateNow,$dateOverdue);
+				$dateDiffInt = (int)($dateDiffInterval->format("%R%a")); //format "%R%a" = %R: +/- sign, %a: days
+
+				if ( $dateDiffInt < 0) {
+
+					return true;
+
+				}
+
+
+			}
+		}
+
+		mysqli_close($dbConnection);
+
+		return false;
+
+	}
+
+	function drugs_overdue_print_table($groupID, $soonBool=false){
+
+		require("config/sql_connect.php");
+
+		$dateNow = date_create(date('d-m-Y'));
+		$soonInt = 14;
+
+		$sql = "SELECT id, name, overdue, amount
 				FROM DrugsDB 
 				WHERE group_id = $groupID";
 
@@ -484,26 +523,37 @@
 
 		if (mysqli_num_rows($result) > 0) {
 
-			if ($soon){
+			if ($soonBool){
 
 				echo
 				"<thead>
 				  <tr>
 					<th></th>
 					<th>Nazwa leku</th>
+					<th>Ilość</th>
 					<th>Data ważności</th>
+					<th>Pozostało dni</th>
 				  </tr>
 				</thead>
 				<tbody>";
 
-				// output data of each row
 				while ($row = mysqli_fetch_assoc($result)) {
-					echo
-						"<tr>".
-						"<td class=''>" . "<input type='checkbox' name='overdue[]' value='".$row["id"]."'></td>" .
-						"<td>" . $row["name"] . "</td>" .
-						"<td>" . $row["overdue"] . "</td>" .
-						"</tr>";
+
+					$dateOverdue = date_create(date("d-m-Y", strtotime($row["overdue"])));
+					$dateDiffInterval = date_diff($dateNow,$dateOverdue);
+					$dateDiffInt = (int)($dateDiffInterval->format("%R%a")); //format "%R%a" = %R: +/- sign, %a: days
+
+					if ( $dateDiffInt > 0 && $dateDiffInt < $soonInt){
+						echo
+							"<tr>".
+								"<td class=''>" . "<input type='checkbox' name='overdue[]' value='".$row["id"]."'></td>" .
+								"<td>" . $row["name"] . "</td>" .
+								"<td>" . $row["amount"] . "</td>" .
+								"<td>" . date_format($dateOverdue, "d-m-Y") . "</td>" .
+								"<td>" . $dateDiffInterval->format("%a"); "</td>" .
+							"</tr>";
+					}
+
 				}
 
 			} else {
@@ -513,17 +563,25 @@
 				  <tr>
 					<th></th>
 					<th>Nazwa leku</th>
+					<th>Ilość</th>
 				  </tr>
 				</thead>
 				<tbody>";
 
-				// output data of each row
 				while ($row = mysqli_fetch_assoc($result)) {
-					echo
-						"<tr>".
-						"<td class=''>" . "<input type='checkbox' name='overdue[]' value='".$row["id"]."'></td>" .
-						"<td>" . $row["name"] . "</td>" .
+
+					$dateOverdue = date_create(date("d-m-Y", strtotime($row["overdue"])));
+					$dateDiffInterval = date_diff($dateNow,$dateOverdue);
+					$dateDiffInt = (int)($dateDiffInterval->format("%R%a")); //format "%R%a" = %R: +/- sign, %a: days
+
+					if ( $dateDiffInt < 0){
+						echo
+							"<tr>".
+							"<td class=''>" . "<input type='checkbox' name='overdue[]' value='".$row["id"]."'></td>" .
+							"<td>" . $row["name"] . "</td>" .
+							"<td>" . $row["amount"] . "</td>" .
 						"</tr>";
+					}
 				}
 
 			}
