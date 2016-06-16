@@ -88,7 +88,7 @@
 								<input type="text" class="form-control" name="drugActive" placeholder="Wpisz substancję czynną" required="required">
 							</div>
 							<br />
-							<button type="submit" class="btn btn-col btn-block">Dodaj nowy lek</button>
+							<button type="submit" class="btn btn-col btn-block">Dodaj nową specyfikację</button>
 						</form>
 					</div>
 				</div>
