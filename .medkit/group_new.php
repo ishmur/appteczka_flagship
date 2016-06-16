@@ -16,12 +16,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = trim_input($_POST['password']);
     $password_check = trim_input($_POST['password_check']);
 
-    $is_group_name_valid = is_group_name_valid($group_name, $group_name_error);
+    $is_group_name_valid = groups_check_name_valid($group_name, $group_name_error);
     $are_passwords_valid = password_valid($password, $password_check, $password_error);
     if($is_group_name_valid && $are_passwords_valid){
         $password = md5($password);
         if(register($group_name, $password, 'group')){
-            give_admin_rights($group_name, $_SESSION['username']);
+            groups_give_admin_rights($group_name, $_SESSION['username']);
             header("Location: group_choose.php?reg=1");
             $_SESSION['new_group'] = $group_name;
             exit();

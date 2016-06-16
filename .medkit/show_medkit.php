@@ -6,7 +6,7 @@ require_once("include/functions.php");
 
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
     $group_name = trim_input($_POST['group_name']);
-    $group_exists = does_group_exist($group_name, $group_name_error);
+    $group_exists = groups_check_if_exists($group_name, $group_name_error);
     
     if($group_exists){
         $_SESSION['medkit'] = $group_name;
@@ -57,7 +57,7 @@ if(!isset($_SESSION['username'])){
                                 <input name="group_name" id="choose_group" list="group_list" >
                                 <datalist id="group_list">
                                     <?php
-                                    $result = get_users_groups($_SESSION['username']);
+                                    $result = groups_get_user_groups($_SESSION['username']);
                                     while ($row = mysqli_fetch_assoc($result)) {
                                         echo "<option value=" .$row['group_name']. "></option>";
                                     }
