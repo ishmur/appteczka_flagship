@@ -8,7 +8,7 @@ if(!isset($_SESSION['username'])){
     exit();
 }
 
-if($_SERVER['REQUEST_METHOD'] == 'POST') {
+if(isset($_POST['specif'])) {
     foreach ($_POST['specif'] as $specifID) {
         specif_delete_record($specifID);
     }
@@ -46,21 +46,26 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="col-md-8 col-md-offset-2">
                 <div class="container-fluid">
                     <div class="col-md-12">
-                        <form class="action="#">
+                        <form class="" method="POST">
                         <div class="form-group">
                             <label for="drugsSearch"><i class="fa fa-question-circle"></i> Szukaj specyfikacji...</label>
-                            <input type="text" class="form-control" id="drugsSearch" placeholder="Wpisz kod EAN">
+                            <input type="text" name="ean" class="form-control" id="ean" placeholder="Wpisz kod EAN">
                             <br />
                             <button type="submit" class="btn btn-col btn-block">Szukaj</button>
                         </div>
                         </form>
                         <div class="container-fluid">
-                            
+
                                 <br /><h2>Wyniki wyszukiwania</h2><hr />
                                 
-
                                     <?php
-                                        specif_print_table();
+                                        if(!isset($_POST['ean'])) {
+                                            if (isset($_GET['p'])) $pag_query = specif_pagination($_GET['p']);
+                                            else $pag_query = specif_pagination();
+                                            specif_print_table($pag_query);
+                                        } else {
+                                            specif_print_ean($_POST['ean']);
+                                        }
                                     ?>
 
                         </div>
