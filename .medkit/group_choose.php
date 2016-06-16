@@ -15,7 +15,7 @@
         $result = groups_change($groupID, $username);
         if ($result){
             $_SESSION["groupID"] = $groupID;
-            $_SESSION["groupName"] = groups_get_name($groupID);
+            $_SESSION["groupName"] = groups_get_selected_name($groupID);
         }
     }
 
