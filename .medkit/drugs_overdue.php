@@ -1,9 +1,22 @@
 <?php
 	session_start();
+
+	require_once("include/functions.php");
 	
 	if(!isset($_SESSION['username'])){
 		header("Location: index.php?logout=1");
 		exit();
+	}
+
+	$groupID = $_SESSION["groupID"];
+
+	if($_SERVER['REQUEST_METHOD'] == 'POST') {
+		foreach ($_POST['overdueSoon'] as $drugID) {
+			drugs_delete_record($drugID, $groupID);
+		}
+		foreach ($_POST['overdue'] as $drugID) {
+			drugs_delete_record($drugID, $groupID);
+		}
 	}
 ?>
 
@@ -35,26 +48,12 @@
 				<div class="container-fluid">
 					<div class="col-md-12">
 						<div class="container-fluid">
-							  <br /><h2>Lista przeterminowanych leków w apteczce:</h2><hr />					  
-							  <table class="table table-hover">
-								<thead>
-								  <tr>
-									<th>Nazwa leku</th>
-								  </tr>
-								</thead>
-								<tbody>
-								  <tr>
-									<td>Apap</td>
-								  </tr>
-								  <tr>
-									<td>Acodin</td>
-								  </tr>
-								  <tr>
-									<td>Zyrtec</td>
-								  </tr>
-								</tbody>
-							  </table>
-							  <button class="btn btn-col btn-block">Usuń leki z bazy</button>
+							  <br><h2>Wykaz przeterminowanych leków:</h2><hr>
+
+									<?php
+										drugs_overdue_print_table($groupID);
+									?>
+
 						</div>
 					</div>
 				</div>
@@ -64,29 +63,13 @@
 				<div class="container-fluid">
 					<div class="col-md-12">
 						<div class="container-fluid">
-							  <br /><h2>Lista leków, których termin ważności wkrótce minie:</h2><hr />					  
-							  <table class="table table-hover">
-								<thead>
-								  <tr>
-									<th>Nazwa leku</th>
-									<th>Termin ważności</th>
-								  </tr>
-								</thead>
-								<tbody>
-								  <tr>
-									<td>Apap</td>
-									<td>13.04.2018</td>
-								  </tr>
-								  <tr>
-									<td>Acodin</td>
-									<td>13.04.2018</td>
-								  </tr>
-								  <tr>
-									<td>Zyrtec</td>
-									<td>13.04.2018</td>
-								  </tr>
-								</tbody>
-							  </table>
+								<br><br><h2>Lista leków, których termin ważności wkrótce minie:</h2><hr>
+
+									<?php
+										$soonInt = 14; //how many days
+										drugs_overdue_soon_print_table($groupID, $soonInt);
+									?>
+
 						</div>
 					</div>
 				</div>

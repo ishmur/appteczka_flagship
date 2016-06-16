@@ -110,18 +110,15 @@
             </div>
 		
 			<div class="modal-body">
-				<h5><b>Lista przeterminowanych leków w apteczce:</b></h5>
-				<p>#lista1</p><p>#lista1</p><p>#lista1</p><p>#lista1</p><p>#lista1</p><p>#lista1</p><p>#lista1</p><p>#lista1</p><p>#lista1</p><p>#lista1</p><p>#lista1</p>
-				<br />
-				<h5><b>Lista leków, których termin ważności wkrótce minie:</b></h5>
-				<p>#Lista2</p>
+				<h5><b>W apteczce znajdują się przeterminowane leki.</b></h5>
+				<p>Proszę przejść do zakładki "Lista leków przeterminowanych" i sprawdzić, których leków nie należy stosować</p>
 			</div>
 			
 			<div class="modal-footer">
-                <button type="button" class="btn btn-default btn-default pull-left" id="modalCancelBtn">
+                <button type="button" class="btn btn-danger pull-left" id="modalCancelBtn">
 					<i class="fa fa-ban"></i> Ok, rozumiem.
 				</button>
-				<a href="drugs_overdue.php"><button type="button" class="btn btn-default btn-default pull-right">
+				<a href="drugs_overdue.php"><button type="button" class="btn btn-success pull-right">
 					<i class="fa fa-share"></i> Przejdź do listy leków.
 				</button></a>
 			</div>

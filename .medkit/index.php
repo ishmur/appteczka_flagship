@@ -15,7 +15,7 @@
 	else if (isset($_COOKIE['username']) && isset($_COOKIE['password'])){
 		if (correct_password($_COOKIE['username'], $_COOKIE['password'])) {
 			$_SESSION['username'] = $_COOKIE['username'];
-			$_SESSION["groupID"] = user_get_group_id($_SESSION['username']);
+			$_SESSION["groupID"] = users_get_group_id($_SESSION['username']);
 			$_SESSION["groupName"] = groups_get_name($_SESSION["groupID"]);
 			header("Location: home.php");
 			exit();
@@ -35,11 +35,17 @@
 		if($user_check && $password_check){
 			$password = md5($password);
 			if(correct_password($username, $password)) {
+				
 				$_SESSION['username'] = $username;
-				$_SESSION["groupID"] = user_get_group_id($_SESSION['username']);
+				$_SESSION["groupID"] = users_get_group_id($_SESSION['username']);
 				$_SESSION["groupName"] = groups_get_name($_SESSION["groupID"]);
-				$_SESSION['drugsOverdueModal'] = "show";
+
+				if (drugs_overdue_check_date($_SESSION["groupID"])){
+					$_SESSION['drugsOverdueModal'] = "show";
+				}
+
 				header("Location: home.php");
+
 				if(!$remember_me) {
 					exit();
 				} else {
