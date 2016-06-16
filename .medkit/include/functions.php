@@ -7,6 +7,42 @@
 		return $input;
 	}
 
+	function db_statement(){
+		$args = func_get_args();
+		if(count($args) < 4){
+			trigger_error("Not enough input arguments");
+			return false;
+		} else {
+			$dbConnection = $args[0];
+			$sql = $args[1];
+			$types = $args[2];
+			$params = $args[3];
+
+			$stmt = mysqli_prepare($dbConnection,$sql);
+			if ($stmt === false) {
+				trigger_error('Statement failed! ' . htmlspecialchars(mysqli_error($dbConnection)), E_USER_ERROR);
+				return false;
+			}
+
+			$bind = call_user_func_array(array($stmt, "bind_param"), array_merge(array($types), $params));
+			if ($bind === false) {
+				trigger_error('Bind param failed!', E_USER_ERROR);
+				return false;
+			}
+
+			$exec = mysqli_stmt_execute($stmt);
+			if ($exec === false) {
+				trigger_error('Statement execute failed! ' . htmlspecialchars(mysqli_stmt_error($stmt)), E_USER_ERROR);
+				return false;
+			}
+
+			mysqli_stmt_close($stmt);
+			mysqli_close($dbConnection);
+			return true;
+
+		}
+	}
+
 	function login_valid($login, &$error) {
 		if (filter_var($login, FILTER_VALIDATE_EMAIL)) {
 
@@ -77,24 +113,8 @@
 				VALUES (?,?)";
 		}
 
-		$stmt = mysqli_prepare($dbConnection,$sql);
-		if ($stmt === false) {
-			trigger_error('Statement failed! ' . htmlspecialchars(mysqli_error($dbConnection)), E_USER_ERROR);
-		}
-
-		$bind = mysqli_stmt_bind_param($stmt, "ss", $username, $password);
-		if ($bind === false) {
-			trigger_error('Bind param failed!', E_USER_ERROR);
-		}
-
-		$exec = mysqli_stmt_execute($stmt);
-		if ($exec === false) {
-			trigger_error('Statement execute failed! ' . htmlspecialchars(mysqli_stmt_error($stmt)), E_USER_ERROR);
-		}
-
-		mysqli_stmt_close($stmt);
-		mysqli_close($dbConnection);
-		return true;
+		$processed = db_statement($dbConnection, $sql, "ss", array(&$username, &$password));
+		return $processed;
 	}
 
 	function login_basic_check($login, &$error){
