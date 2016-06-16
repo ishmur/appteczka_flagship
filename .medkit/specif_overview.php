@@ -55,17 +55,14 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </div>
                         </form>
                         <div class="container-fluid">
-                            <form action="" method='POST'>
+                            
                                 <br /><h2>Wyniki wyszukiwania</h2><hr />
-                                <table class="table table-hover">
+                                
 
                                     <?php
                                         specif_print_table();
                                     ?>
 
-                                </table>
-                                <button type="submit" class="btn btn-col btn-block">Usuń zaznaczone leki</button>
-                            </form>
                         </div>
                     </div>
                 </div>

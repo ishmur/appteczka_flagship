@@ -56,17 +56,14 @@
 							</div>
 						</form>
 						<div class="container-fluid">
-							<form action="" method='POST'>
+							
 							  <br /><h2>Wyniki wyszukiwania</h2><hr />					  
-							  <table class="table table-hover">
+							  
 								
 									<?php
 										drugs_print_table($groupID);
 									?>
 
-							  </table>
-							  <button type="submit" class="btn btn-col btn-block">Usuń zaznaczone leki</button>
-							</form>
 						</div>
 					</div>
 				</div>

@@ -9,6 +9,15 @@
 	}
 
 	$groupID = $_SESSION["groupID"];
+
+	if($_SERVER['REQUEST_METHOD'] == 'POST') {
+		foreach ($_POST['overdueSoon'] as $drugID) {
+			drugs_delete_record($drugID, $groupID);
+		}
+		foreach ($_POST['overdue'] as $drugID) {
+			drugs_delete_record($drugID, $groupID);
+		}
+	}
 ?>
 
 <!DOCTYPE html>
@@ -39,15 +48,12 @@
 				<div class="container-fluid">
 					<div class="col-md-12">
 						<div class="container-fluid">
-							  <br /><h2>Lista przeterminowanych leków w apteczce:</h2><hr />
-								<table class="table table-hover">
+							  <br><h2>Wykaz przeterminowanych leków:</h2><hr>
 
 									<?php
 										drugs_overdue_print_table($groupID);
 									?>
 
-								</table>
-							  <button class="btn btn-col btn-block">Usuń leki z bazy</button>
 						</div>
 					</div>
 				</div>
@@ -57,15 +63,13 @@
 				<div class="container-fluid">
 					<div class="col-md-12">
 						<div class="container-fluid">
-							  <br /><h2>Lista leków, których termin ważności wkrótce minie:</h2><hr />
-							<table class="table table-hover">
+								<br><br><h2>Lista leków, których termin ważności wkrótce minie:</h2><hr>
 
-								<?php
-								$soon = true; //print drugs that will be overdue in X days
-								drugs_overdue_print_table($groupID, $soon);
-								?>
+									<?php
+										$soonInt = 14; //how many days
+										drugs_overdue_soon_print_table($groupID, $soonInt);
+									?>
 
-							</table>
 						</div>
 					</div>
 				</div>

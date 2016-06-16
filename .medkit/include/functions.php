@@ -412,7 +412,9 @@
 		if (mysqli_num_rows($result) > 0) {
 
 			echo
-			"<thead>
+			"<form action='' method='POST'>
+			<table class='table table-hover'>
+			<thead>
 			  <tr>
 			  	<th></th>
 				<th>Nazwa leku</th>
@@ -436,10 +438,20 @@
 						"<td>" . $row["user_added"] . "</td>" .
 					"</tr>";
 			}
-		}
 
-		echo
-			"</tbody>";
+			echo
+				"</tbody>
+				</table>
+				<button type='submit' class='btn btn-col btn-block'>Usuń zaznaczone leki</button>
+				</form>";
+
+		} else {
+
+			echo
+				"<p>Apteczka jest pusta.</p>" .
+				"<a href='drugs_new.php'>Dodaj nowy lek</a>";
+
+		}
 
 		mysqli_close($dbConnection);
 	}
@@ -478,28 +490,17 @@
 
 		$dateNow = date_create(date('d-m-Y'));
 
-		$sql = "SELECT overdue
+		$sql = "SELECT id, name, overdue, amount
 				FROM DrugsDB 
-				WHERE group_id = $groupID";
+				WHERE group_id = $groupID
+				AND DATE(overdue) < CURRENT_DATE()";
 
 		$result = mysqli_query($dbConnection, $sql);
 
 		if (mysqli_num_rows($result) > 0){
 
-			while ($row = mysqli_fetch_assoc($result)){
+			return true;
 
-				$dateOverdue = date_create(date("d-m-Y", strtotime($row["overdue"])));
-				$dateDiffInterval = date_diff($dateNow,$dateOverdue);
-				$dateDiffInt = (int)($dateDiffInterval->format("%R%a")); //format "%R%a" = %R: +/- sign, %a: days
-
-				if ( $dateDiffInt < 0) {
-
-					return true;
-
-				}
-
-
-			}
 		}
 
 		mysqli_close($dbConnection);
@@ -512,21 +513,72 @@
 
 		require("config/sql_connect.php");
 
-		$dateNow = date_create(date('d-m-Y'));
-		$soonInt = 14;
-
 		$sql = "SELECT id, name, overdue, amount
 				FROM DrugsDB 
-				WHERE group_id = $groupID";
+				WHERE group_id = $groupID
+				AND DATE(overdue) < CURRENT_DATE()";
 
 		$result = mysqli_query($dbConnection, $sql);
 
 		if (mysqli_num_rows($result) > 0) {
 
-			if ($soonBool){
+			echo
+				"<form action='' method='POST'>
+				<table class='table table-hover'>
+				<thead>
+				  <tr>
+					<th></th>
+					<th>Nazwa leku</th>
+					<th>Ilość</th>
+				  </tr>
+				</thead>
+				<tbody>";
+
+			while ($row = mysqli_fetch_assoc($result)) {
 
 				echo
-				"<thead>
+					"<tr>".
+					"<td class=''>" . "<input type='checkbox' name='overdue[]' value='".$row["id"]."'></td>" .
+					"<td>" . $row["name"] . "</td>" .
+					"<td>" . $row["amount"] . "</td>" .
+					"</tr>";
+
+			}
+
+			echo
+				"</table>
+				</tbody>
+				<button class='btn btn-col btn-block'>Usuń zaznaczone lekarstwa</button>
+				</form>";
+
+		} else {
+
+			echo
+				"<p>Wszystkie leki znajdujące się w apteczce są przydatne do spożycia.</p>";
+
+		}
+
+		mysqli_close($dbConnection);
+	}
+
+	function drugs_overdue_soon_print_table($groupID, $soonInt){
+
+		require("config/sql_connect.php");
+
+		$sql = "SELECT id, name, overdue, amount
+				FROM DrugsDB 
+				WHERE group_id = $groupID
+				AND DATE(overdue) < CURRENT_DATE() + INTERVAL $soonInt day
+				AND DATE(overdue) > CURRENT_DATE()";
+
+		$result = mysqli_query($dbConnection, $sql);
+
+		if (mysqli_num_rows($result) > 0) {
+
+			echo
+				"<form action='' method='POST'>
+				<table class='table table-hover'>
+				<thead>
 				  <tr>
 					<th></th>
 					<th>Nazwa leku</th>
@@ -537,59 +589,39 @@
 				</thead>
 				<tbody>";
 
-				while ($row = mysqli_fetch_assoc($result)) {
+			while ($row = mysqli_fetch_assoc($result)) {
 
-					$dateOverdue = date_create(date("d-m-Y", strtotime($row["overdue"])));
-					$dateDiffInterval = date_diff($dateNow,$dateOverdue);
-					$dateDiffInt = (int)($dateDiffInterval->format("%R%a")); //format "%R%a" = %R: +/- sign, %a: days
+				$dateNow = date_create(date('d-m-Y'));
+				$dateOverdue = date_create(date("d-m-Y", strtotime($row["overdue"])));
+				$dateDiffInterval = date_diff($dateNow, $dateOverdue);
+				$dateDiffInt = (int)($dateDiffInterval->format("%R%a")); //format "%R%a" = %R: +/- sign, %a: days
 
-					if ( $dateDiffInt > 0 && $dateDiffInt < $soonInt){
-						echo
-							"<tr>".
-								"<td class=''>" . "<input type='checkbox' name='overdue[]' value='".$row["id"]."'></td>" .
-								"<td>" . $row["name"] . "</td>" .
-								"<td>" . $row["amount"] . "</td>" .
-								"<td>" . date_format($dateOverdue, "d-m-Y") . "</td>" .
-								"<td>" . $dateDiffInterval->format("%a"); "</td>" .
-							"</tr>";
-					}
-
-				}
-
-			} else {
-
-				echo
-				"<thead>
-				  <tr>
-					<th></th>
-					<th>Nazwa leku</th>
-					<th>Ilość</th>
-				  </tr>
-				</thead>
-				<tbody>";
-
-				while ($row = mysqli_fetch_assoc($result)) {
-
-					$dateOverdue = date_create(date("d-m-Y", strtotime($row["overdue"])));
-					$dateDiffInterval = date_diff($dateNow,$dateOverdue);
-					$dateDiffInt = (int)($dateDiffInterval->format("%R%a")); //format "%R%a" = %R: +/- sign, %a: days
-
-					if ( $dateDiffInt < 0){
-						echo
-							"<tr>".
-							"<td class=''>" . "<input type='checkbox' name='overdue[]' value='".$row["id"]."'></td>" .
-							"<td>" . $row["name"] . "</td>" .
-							"<td>" . $row["amount"] . "</td>" .
+				if ($dateDiffInt > 0 && $dateDiffInt < $soonInt) {
+					echo
+						"<tr>" .
+						"<td class=''>" . "<input type='checkbox' name='overdueSoon[]' value='" . $row["id"] . "'></td>" .
+						"<td>" . $row["name"] . "</td>" .
+						"<td>" . $row["amount"] . "</td>" .
+						"<td>" . date_format($dateOverdue, "d-m-Y") . "</td>" .
+						"<td>" . $dateDiffInterval->format("%a");
+						"</td>" .
 						"</tr>";
-					}
 				}
 
 			}
 
-		}
+			echo
+				"</table>
+				</tbody>
+				<button class='btn btn-col btn-block'>Usuń zaznaczone lekarstwa</button>
+				</form>";
 
-		echo
-		"</tbody>";
+		} else {
+
+			echo
+				"<p>Okres ważności wszystkich leków znajdujących się w apteczce jest dłuższy niż $soonInt dni.</p>";
+
+		}
 
 		mysqli_close($dbConnection);
 	}
@@ -627,20 +659,23 @@
 		$sql = "SELECT name, ean, package_size, unit, active, id_drugs_specification FROM drugs_specification";
 		$result = mysqli_query($dbConnection, $sql);
 
-		echo
-			"<thead>
-			  <tr>
-				<th></th>
-				<th>Nazwa leku</th>
-				<th>Kod EAN</th>
-				<th>Ilość leku w opakowaniu</th>
-				<th>Jednostka</th>
-				<th>Substancja czynna</th>
-			  </tr>
-			</thead>
-			<tbody>";
-
 		if (mysqli_num_rows($result) > 0) {
+
+			echo
+				"<form action='' method='POST'>
+				<table class='table table-hover'>
+				<thead>
+				  <tr>
+					<th></th>
+					<th>Nazwa leku</th>
+					<th>Kod EAN</th>
+					<th>Ilość leku w opakowaniu</th>
+					<th>Jednostka</th>
+					<th>Substancja czynna</th>
+				  </tr>
+				</thead>
+				<tbody>";
+
 			// output data of each row
 			while ($row = mysqli_fetch_assoc($result)) {
 				echo
@@ -653,10 +688,20 @@
 						"<td>" . $row["active"] . "</td>" .
 					"</tr>";
 			}
-		}
 
-		echo
-			"</tbody>";
+			echo
+				"</tbody>
+				</table>
+				<button type=\"submit\" class=\"btn btn-col btn-block\">Usuń zaznaczone leki</button>
+				</form>";
+
+		} else {
+
+			echo
+				"<p>Niezdefiniowano żadnej specyfikacji leku.</p>" .
+				"<a href='specif_new.php'>Dodaj nową specyfikację</a>";
+
+		}
 
 		mysqli_close($dbConnection);
 	}
@@ -689,21 +734,25 @@
 	}
 
 	function groups_print_table($username){
+
 		require("config/sql_connect.php");
 
 		$result = get_users_groups($username);
 
-		echo
-			"<thead>
-		 		 <tr>
-					<th></th>
-					<th>Nazwa grupy</th>
-					<th></th>
-				  </tr>
-			</thead>
-			<tbody>";
-
 		if (mysqli_num_rows($result) > 0) {
+
+			echo
+				"<form action='' method='POST'>
+				<table class=\"table table-hover\">
+				<thead>
+					 <tr>
+						<th></th>
+						<th>Nazwa grupy</th>
+						<th></th>
+					  </tr>
+				</thead>
+				<tbody>";
+
 			// output data of each row
 			while ($row = mysqli_fetch_assoc($result)) {
 				$redirectUrl = "'group_choose.php?change=" . $row["id"] . "'";
@@ -714,12 +763,23 @@
 					"<td>" . "<a href=$redirectUrl>Wybierz</a>" . "</td>" .
 					"</tr>";
 			}
+
+			echo
+				"</tbody>
+				</table>
+				<button type=\"submit\" class=\"btn btn-col btn-block\">Opuść zaznaczone grupy</button>
+				</form>";
+
+		} else {
+
+			echo
+				"<p>Nie należysz do żadnej grupy.</p>" .
+				"<p><a href='group_join.php'>Dołącz do istniejącej grupy</a> lub <a href='group_new.php'>załóż nową.</a></p>";
+			
 		}
 
-		echo
-		"</tbody>";
-
 		mysqli_close($dbConnection);
+
 	}
 
 	function groups_leave($groupID, $username){
