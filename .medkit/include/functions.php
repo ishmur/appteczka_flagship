@@ -8,15 +8,16 @@
 	}
 
 	function db_statement(){
+		require("config/sql_connect.php");
+
 		$args = func_get_args();
-		if(count($args) < 4){
+		if(count($args) < 3){
 			trigger_error("Not enough input arguments");
 			return false;
 		} else {
-			$dbConnection = $args[0];
-			$sql = $args[1];
-			$types = $args[2];
-			$params = $args[3];
+			$sql = $args[0];
+			$types = $args[1];
+			$params = $args[2];
 
 			$stmt = mysqli_prepare($dbConnection,$sql);
 			if ($stmt === false) {
@@ -101,8 +102,6 @@
 
 	function register($username, $password, $option){
 
-		require("config/sql_connect.php");
-
 		if ($option == 'user') {
 			$sql = "INSERT INTO users (email, password)
 				VALUES (?,?)";
@@ -113,7 +112,7 @@
 				VALUES (?,?)";
 		}
 
-		$processed = db_statement($dbConnection, $sql, "ss", array(&$username, &$password));
+		$processed = db_statement($sql, "ss", array(&$username, &$password));
 		return $processed;
 	}
 
