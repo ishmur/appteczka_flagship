@@ -30,22 +30,22 @@
         }
     }
 
-    if($_GET['reg']==1){
+    if(isset($_SESSION['joined_group'])){
         ?>
         <div class="alert alert-success">
-            You've just created new virtual medical kit called <strong><? echo $_SESSION['new_group']?></strong>! Good for you!
+            Dołączono do apteczki: <strong><? echo $_SESSION['new_group']?></strong>!
         </div>
         <?
-        $_SESSION['new_group'] = "";
+        $_SESSION['joined_group'] = null;
     }
 
-    if($_GET['reg']==2){
+    if(isset($_SESSION['new_group'])){
         ?>
         <div class="alert alert-success">
-            You've just joined a virtual medical kit called <strong><? echo $_SESSION['new_group']?></strong>! Cheers mate!
+            Utworzono nową apteczkę: <strong><? echo $_SESSION['new_group']?></strong>!
         </div>
         <?
-        $_SESSION['new_group'] = "";
+        $_SESSION['new_group'] = null;
     }
 
 ?>
