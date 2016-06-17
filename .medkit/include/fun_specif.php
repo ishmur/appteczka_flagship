@@ -3,60 +3,26 @@
     function specif_new_record($specif_name, $specif_EAN, $specif_per_package, $specif_price, $specif_active){
 
         require("config/sql_connect.php");
+        
 
         $sql = "INSERT INTO drug_spec (drug_name, ean, per_package, price_per_package, active, user_defined, price_per_unit)
                     VALUES (?,?,?,?,?,1,?)";
 
-        $stmt = mysqli_prepare($dbConnection,$sql);
-        if ($stmt === false) {
-            trigger_error('Statement failed! ' . htmlspecialchars(mysqli_error($dbConnection)), E_USER_ERROR);
-        }
-
         $specif_price_per_unit = round($specif_price/$specif_per_package, 2);
-
-        $bind = mysqli_stmt_bind_param($stmt, "ssddsd", $specif_name, $specif_EAN, $specif_per_package, $specif_price, $specif_active, $specif_price_per_unit);
-        if ($bind === false) {
-            trigger_error('Bind param failed!', E_USER_ERROR);
-        }
-
-        $exec = mysqli_stmt_execute($stmt);
-        if ($exec === false) {
-            trigger_error('Statement execute failed! ' . htmlspecialchars(mysqli_stmt_error($stmt)), E_USER_ERROR);
-        }
-
-        mysqli_stmt_close($stmt);
-        mysqli_close($dbConnection);
-
+        $processed = db_statement($sql, "ssddsd", array(&$specif_name, &$specif_EAN, &$specif_per_package, &$specif_price, &$specif_active, &$specif_price_per_unit));
     }
 
     function specif_update_record($specif_name, $specif_EAN, $specif_per_package, $specif_price, $specif_active, $specif_id){
 
         require("config/sql_connect.php");
+        
 
         $sql = "UPDATE drug_spec 
                 SET drug_name = ?, ean = ?, per_package = ?, price_per_package = ?, active = ?, price_per_unit = ?
                 WHERE id_spec = ?";
-
-        $stmt = mysqli_prepare($dbConnection,$sql);
-        if ($stmt === false) {
-            trigger_error('Statement failed! ' . htmlspecialchars(mysqli_error($dbConnection)), E_USER_ERROR);
-        }
-
+        
         $specif_price_per_unit = round($specif_price/$specif_per_package, 2);
-
-        $bind = mysqli_stmt_bind_param($stmt, "ssddsdi", $specif_name, $specif_EAN, $specif_per_package, $specif_price, $specif_active, $specif_price_per_unit, $specif_id);
-        if ($bind === false) {
-            trigger_error('Bind param failed!', E_USER_ERROR);
-        }
-
-        $exec = mysqli_stmt_execute($stmt);
-        if ($exec === false) {
-            trigger_error('Statement execute failed! ' . htmlspecialchars(mysqli_stmt_error($stmt)), E_USER_ERROR);
-        }
-
-        mysqli_stmt_close($stmt);
-        mysqli_close($dbConnection);
-
+        $processed = db_statement($sql, "ssddsdi", array(&$specif_name, &$specif_EAN, &$specif_per_package, &$specif_price, &$specif_active, &$specif_price_per_unit, &$specif_id));
     }
 
     function specif_pagination($page = 1){
@@ -64,8 +30,10 @@
         //DO POPRAWY
         //ALE DZIALA XD
         require("config/sql_connect.php");
+        
         $sql = "SELECT drug_name, ean, per_package, unit, active, price_per_package FROM drug_spec";
         $result = mysqli_query($dbConnection, $sql);
+        
         $rows = mysqli_num_rows($result);
         $rows_per_page = 30;
         $pages = intval(ceil($rows / $rows_per_page));
@@ -98,6 +66,7 @@
     function specif_print_table($sql){
 
         require("config/sql_connect.php");
+        
 
         $userDefinedCounter = 0;
 
@@ -171,32 +140,17 @@
     function specif_delete_record($specifID){
 
         require("config/sql_connect.php");
+        
 
         $sql = "DELETE FROM drug_spec 
             WHERE id_spec = ?";
-
-        $stmt = mysqli_prepare($dbConnection,$sql);
-        if ($stmt === false) {
-            trigger_error('Statement failed! ' . htmlspecialchars(mysqli_error($dbConnection)), E_USER_ERROR);
-        }
-
-        $bind = mysqli_stmt_bind_param($stmt, "i", $specifID);
-        if ($bind === false) {
-            trigger_error('Bind param failed!', E_USER_ERROR);
-        }
-
-        $exec = mysqli_stmt_execute($stmt);
-        if ($exec === false) {
-            trigger_error('Statement execute failed! ' . htmlspecialchars(mysqli_stmt_error($stmt)), E_USER_ERROR);
-        }
-
-        mysqli_stmt_close($stmt);
-        mysqli_close($dbConnection);
-
+        
+        $processed = db_statement($sql, "i", array(&$specifID));
     }
 
     function specif_print_ean($ean){
         require("config/sql_connect.php");
+        
 
         $userDefinedCounter = 0;
 
@@ -204,22 +158,8 @@
                     FROM drug_spec 
                     WHERE ean = ?";
 
-        $stmt = mysqli_prepare($dbConnection, $sql);
-        if ($stmt === false) {
-            trigger_error('Statement failed! ' . htmlspecialchars(mysqli_error($dbConnection)), E_USER_ERROR);
-        }
-
-        $bind = mysqli_stmt_bind_param($stmt, "s", $ean);
-        if ($bind === false) {
-            trigger_error('Bind param failed!', E_USER_ERROR);
-        }
-
-        $exec = mysqli_stmt_execute($stmt);
-        if ($exec === false) {
-            trigger_error('Statement execute failed! ' . htmlspecialchars(mysqli_stmt_error($stmt)), E_USER_ERROR);
-        }
-        else {
-            $result = mysqli_stmt_get_result($stmt);
+        $result = db_statement($sql, "s", array(&$ean));
+        
             if (mysqli_num_rows($result) == 1) {
 
                 $row = mysqli_fetch_assoc($result);
@@ -275,40 +215,23 @@
 
             }
 
-        }
-
-        mysqli_stmt_close($stmt);
-        mysqli_close($dbConnection);
-
     }
 
     function specif_get_info($specif_id){
 
         require("config/sql_connect.php");
 
+
         $specif = null;
 
         $sql = "SELECT  drug_name, ean, per_package, price_per_package, active
                 FROM drug_spec
                 WHERE id_spec = ?";
+        
+        $result = db_statement($sql, "i", array(&$specif_id));
 
-        $stmt = mysqli_prepare($dbConnection,$sql);
-        if ($stmt === false) {
-            trigger_error('Statement failed! ' . htmlspecialchars(mysqli_error($dbConnection)), E_USER_ERROR);
-        }
-
-        $bind = mysqli_stmt_bind_param($stmt, "i", $specif_id);
-        if ($bind === false) {
-            trigger_error('Bind param failed!', E_USER_ERROR);
-        }
-
-        $exec = mysqli_stmt_execute($stmt);
-        if ($exec === false) {
-            trigger_error('Statement execute failed! ' . htmlspecialchars(mysqli_stmt_error($stmt)), E_USER_ERROR);
-        }
-        else {
-            $result = mysqli_stmt_get_result($stmt);
-            if (mysqli_num_rows($result) == 1) {
+        
+        if (mysqli_num_rows($result) == 1) {
                 $row = mysqli_fetch_assoc($result);
                 $specif['drug_name'] = $row["drug_name"];
                 $specif['ean'] = $row["ean"];
@@ -316,12 +239,8 @@
                 $specif['price_per_package'] = $row["price_per_package"];
                 $specif['active'] = $row["active"];
                 $specif['id_spec'] = $specif_id;
-            }
         }
-
-        mysqli_stmt_close($stmt);
-        mysqli_close($dbConnection);
-
+        
         return $specif;
 
     }

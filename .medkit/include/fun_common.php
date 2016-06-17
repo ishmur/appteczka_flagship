@@ -40,12 +40,14 @@
             if ($exec === false) {
                 trigger_error('Statement execute failed! ' . htmlspecialchars(mysqli_stmt_error($stmt)), E_USER_ERROR);
                 return false;
+            } else {
+                $result = mysqli_stmt_get_result($stmt);
             }
 
             mysqli_stmt_close($stmt);
             mysqli_close($dbConnection);
 
-            return true;
+            return $result;
 
         }
     }
@@ -120,8 +122,8 @@
     function correct_password($username, $password){
         require("config/sql_connect.php");
 
-        $sql = "SELECT id FROM users WHERE email = '$username' and password = '$password'";
-        $result = mysqli_query($dbConnection, $sql);
+        $sql = "SELECT id FROM users WHERE email = ? and password = ?";
+        $result = db_statement($sql, "ss", array(&$username, &$password));
 
         if (mysqli_num_rows($result) == 1) {
             return true;
@@ -136,13 +138,13 @@
         require("config/sql_connect.php");
 
         if ($db == 'users') {
-            $sql = "SELECT id FROM users WHERE email = '$entity'";
+            $sql = "SELECT id FROM users WHERE email = ?";
         }
         else if ($db == 'groups'){
-            $sql = "SELECT id FROM groups WHERE group_name = '$entity'";
+            $sql = "SELECT id FROM groups WHERE group_name = ?";
         }
 
-        $result = mysqli_query($dbConnection, $sql);
+        $result = db_statement($sql, "s", array(&$entity));
 
         if (mysqli_num_rows($result) > 0) {
             return true;
@@ -166,7 +168,7 @@
         }
 
         $processed = db_statement($sql, "ss", array(&$username, &$password));
-        return $processed;
+        return ($processed == false);
 
     }
 
