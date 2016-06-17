@@ -10,8 +10,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     $group_name = trim_input($_POST['group_name']);
     $password = trim_input($_POST['password']);
 
-    $group_exists = does_group_exist($group_name, $group_name_error);
-    $is_password_correct = correct_password_group($group_name, $password, $password_error);
+    $group_exists = groups_check_if_exists($group_name, $group_name_error);
+    $is_password_correct = groups_check_password_correct($group_name, $password, $password_error);
 
     if(isset($group_name_error) || isset($password_error)){
         $form_style = "has-error";
@@ -19,7 +19,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if($group_exists && $is_password_correct){
         $password = md5($password);
-        if(add_to_group($group_name, $_SESSION['username'])){
+        if(groups_add_user_to_group($group_name, $_SESSION['username'])){
             header("Location: group_choose.php?reg=2");
             $_SESSION['new_group'] = $group_name;
             exit();
@@ -73,7 +73,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <input name="group_name" id="choose_group" list="group_list" placeholder="Wprowadź nazwę grupy" class="form-control">
                                 <datalist id="group_list">
                                     <?php
-                                        $result = get_all_groups();
+                                        $result = groups_get_all_names();
                                         while ($row = mysqli_fetch_assoc($result)) {
                                         echo "<option value=" .$row['group_name']. "></option>";
                                     }

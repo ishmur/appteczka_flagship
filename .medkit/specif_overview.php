@@ -56,23 +56,18 @@ if(isset($_POST['specif'])) {
                         </form>
                         <div class="container-fluid">
 
-                            <form action="" method="POST">
                                 <br /><h2>Wyniki wyszukiwania</h2><hr />
-
-                                <table class="table table-hover">
+                                
                                     <?php
-                                    if(!isset($_POST['ean'])) {
-                                        if (isset($_GET['p'])) $pag_query = specif_pagination($_GET['p']);
-                                        else $pag_query = specif_pagination();
-                                        specif_print_table($pag_query);
-                                    } else {
-                                        specif_print_ean($_POST['ean']);
-                                    }
+                                        if(!isset($_POST['ean'])) {
+                                            if (isset($_GET['p'])) $pag_query = specif_pagination($_GET['p']);
+                                            else $pag_query = specif_pagination();
+                                            specif_print_table($pag_query);
+                                        } else {
+                                            specif_print_ean($_POST['ean']);
+                                        }
                                     ?>
 
-                                </table>
-                                <button type="submit" class="btn btn-col btn-block">Usuń zaznaczone leki</button>
-                            </form>
                         </div>
                     </div>
                 </div>

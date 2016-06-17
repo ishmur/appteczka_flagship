@@ -15,7 +15,7 @@
         $result = groups_change($groupID, $username);
         if ($result){
             $_SESSION["groupID"] = $groupID;
-            $_SESSION["groupName"] = groups_get_name($groupID);
+            $_SESSION["groupName"] = groups_get_selected_name($groupID);
         }
     }
 
@@ -82,17 +82,15 @@
                 <div class="container-fluid">
                     <div class="col-md-12">
                         <div class="container-fluid">
-                            <form action="" method='POST'>
-                                <h2>Lista grup, do których należysz</h2><hr />
-                                <table class="table table-hover">
+                           
+                                <h2>Lista grup, do których należysz:</h2><hr />
+
 
                                     <?php
-                                    groups_print_table($username);
+                                        groups_print_table($username);
                                     ?>
 
-                                </table>
-                                <button type="submit" class="btn btn-col btn-block">Opuść zaznaczone grupy</button>
-                            </form>
+
                         </div>
                     </div>
                 </div>
