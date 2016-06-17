@@ -186,11 +186,11 @@
         require("config/sql_connect.php");
         
 
-        $sql = "SELECT id FROM groups WHERE group_name = '$group'";
+        $sql = "SELECT id FROM groups WHERE group_name = ?";
         $result1 = db_statement($sql, "s", array(&$group));
 
         if (mysqli_num_rows($result1) == 1) {
-            $sql = "SELECT id FROM users WHERE email = '$login'";
+            $sql = "SELECT id FROM users WHERE email = ?";
             $result2 = db_statement($sql, "s", array(&$login));
 
             if (mysqli_num_rows($result2) == 1) {
@@ -245,7 +245,7 @@
         
 
         $password = md5($password);
-        $sql = "SELECT id FROM groups WHERE group_name = '$group_name' and password = '$password'";
+        $sql = "SELECT id FROM groups WHERE group_name = ? and password = ?";
         $result = db_statement($sql, "ss", array(&$group_name, &$password));
 
         if (mysqli_num_rows($result) == 1) {
