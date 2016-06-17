@@ -3,6 +3,7 @@
     function groups_get_user_groups($user){
 
         require("config/sql_connect.php");
+        
 
         $sql = "SELECT group_name, id 
                     FROM groups 
@@ -12,16 +13,16 @@
                                 WHERE user_id IN 
                                                 (SELECT id 
                                                 FROM `users` 
-                                                WHERE email = '$user'))";
+                                                WHERE email = ?))";
 
-        $result = mysqli_query($dbConnection, $sql);
+        $result = db_statement($sql, "s", array(&$user));
         return $result;
 
     }
 
     function groups_print_table($username){
 
-        require("config/sql_connect.php");
+        require("config/sql_connect.php"); //czy potrzebne tu?
 
         $result = groups_get_user_groups($username);
 
@@ -71,6 +72,7 @@
     function groups_leave($groupID, $username){
 
         require("config/sql_connect.php");
+        
 
         $sql = "DELETE FROM connections 
                 WHERE group_id = ?
@@ -79,29 +81,13 @@
                     FROM users 
                     WHERE email = ?)";
 
-        $stmt = mysqli_prepare($dbConnection,$sql);
-        if ($stmt === false) {
-            trigger_error('Statement failed! ' . htmlspecialchars(mysqli_error($dbConnection)), E_USER_ERROR);
-        }
-
-        $bind = mysqli_stmt_bind_param($stmt, "is", $groupID, $username);
-        if ($bind === false) {
-            trigger_error('Bind param failed!', E_USER_ERROR);
-        }
-
-        $exec = mysqli_stmt_execute($stmt);
-        if ($exec === false) {
-            trigger_error('Statement execute failed! ' . htmlspecialchars(mysqli_stmt_error($stmt)), E_USER_ERROR);
-        }
-
-        mysqli_stmt_close($stmt);
-        mysqli_close($dbConnection);
-
+        $processed = db_statement($sql, "is", array(&$groupID, &$username));
     }
 
     function groups_change($groupID, $username, $setNULL=false){
 
         require("config/sql_connect.php");
+        
 
         $result = groups_get_user_groups($username);
         $changed = false;
@@ -114,73 +100,32 @@
                             SET show_group_id = ?
                             WHERE email = ?";
 
-                    $stmt = mysqli_prepare($dbConnection,$sql);
-                    if ($stmt === false) {
-                        trigger_error('Statement failed! ' . htmlspecialchars(mysqli_error($dbConnection)), E_USER_ERROR);
-                    }
-
-                    $bind = mysqli_stmt_bind_param($stmt, "is", $groupID, $username);
-                    if ($bind === false) {
-                        trigger_error('Bind param failed!', E_USER_ERROR);
-                    }
-
-                    if ($setNULL == true) {
-                        $groupID = null;
-                    }
-
-                    $exec = mysqli_stmt_execute($stmt);
-                    if ($exec === false) {
-                        trigger_error('Statement execute failed! ' . htmlspecialchars(mysqli_stmt_error($stmt)), E_USER_ERROR);
-                    }
-
-                    mysqli_stmt_close($stmt);
+                    $processed = db_statement($sql, "is", array(&$groupID, &$username));
                     $changed = true;
 
                     break;
                 }
             }
         }
-
-        mysqli_close($dbConnection);
-
         return $changed;
     }
 
     function groups_get_selected_name($groupID){
 
         require("config/sql_connect.php");
+        
 
         $sql = "SELECT group_name
                 FROM groups
                 WHERE id = ?";
 
-        $stmt = mysqli_prepare($dbConnection,$sql);
-        if ($stmt === false) {
-            trigger_error('Statement failed! ' . htmlspecialchars(mysqli_error($dbConnection)), E_USER_ERROR);
-        }
+        $result = db_statement($sql, "i", array(&$groupID));
 
-        $bind = mysqli_stmt_bind_param($stmt, "i", $groupID);
-        if ($bind === false) {
-            trigger_error('Bind param failed!', E_USER_ERROR);
+        if (mysqli_num_rows($result) == 1) {
+            $row = mysqli_fetch_assoc($result);
+            $groupName = $row["group_name"];
         }
-
-        $exec = mysqli_stmt_execute($stmt);
-        if ($exec === false) {
-            trigger_error('Statement execute failed! ' . htmlspecialchars(mysqli_stmt_error($stmt)), E_USER_ERROR);
-        }
-        else {
-            $result = mysqli_stmt_get_result($stmt);
-            if (mysqli_num_rows($result) == 1) {
-                $row = mysqli_fetch_assoc($result);
-                $groupName = $row["group_name"];
-            }
-        }
-
-        mysqli_stmt_close($stmt);
-        mysqli_close($dbConnection);
-
         return $groupName;
-
     }
 
     function groups_get_all_names(){
@@ -193,25 +138,21 @@
         $result = mysqli_query($dbConnection, $sql);
 
         return $result;
-
     }
 
     function groups_give_admin_rights($group, $login){
 
         require("config/sql_connect.php");
-        $sql = "SELECT id FROM groups WHERE group_name = '$group'";
-        $result1 = mysqli_query($dbConnection, $sql);
+
+        $sql = "SELECT id FROM groups WHERE group_name = ?";
+        $result1 = db_statement($sql, "s", array(&$group));
 
         if (mysqli_num_rows($result1) == 1) {
-            $sql = "SELECT id FROM users WHERE email = '$login'";
-            $result2 = mysqli_query($dbConnection, $sql);
+            $sql = "SELECT id FROM users WHERE email = ?";
+            $result2 = db_statement($sql, "s", array(&$login));
 
             if (mysqli_num_rows($result2) == 1) {
                 $sql = "INSERT INTO connections (group_id, user_id, admin_rights) VALUES (?,?,?)";/////TU TRZEBA ZMIENIC!!
-                $stmt = mysqli_prepare($dbConnection, $sql);
-                if ($stmt === false) {
-                    trigger_error('Statement failed! ' . htmlspecialchars(mysqli_error($dbConnection)), E_USER_ERROR);
-                }
 
                 $result1 = mysqli_fetch_assoc($result1);
                 $result2 = mysqli_fetch_assoc($result2);
@@ -219,18 +160,7 @@
                 $result2 = $result2["id"];
                 $admin = 1;
 
-                $bind = mysqli_stmt_bind_param($stmt, "iii", $result1, $result2, $admin);
-                if ($bind === false) {
-                    trigger_error('Bind param failed!', E_USER_ERROR);
-                }
-
-                $exec = mysqli_stmt_execute($stmt);
-                if ($exec === false) {
-                    trigger_error('Statement execute failed! ' . htmlspecialchars(mysqli_stmt_error($stmt)), E_USER_ERROR);
-                }
-
-                mysqli_stmt_close($stmt);
-                mysqli_close($dbConnection);
+                $processed = db_statement($sql, "iii", array(&$result1, &$result2, &$admin));
                 return true;
             } else {
                 return false;
@@ -243,19 +173,17 @@
     function groups_add_user_to_group($group, $login){/////POLACZYC Z FUNKCJA give_admin_rights
 
         require("config/sql_connect.php");
+        
+
         $sql = "SELECT id FROM groups WHERE group_name = '$group'";
-        $result1 = mysqli_query($dbConnection, $sql);
+        $result1 = db_statement($sql, "s", array(&$group));
 
         if (mysqli_num_rows($result1) == 1) {
             $sql = "SELECT id FROM users WHERE email = '$login'";
-            $result2 = mysqli_query($dbConnection, $sql);
+            $result2 = db_statement($sql, "s", array(&$login));
 
             if (mysqli_num_rows($result2) == 1) {
                 $sql = "INSERT INTO connections (group_id, user_id, admin_rights) VALUES (?,?,?)";/////TU TRZEBA ZMIENIC!!
-                $stmt = mysqli_prepare($dbConnection, $sql);
-                if ($stmt === false) {
-                    trigger_error('Statement failed! ' . htmlspecialchars(mysqli_error($dbConnection)), E_USER_ERROR);
-                }
 
                 $result1 = mysqli_fetch_assoc($result1);
                 $result2 = mysqli_fetch_assoc($result2);
@@ -263,17 +191,7 @@
                 $result2 = $result2["id"];
                 $admin = 0;
 
-                $bind = mysqli_stmt_bind_param($stmt, "iii", $result1, $result2, $admin);
-                if ($bind === false) {
-                    trigger_error('Bind param failed!', E_USER_ERROR);
-                }
-
-                $exec = mysqli_stmt_execute($stmt);
-                if ($exec === false) {
-                    trigger_error('Statement execute failed! ' . htmlspecialchars(mysqli_stmt_error($stmt)), E_USER_ERROR);
-                }
-                mysqli_stmt_close($stmt);
-                mysqli_close($dbConnection);
+                $processed = db_statement($sql, "iii", array(&$result1, &$result2, &$admin));
                 return true;
             } else {
                 return false;
@@ -311,10 +229,13 @@
     }
 
     function groups_check_password_correct($group_name, $password, &$error){
+
         require("config/sql_connect.php");
+        
+
         $password = md5($password);
         $sql = "SELECT id FROM groups WHERE group_name = '$group_name' and password = '$password'";
-        $result = mysqli_query($dbConnection, $sql);
+        $result = db_statement($sql, "ss", array(&$group_name, &$password));
 
         if (mysqli_num_rows($result) == 1) {
             return true;
