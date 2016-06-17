@@ -10,7 +10,7 @@
 
     }
 
-    if(isset($_POST["edit-submit"])) {
+    if(isset($_POST["specif_edit"])) {
 
         $specif = specif_get_info($_POST['specif_edit'][0]);
 
