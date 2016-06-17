@@ -1,18 +1,50 @@
 <?php
 
-    function specif_new_record($drugName, $drugEAN, $drugUnit, $drugSize, $drugActive){
+    function specif_new_record($specif_name, $specif_EAN, $specif_per_package, $specif_price, $specif_active){
 
         require("config/sql_connect.php");
 
-        $sql = "INSERT INTO drugs_specification (name, ean, unit, package_size, active)
-                    VALUES (?,?,?,?,?)";
+        $sql = "INSERT INTO drug_spec (drug_name, ean, per_package, price_per_package, active, user_defined, price_per_unit)
+                    VALUES (?,?,?,?,?,1,?)";
 
         $stmt = mysqli_prepare($dbConnection,$sql);
         if ($stmt === false) {
             trigger_error('Statement failed! ' . htmlspecialchars(mysqli_error($dbConnection)), E_USER_ERROR);
         }
 
-        $bind = mysqli_stmt_bind_param($stmt, "sssis", $drugName, $drugEAN, $drugUnit, $drugSize, $drugActive);
+        $specif_price_per_unit = round($specif_price/$specif_per_package, 2);
+
+        $bind = mysqli_stmt_bind_param($stmt, "ssddsd", $specif_name, $specif_EAN, $specif_per_package, $specif_price, $specif_active, $specif_price_per_unit);
+        if ($bind === false) {
+            trigger_error('Bind param failed!', E_USER_ERROR);
+        }
+
+        $exec = mysqli_stmt_execute($stmt);
+        if ($exec === false) {
+            trigger_error('Statement execute failed! ' . htmlspecialchars(mysqli_stmt_error($stmt)), E_USER_ERROR);
+        }
+
+        mysqli_stmt_close($stmt);
+        mysqli_close($dbConnection);
+
+    }
+
+    function specif_update_record($specif_name, $specif_EAN, $specif_per_package, $specif_price, $specif_active, $specif_id){
+
+        require("config/sql_connect.php");
+
+        $sql = "UPDATE drug_spec 
+                SET drug_name = ?, ean = ?, per_package = ?, price_per_package = ?, active = ?, price_per_unit = ?
+                WHERE id_spec = ?";
+
+        $stmt = mysqli_prepare($dbConnection,$sql);
+        if ($stmt === false) {
+            trigger_error('Statement failed! ' . htmlspecialchars(mysqli_error($dbConnection)), E_USER_ERROR);
+        }
+
+        $specif_price_per_unit = round($specif_price/$specif_per_package, 2);
+
+        $bind = mysqli_stmt_bind_param($stmt, "ssddsdi", $specif_name, $specif_EAN, $specif_per_package, $specif_price, $specif_active, $specif_price_per_unit, $specif_id);
         if ($bind === false) {
             trigger_error('Bind param failed!', E_USER_ERROR);
         }
@@ -58,54 +90,68 @@
         $start_limit = ($rows_per_page * ($page - 1));
 
 
-        return "SELECT id_spec, drug_name, ean, per_package, unit, active, price_per_package FROM drug_spec 
-                    ORDER BY drug_name LIMIT " . $start_limit . "," . $rows_per_page;
+        return "SELECT id_spec, drug_name, ean, per_package, unit, active, price_per_package, user_defined 
+                FROM drug_spec 
+                ORDER BY drug_name LIMIT " . $start_limit . "," . $rows_per_page;
     }
-
-
-
 
     function specif_print_table($sql){
 
         require("config/sql_connect.php");
+
+        $userDefinedCounter = 0;
 
         $result = mysqli_query($dbConnection, $sql);
 
         if (mysqli_num_rows($result) > 0) {
 
             echo
-            "<form action='' method='POST'>
-                    <table class='table table-hover'>
-                    <thead>
-                      <tr>
-                        <th></th>
-                        <th>Nazwa leku</th>
-                        <th>Kod EAN</th>
-                        <th>Ilość leku</th>
-                        <th>Substancja czynna</th>
-                        <th>Cena</th>
-                      </tr>
-                    </thead>
-                    <tbody>";
+                "<table class='table table-hover'>
+                <thead>
+                  <tr>
+                    <th>Nazwa leku</th>
+                    <th>Kod EAN</th>
+                    <th>Ilość leku</th>
+                    <th>Substancja czynna</th>
+                    <th>Cena</th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>";
 
             // output data of each row
             while ($row = mysqli_fetch_assoc($result)) {
                 echo
                     "<tr>".
-                    "<td class=''>" . "<input type='checkbox' name='specif[]' value='".$row["id_spec"]."'></td>" .
+
                     "<td>" . $row["drug_name"] . "</td>" .
                     "<td>" . $row["ean"] . "</td>" .
                     "<td>" . $row["per_package"] . " " . $row["unit"] . "</td>" .
                     "<td>" . $row["active"] . "</td>" .
-                    "<td>" . $row["price_per_package"] . "</td>" .
-                    "</tr>";
+                    "<td>" . $row["price_per_package"] . "</td>";
+                if ($row["user_defined"]) {
+                    $userDefinedCounter++;
+                    echo
+                        "<input form='edit_specif' type='hidden' name='specif_edit[]' value='".$row['id_spec']."'>".
+                        "<td class=''>" . "<input form='edit_specif' name='edit-submit' type='submit' value='Edytuj'></td>".
+                        "<td class=''>" . "<input form='delete_specif' type='checkbox' name='specif[]' value='".$row["id_spec"]."'></td>";
+                }
+                    echo "</tr>";
             }
 
             echo
-            "</tbody>
-                    </table>
-                    <button type=\"submit\" class=\"btn btn-col btn-block\">Usuń zaznaczone leki</button>
-                    </form>";
+                "</tbody>
+                </table>";
+
+            if ($userDefinedCounter){
+                echo
+                        "<form action='' method='POST' id='delete_specif'>
+                            <button type='submit' name='delete-submit' class='btn btn-col btn-block'>Usuń zaznaczone specyfikacje</button>
+                        </form>
+                        <form action='specif_edit.php' method='POST' id='edit_specif'>
+                        </form>";
+            }
 
         } else {
 
@@ -145,12 +191,12 @@
 
     }
 
-
-
     function specif_print_ean($ean){
         require("config/sql_connect.php");
 
-        $sql = "SELECT id_spec, drug_name, ean, per_package, unit, active, price_per_package 
+        $userDefinedCounter = 0;
+
+        $sql = "SELECT id_spec, drug_name, ean, per_package, unit, active, price_per_package, user_defined
                     FROM drug_spec 
                     WHERE ean = ?";
 
@@ -174,38 +220,53 @@
 
                 $row = mysqli_fetch_assoc($result);
                 echo
-                "<form action='' method='POST'>
-                        <table class='table table-hover'>
-                        <thead>
-                          <tr>
-                            <th></th>
-                            <th>Nazwa leku</th>
-                            <th>Kod EAN</th>
-                            <th>Ilość leku</th>
-                            <th>Substancja czynna</th>
-                            <th>Cena</th>
-                          </tr>
-                        </thead>
-                        <tbody>";
+                    "<table class='table table-hover'>
+                     <thead>
+                       <tr>
+                         <th>Nazwa leku</th>
+                         <th>Kod EAN</th>
+                         <th>Ilość leku</th>
+                         <th>Substancja czynna</th>
+                         <th>Cena</th>
+                         <th></th>
+                         <th></th>
+                       </tr>
+                     </thead>
+                     <tbody>";
                 echo
                     "<tr>".
-                    "<td class=''>" . "<input type='checkbox' name='specif[]' value='".$row["id_spec"]."'></td>" .
-                    "<td>" . $row["drug_name"] . "</td>" .
-                    "<td>" . $row["ean"] . "</td>" .
-                    "<td>" . $row["per_package"] . " " . $row["unit"] . "</td>" .
-                    "<td>" . $row["active"] . "</td>" .
-                    "<td>" . $row["price_per_package"] . "</td>" .
-                    "</tr>";
+                        "<td>" . $row["drug_name"] . "</td>" .
+                        "<td>" . $row["ean"] . "</td>" .
+                        "<td>" . $row["per_package"] . " " . $row["unit"] . "</td>" .
+                        "<td>" . $row["active"] . "</td>" .
+                        "<td>" . $row["price_per_package"] . "</td>";
+
+                if ($row["user_defined"]) {
+                    $userDefinedCounter++;
+                    echo
+                        "<input form='edit_specif' type='hidden' name='specif_edit[]' value='".$row['id_spec']."'>".
+                        "<td class=''>" . "<input form='edit_specif' name='edit-submit' type='submit' value='Edytuj'></td>".
+                        "<input form='delete_specif' type='hidden' name='specif[]' value='".$row['id_spec']."'>".
+                        "<td class=''>" . "<input form='delete_specif' name='delete-submit' type='submit' value='Usuń'></td>";
+                }
+
                 echo
-                "</tbody>
-                        </table>
-                        <button type=\"submit\" class=\"btn btn-col btn-block\">Usuń zaznaczone leki</button>
+                        "</tr>
+                        </tbody>
+                        </table>";
+
+                if ($userDefinedCounter){
+                    echo
+                        "<form action='' method='POST' id='delete_specif'>
+                        </form>
+                        <form action='specif_edit.php' method='POST' id='edit_specif'>
                         </form>";
+                }
 
             } else {
 
                 echo
-                    "<p>Niezdefiniowano żadnej specyfikacji leku.</p>" .
+                    "<p>W apteczce nie ma leku o wybranej specyfikacji.</p>" .
                     "<a href='specif_new.php'>Dodaj nową specyfikację</a>";
 
             }
@@ -214,6 +275,50 @@
 
         mysqli_stmt_close($stmt);
         mysqli_close($dbConnection);
+
+    }
+
+    function specif_get_info($specif_id){
+
+        require("config/sql_connect.php");
+
+        $specif = null;
+
+        $sql = "SELECT  drug_name, ean, per_package, price_per_package, active
+                FROM drug_spec
+                WHERE id_spec = ?";
+
+        $stmt = mysqli_prepare($dbConnection,$sql);
+        if ($stmt === false) {
+            trigger_error('Statement failed! ' . htmlspecialchars(mysqli_error($dbConnection)), E_USER_ERROR);
+        }
+
+        $bind = mysqli_stmt_bind_param($stmt, "i", $specif_id);
+        if ($bind === false) {
+            trigger_error('Bind param failed!', E_USER_ERROR);
+        }
+
+        $exec = mysqli_stmt_execute($stmt);
+        if ($exec === false) {
+            trigger_error('Statement execute failed! ' . htmlspecialchars(mysqli_stmt_error($stmt)), E_USER_ERROR);
+        }
+        else {
+            $result = mysqli_stmt_get_result($stmt);
+            if (mysqli_num_rows($result) == 1) {
+                $row = mysqli_fetch_assoc($result);
+                $specif['drug_name'] = $row["drug_name"];
+                $specif['ean'] = $row["ean"];
+                $specif['per_package'] = $row["per_package"];
+                $specif['price_per_package'] = $row["price_per_package"];
+                $specif['active'] = $row["active"];
+                $specif['id_spec'] = $specif_id;
+            }
+        }
+
+        mysqli_stmt_close($stmt);
+        mysqli_close($dbConnection);
+
+        return $specif;
 
     }
 

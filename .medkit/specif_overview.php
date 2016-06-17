@@ -1,18 +1,18 @@
 <?php
-session_start();
+    session_start();
 
-require_once("include/functions.php");
+    require_once("include/functions.php");
 
-if(!isset($_SESSION['username'])){
-    header("Location: index.php?logout=1");
-    exit();
-}
-
-if(isset($_POST['specif'])) {
-    foreach ($_POST['specif'] as $specifID) {
-        specif_delete_record($specifID);
+    if(!isset($_SESSION['username'])){
+        header("Location: index.php?logout=1");
+        exit();
     }
-}
+
+    if(isset($_POST['specif'])) {
+        foreach ($_POST['specif'] as $specifID) {
+            specif_delete_record($specifID);
+        }
+    }
 
 ?>
 
@@ -45,7 +45,7 @@ if(isset($_POST['specif'])) {
 
             <div class="col-md-8 col-md-offset-2">
                 <div class="container-fluid">
-                    <div class="col-md-12">
+
                         <form class="" method="POST">
                         <div class="form-group">
                             <label for="drugsSearch"><i class="fa fa-question-circle"></i> Szukaj specyfikacji...</label>
@@ -69,7 +69,7 @@ if(isset($_POST['specif'])) {
                                     ?>
 
                         </div>
-                    </div>
+
                 </div>
             </div>
 
@@ -77,6 +77,8 @@ if(isset($_POST['specif'])) {
     </div>
 
 </div>
+
+<script src="js/specif_overview.js"></script>
 
 </body>
 
