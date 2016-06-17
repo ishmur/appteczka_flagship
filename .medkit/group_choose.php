@@ -33,7 +33,7 @@
     if(isset($_SESSION['joined_group'])){
         ?>
         <div class="alert alert-success">
-            Dołączono do apteczki: <strong><? echo $_SESSION['new_group']?></strong>!
+            Dołączono do apteczki: <strong><? echo $_SESSION['joined_group']?></strong>!
         </div>
         <?
         $_SESSION['joined_group'] = null;
