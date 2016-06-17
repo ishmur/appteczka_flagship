@@ -24,7 +24,7 @@ for (var index = 0; index < userButtonsOverdue.length; index++){
 var userInputsSoon = document.querySelectorAll("input[name='overdueSoon[]']");
 var userButtonsSoon = document.getElementsByClassName("btn-delete-soon");
 
-for (var index = 0; index < userButtonsSoon.length; index++){
+for (index = 0; index < userButtonsSoon.length; index++){
     let input = userInputsSoon[index];
     let row = input.parentNode.parentNode.parentNode;
     let button = userButtonsSoon[index];

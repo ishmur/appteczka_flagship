@@ -10,8 +10,8 @@
 
     $username = $_SESSION['username'];
 
-    if($_SERVER['REQUEST_METHOD'] == 'GET') {
-        $groupID = $_GET['change'];
+    if(isset($_POST['group_change'])) {
+        $groupID = $_POST['group_change'][0];
         $result = groups_change($groupID, $username);
         if ($result){
             $_SESSION["groupID"] = $groupID;
@@ -19,7 +19,7 @@
         }
     }
 
-    if($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if(isset($_POST['groups'])) {
         foreach ($_POST['groups'] as $groupID) {
             if ($groupID == $_SESSION["groupID"]){
                 $result = groups_change($groupID, $username, true); // true = setNULL
@@ -100,6 +100,8 @@
     </div>
 
 </div>
+
+<script src="js/group_choose.js"></script>
 
 </body>
 

@@ -1,6 +1,6 @@
 'use strict';
 
-var userInputs = document.querySelectorAll("input[name='specif[]']");
+var userInputs = document.querySelectorAll("input[name='drugs[]']");
 var userButtons = document.getElementsByClassName("btn-delete");
 
 for (var index = 0; index < userButtons.length; index++){
@@ -21,9 +21,9 @@ for (var index = 0; index < userButtons.length; index++){
     });
 }
 
-var userInputsEdit = document.querySelectorAll("input[name='specif_edit[]']");
+var userInputsEdit = document.querySelectorAll("input[name='drugs_edit[]']");
 var userButtonsEdit = document.getElementsByClassName("btn-edit");
-var editForm = document.forms["edit_specif"];
+var editForm = document.forms["edit_drugs"];
 
 for (index = 0; index < userButtonsEdit.length; index++){
     let input = userInputsEdit[index];

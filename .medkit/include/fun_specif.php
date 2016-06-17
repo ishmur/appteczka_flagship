@@ -35,7 +35,7 @@
         $result = mysqli_query($dbConnection, $sql);
         
         $rows = mysqli_num_rows($result);
-        $rows_per_page = 30;
+        $rows_per_page = 10;
         $pages = intval(ceil($rows / $rows_per_page));
         $start = $page - 2;
         $prev = $page - 1;
@@ -99,15 +99,22 @@
                     "<td>" . $row["per_package"] . " " . $row["unit"] . "</td>" .
                     "<td>" . $row["active"] . "</td>" .
                     "<td>" . $row["price_per_package"] . "</td>";
+
                 if ($row["user_defined"]) {
                     $userDefinedCounter++;
                     echo
-                        "<input form='edit_specif' type='hidden' name='specif_edit[]' value='".$row['id_spec']."'>".
-                        "<td class=''>" . "<input class='btn btn-warning' form='edit_specif' name='edit-submit' type='submit' value='Edytuj'></td>".
+                        "<td class='hidden'><div class=''>".
+                            "<input form='edit_specif' type='checkbox' name='specif_edit[]' value='".$row['id_spec']."'>".
+                        "</div></td>".
+                        "<td class=''>
+                            <button type='button' class='btn btn-warning btn-edit'>Edytuj</button>
+                        </td>".
                         "<td class='hidden'><div class=''>".
                             "<input form='delete_specif' type='checkbox' name='specif[]' value='".$row['id_spec']."'>".
                         "</div></td>".
-                        "<td class=''>" . "<button type='button' class='btn btn-danger btn-delete'>Zaznacz</button></td>";
+                        "<td class=''>" .
+                            "<button type='button' class='btn btn-danger btn-delete'>Zaznacz</button>".
+                        "</td>";
 
                 }
                     echo "</tr>";

@@ -10,11 +10,15 @@
 
 	$groupID = $_SESSION["groupID"];
 
-	if($_SERVER['REQUEST_METHOD'] == 'POST') {
+	if(isset($_POST['drugs'])) {
 		foreach ($_POST['drugs'] as $drugID) {
 			drugs_delete_record($drugID, $groupID);
 		}
 	}
+
+    if(isset($_POST["drugs_edit"])){
+        //tba
+    }
 
 ?>
 
@@ -73,6 +77,8 @@
 	</div>
 	
 </div>
+
+<script src="js/drugs_overview.js"></script>
 
 </body>
 
