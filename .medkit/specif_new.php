@@ -4,11 +4,13 @@
 	require_once("include/functions.php");
 
 	if(!isset($_SESSION['username'])){
+
 		header("Location: index.php?logout=1");
 		exit();
 	}
 
 	if($_SERVER['REQUEST_METHOD'] == 'POST') {
+
 		$specif_name = $_POST['specif_name'];
 		$specif_EAN = $_POST['specif_EAN'];
 		//$drugUnit = $_POST['drugUnit'];
@@ -20,8 +22,9 @@
 
 		specif_new_record($specif_name, $specif_EAN, $specif_per_package, $specif_price, $specif_active);
 
-		header("Location: specif_new.php");
+		header("Location: specif_overview.php");
 		exit();
+
 	}
 
 ?>

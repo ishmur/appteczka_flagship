@@ -78,6 +78,8 @@
 
 </div>
 
+<script src="js/specif_overview.js"></script>
+
 </body>
 
 </html>

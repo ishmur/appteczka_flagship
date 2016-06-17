@@ -10,14 +10,18 @@
 
 	$groupID = $_SESSION["groupID"];
 
-	if($_SERVER['REQUEST_METHOD'] == 'POST') {
+	if (isset($_POST['overdueSoon'])){
 		foreach ($_POST['overdueSoon'] as $drugID) {
 			drugs_delete_record($drugID, $groupID);
 		}
+	}
+
+	if (isset($_POST['overdue'])){
 		foreach ($_POST['overdue'] as $drugID) {
 			drugs_delete_record($drugID, $groupID);
 		}
 	}
+
 ?>
 
 <!DOCTYPE html>

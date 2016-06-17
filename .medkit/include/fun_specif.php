@@ -29,6 +29,36 @@
 
     }
 
+    function specif_update_record($specif_name, $specif_EAN, $specif_per_package, $specif_price, $specif_active, $specif_id){
+
+        require("config/sql_connect.php");
+
+        $sql = "UPDATE drug_spec 
+                SET drug_name = ?, ean = ?, per_package = ?, price_per_package = ?, active = ?, price_per_unit = ?
+                WHERE id_spec = ?";
+
+        $stmt = mysqli_prepare($dbConnection,$sql);
+        if ($stmt === false) {
+            trigger_error('Statement failed! ' . htmlspecialchars(mysqli_error($dbConnection)), E_USER_ERROR);
+        }
+
+        $specif_price_per_unit = round($specif_price/$specif_per_package, 2);
+
+        $bind = mysqli_stmt_bind_param($stmt, "ssddsdi", $specif_name, $specif_EAN, $specif_per_package, $specif_price, $specif_active, $specif_price_per_unit, $specif_id);
+        if ($bind === false) {
+            trigger_error('Bind param failed!', E_USER_ERROR);
+        }
+
+        $exec = mysqli_stmt_execute($stmt);
+        if ($exec === false) {
+            trigger_error('Statement execute failed! ' . htmlspecialchars(mysqli_stmt_error($stmt)), E_USER_ERROR);
+        }
+
+        mysqli_stmt_close($stmt);
+        mysqli_close($dbConnection);
+
+    }
+
     function specif_pagination($page = 1){
         //JEST TO KLASYCZNY PRZYKLAD KODU SPAGHETTI
         //DO POPRAWY
@@ -281,6 +311,7 @@
                 $specif['per_package'] = $row["per_package"];
                 $specif['price_per_package'] = $row["price_per_package"];
                 $specif['active'] = $row["active"];
+                $specif['id_spec'] = $specif_id;
             }
         }
 
