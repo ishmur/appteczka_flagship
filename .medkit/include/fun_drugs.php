@@ -14,7 +14,7 @@
 
         require("config/sql_connect.php");
 
-        $sql = "SELECT id, name, price, amount, overdue, user_added 
+        $sql = "SELECT id, name, price, amount, overdue 
                     FROM DrugsDB 
                     WHERE group_id = ?";
 
@@ -23,37 +23,52 @@
         if (mysqli_num_rows($result) > 0) {
 
             echo
-            "<form action='' method='POST'>
-                <table class='table table-hover'>
+                "<table class='table table-hover'>
                 <thead>
                   <tr>
-                    <th></th>
                     <th>Nazwa leku</th>
                     <th>Cena w złotówkach</th>
                     <th>Ilość</th>
                     <th>Data ważności</th>
-                    <th>Kto dodał</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>";
 
-            // output data of each row
             while ($row = mysqli_fetch_assoc($result)) {
                 echo
                     "<tr>".
-                    "<td class=''>" . "<input type='checkbox' name='drugs[]' value='".$row["id"]."'></td>" .
-                    "<td>" . $row["name"] . "</td>" .
-                    "<td>" . $row["price"] . "</td>" .
-                    "<td>" . $row["amount"] . "</td>" .
-                    "<td>" . date("d-m-Y", strtotime($row["overdue"])). "</td>" .
-                    "<td>" . $row["user_added"] . "</td>" .
+                        "<td>" . $row["name"] . "</td>" .
+                        "<td>" . $row["price"] . "</td>" .
+                        "<td>" . $row["amount"] . "</td>" .
+                        "<td>" . date("d-m-Y", strtotime($row["overdue"])). "</td>" .
+                        "<td class=''>" .
+                            "<button type='button' class='btn btn-info btn-take'>Weź lek</button>".
+                        "</td>".
+                        "<td class='hidden'><div class=''>".
+                            "<input form='edit_drugs' type='checkbox' name='drugs_edit[]' value='".$row['id']."'>".
+                        "</div></td>".
+                        "<td class=''>
+                            <button type='button' class='btn btn-warning btn-edit'>Edytuj</button>
+                        </td>".
+                        "<td class='hidden'><div class=''>".
+                            "<input form='delete_drugs' type='checkbox' name='drugs[]' value='".$row['id']."'>".
+                        "</div></td>".
+                        "<td class=''>" .
+                            "<button type='button' class='btn btn-danger btn-delete'>Zaznacz</button>".
+                        "</td>";
                     "</tr>";
             }
 
             echo
-            "</tbody>
+                    "</tbody>
                     </table>
-                    <button type='submit' class='btn btn-col btn-block'>Usuń zaznaczone leki</button>
+                    <form action='' method='POST' id='delete_drugs'>
+                        <button type='submit' name='delete-submit' class='btn btn-col btn-block'>Usuń zaznaczone lekarstwa</button>
+                    </form>
+                    <form action='' method='POST' id='edit_drugs'>
                     </form>";
 
         } else {
@@ -109,13 +124,12 @@
         if (mysqli_num_rows($result) > 0) {
 
             echo
-            "<form action='' method='POST'>
-                    <table class='table table-hover'>
+                    "<table class='table table-hover'>
                     <thead>
                       <tr>
-                        <th></th>
                         <th>Nazwa leku</th>
                         <th>Ilość</th>
+                        <th></th>
                       </tr>
                     </thead>
                     <tbody>";
@@ -124,17 +138,23 @@
 
                 echo
                     "<tr>".
-                    "<td class=''>" . "<input type='checkbox' name='overdue[]' value='".$row["id"]."'></td>" .
-                    "<td>" . $row["name"] . "</td>" .
-                    "<td>" . $row["amount"] . "</td>" .
+                        "<td>" . $row["name"] . "</td>" .
+                        "<td>" . $row["amount"] . "</td>" .
+                        "<td class='hidden'><div class=''>".
+                            "<input form='delete_overdue' type='checkbox' name='overdue[]' value='".$row['id']."'>".
+                        "</div></td>".
+                        "<td class=''>
+                            <button type='button' class='btn btn-danger btn-delete-overdue'>Zaznacz</button>
+                         </td>";
                     "</tr>";
 
             }
 
             echo
-            "</table>
+                    "</table>
                     </tbody>
-                    <button class='btn btn-col btn-block'>Usuń zaznaczone lekarstwa</button>
+                    <form action='' method='POST' id='delete_overdue'>
+                            <button type='submit' name='delete-submit' class='btn btn-col btn-block'>Usuń zaznaczone lekarstwa</button>
                     </form>";
 
         } else {
@@ -160,15 +180,14 @@
         if (mysqli_num_rows($result) > 0) {
 
             echo
-            "<form action='' method='POST'>
-                    <table class='table table-hover'>
+                    "<table class='table table-hover'>
                     <thead>
                       <tr>
-                        <th></th>
                         <th>Nazwa leku</th>
                         <th>Ilość</th>
                         <th>Data ważności</th>
                         <th>Pozostało dni</th>
+                        <th></th>
                       </tr>
                     </thead>
                     <tbody>";
@@ -181,21 +200,26 @@
 
                 echo
                     "<tr>" .
-                    "<td class=''>" . "<input type='checkbox' name='overdueSoon[]' value='" . $row["id"] . "'></td>" .
-                    "<td>" . $row["name"] . "</td>" .
-                    "<td>" . $row["amount"] . "</td>" .
-                    "<td>" . date_format($dateOverdue, "d-m-Y") . "</td>" .
-                    "<td>" . $dateDiffInterval->format("%a"); // show result in days
-                "</td>" .
-                "</tr>";
-
+                        "<td>" . $row["name"] . "</td>" .
+                        "<td>" . $row["amount"] . "</td>" .
+                        "<td>" . date_format($dateOverdue, "d-m-Y") . "</td>" .
+                        "<td>" . $dateDiffInterval->format("%a") . // show result in days
+                        "</td>" .
+                        "<td class='hidden'><div class=''>".
+                            "<input form='delete_soon' type='checkbox' name='overdueSoon[]' value='".$row['id']."'>".
+                        "</div></td>".
+                        "<td class=''>
+                            <button type='button' class='btn btn-danger btn-delete-soon'>Zaznacz</button>
+                         </td>".
+                    "</tr>";
 
             }
 
             echo
-            "</table>
+                    "</table>
                     </tbody>
-                    <button class='btn btn-col btn-block'>Usuń zaznaczone lekarstwa</button>
+                    <form action='' method='POST' id='delete_soon'>
+                        <button type='submit' name='delete-submit' class='btn btn-col btn-block'>Usuń zaznaczone lekarstwa</button>
                     </form>";
 
         } else {

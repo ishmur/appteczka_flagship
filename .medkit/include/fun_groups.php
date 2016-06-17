@@ -29,12 +29,11 @@
         if (mysqli_num_rows($result) > 0) {
 
             echo
-                "<form action='' method='POST'>
-                <table class=\"table table-hover\">
+                "<table class='table table-hover'>
                 <thead>
                      <tr>
-                        <th></th>
                         <th>Nazwa grupy</th>
+                        <th></th>
                         <th></th>
                       </tr>
                 </thead>
@@ -42,20 +41,32 @@
 
             while ($row = mysqli_fetch_assoc($result)) {
                 
-                $redirectUrl = "'group_choose.php?change=" . $row["id"] . "'";
                 echo
                     "<tr>".
-                    "<td class=''>" . "<input type='checkbox' name='groups[]' value='".$row["id"]."'></td>" .
-                    "<td>" . $row["group_name"] . "</td>" .
-                    "<td>" . "<a href=$redirectUrl>Wybierz</a>" . "</td>" .
+                        "<td>" . $row["group_name"] . "</td>" .
+                        "<td class='hidden'><div class=''>".
+                            "<input form='change_group' type='checkbox' name='group_change[]' value='".$row['id']."'>".
+                        "</div></td>".
+                        "<td class=''>
+                            <button type='button' class='btn btn-info btn-change'>Wybierz</button>
+                        </td>".
+                        "<td class='hidden'><div class=''>".
+                            "<input form='leave_groups' type='checkbox' name='groups[]' value='".$row['id']."'>".
+                        "</div></td>".
+                        "<td class=''>" .
+                            "<button type='button' class='btn btn-danger btn-delete'>Zaznacz</button>".
+                        "</td>";
                     "</tr>";
             }
 
             echo
-                "</tbody>
-                </table>
-                <button type=\"submit\" class=\"btn btn-col btn-block\">Opuść zaznaczone grupy</button>
-                </form>";
+                    "</tbody>
+                    </table>
+                    <form action='' method='POST' id='leave_groups'>
+                        <button type='submit' name='delete-submit' class='btn btn-col btn-block'>Opuść zaznaczone grupy</button>
+                    </form>
+                    <form action='' method='POST' id='change_group'>
+                    </form>";
 
         } else {
 
