@@ -12,7 +12,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $group_exists = groups_check_if_exists($group_name, $group_name_error);
     $is_password_correct = groups_check_password_correct($group_name, $password, $password_error);
-
+    
     if(isset($group_name_error) || isset($password_error)){
         $form_style = "has-error";
     }

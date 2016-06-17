@@ -5,5 +5,6 @@
 	require("include/fun_drugs.php");
 	require("include/fun_specif.php");
 	require("include/fun_groups.php");
+	//require("include/fun_feed.php");
 
 ?>
