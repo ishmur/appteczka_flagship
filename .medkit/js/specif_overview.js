@@ -1,20 +1,22 @@
 'use strict';
 
 var userInputs = document.querySelectorAll("input[name='specif[]']");
+var userButtons = document.getElementsByClassName("btn-delete");
 
-for (var index = 0; index < userInputs.length; index++){
-    var input = userInputs[index];
-    input.addEventListener('change',function(){
-        switch(this.checked){
+for (var index = 0; index < userButtons.length; index++){
+    let input = userInputs[index];
+    let row = input.parentNode.parentNode.parentNode;
+    let button = userButtons[index];
 
-            case true:
-                this.parentNode.parentNode.classList.add("danger");
-                break;
-
-            case false:
-                this.parentNode.parentNode.classList.remove("danger");
-                break;
-
+    button.addEventListener('click', function(){
+        if(input.checked) {
+            input.checked = false;
+            row.classList.remove("danger");
+            button.innerHTML = "Zaznacz";
+        } else {
+            input.checked = true;
+            row.classList.add("danger");
+            button.innerHTML = "Odznacz";
         }
     });
 }

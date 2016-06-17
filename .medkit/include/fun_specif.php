@@ -134,8 +134,12 @@
                     $userDefinedCounter++;
                     echo
                         "<input form='edit_specif' type='hidden' name='specif_edit[]' value='".$row['id_spec']."'>".
-                        "<td class=''>" . "<input form='edit_specif' name='edit-submit' type='submit' value='Edytuj'></td>".
-                        "<td class=''>" . "<input form='delete_specif' type='checkbox' name='specif[]' value='".$row["id_spec"]."'></td>";
+                        "<td class=''>" . "<input class='btn btn-warning' form='edit_specif' name='edit-submit' type='submit' value='Edytuj'></td>".
+                        "<td class='hidden'><div class=''>".
+                            "<input form='delete_specif' type='checkbox' name='specif[]' value='".$row['id_spec']."'>".
+                        "</div></td>".
+                        "<td class=''>" . "<button type='button' class='btn btn-danger btn-delete'>Zaznacz</button></td>";
+
                 }
                     echo "</tr>";
             }
@@ -245,9 +249,9 @@
                     $userDefinedCounter++;
                     echo
                         "<input form='edit_specif' type='hidden' name='specif_edit[]' value='".$row['id_spec']."'>".
-                        "<td class=''>" . "<input form='edit_specif' name='edit-submit' type='submit' value='Edytuj'></td>".
+                        "<td class=''>" . "<input class='btn btn-warning' form='edit_specif' name='edit-submit' type='submit' value='Edytuj'></td>".
                         "<input form='delete_specif' type='hidden' name='specif[]' value='".$row['id_spec']."'>".
-                        "<td class=''>" . "<input form='delete_specif' name='delete-submit' type='submit' value='Usuń'></td>";
+                        "<td class=''>" . "<input class='btn btn-danger' form='delete_specif' name='delete-submit' type='submit' value='Usuń'></td>";
                 }
 
                 echo
