@@ -109,13 +109,12 @@
         if (mysqli_num_rows($result) > 0) {
 
             echo
-            "<form action='' method='POST'>
-                    <table class='table table-hover'>
+                    "<table class='table table-hover'>
                     <thead>
                       <tr>
-                        <th></th>
                         <th>Nazwa leku</th>
                         <th>Ilość</th>
+                        <th></th>
                       </tr>
                     </thead>
                     <tbody>";
@@ -124,17 +123,23 @@
 
                 echo
                     "<tr>".
-                    "<td class=''>" . "<input type='checkbox' name='overdue[]' value='".$row["id"]."'></td>" .
-                    "<td>" . $row["name"] . "</td>" .
-                    "<td>" . $row["amount"] . "</td>" .
+                        "<td>" . $row["name"] . "</td>" .
+                        "<td>" . $row["amount"] . "</td>" .
+                        "<td class='hidden'><div class=''>".
+                            "<input form='delete_overdue' type='checkbox' name='overdue[]' value='".$row['id']."'>".
+                        "</div></td>".
+                        "<td class=''>
+                            <button type='button' class='btn btn-danger btn-delete-overdue'>Zaznacz</button>
+                         </td>";
                     "</tr>";
 
             }
 
             echo
-            "</table>
+                    "</table>
                     </tbody>
-                    <button class='btn btn-col btn-block'>Usuń zaznaczone lekarstwa</button>
+                    <form action='' method='POST' id='delete_overdue'>
+                            <button type='submit' name='delete-submit' class='btn btn-col btn-block'>Usuń zaznaczone lekarstwa</button>
                     </form>";
 
         } else {
@@ -160,15 +165,14 @@
         if (mysqli_num_rows($result) > 0) {
 
             echo
-            "<form action='' method='POST'>
-                    <table class='table table-hover'>
+                    "<table class='table table-hover'>
                     <thead>
                       <tr>
-                        <th></th>
                         <th>Nazwa leku</th>
                         <th>Ilość</th>
                         <th>Data ważności</th>
                         <th>Pozostało dni</th>
+                        <th></th>
                       </tr>
                     </thead>
                     <tbody>";
@@ -181,21 +185,26 @@
 
                 echo
                     "<tr>" .
-                    "<td class=''>" . "<input type='checkbox' name='overdueSoon[]' value='" . $row["id"] . "'></td>" .
-                    "<td>" . $row["name"] . "</td>" .
-                    "<td>" . $row["amount"] . "</td>" .
-                    "<td>" . date_format($dateOverdue, "d-m-Y") . "</td>" .
-                    "<td>" . $dateDiffInterval->format("%a"); // show result in days
-                "</td>" .
-                "</tr>";
-
+                        "<td>" . $row["name"] . "</td>" .
+                        "<td>" . $row["amount"] . "</td>" .
+                        "<td>" . date_format($dateOverdue, "d-m-Y") . "</td>" .
+                        "<td>" . $dateDiffInterval->format("%a") . // show result in days
+                        "</td>" .
+                        "<td class='hidden'><div class=''>".
+                            "<input form='delete_soon' type='checkbox' name='overdueSoon[]' value='".$row['id']."'>".
+                        "</div></td>".
+                        "<td class=''>
+                            <button type='button' class='btn btn-danger btn-delete-soon'>Zaznacz</button>
+                         </td>".
+                    "</tr>";
 
             }
 
             echo
-            "</table>
+                    "</table>
                     </tbody>
-                    <button class='btn btn-col btn-block'>Usuń zaznaczone lekarstwa</button>
+                    <form action='' method='POST' id='delete_soon'>
+                        <button type='submit' name='delete-submit' class='btn btn-col btn-block'>Usuń zaznaczone lekarstwa</button>
                     </form>";
 
         } else {

@@ -20,5 +20,3 @@ for (var index = 0; index < userButtons.length; index++){
         }
     });
 }
-
-
