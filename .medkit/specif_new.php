@@ -9,15 +9,16 @@
 	}
 
 	if($_SERVER['REQUEST_METHOD'] == 'POST') {
-		$drugName = $_POST['drugName'];
-		$drugEAN = $_POST['drugEAN'];
-		$drugUnit = $_POST['drugUnit'];
-		$drugSize = $_POST['drugSize'];
-		$drugActive = $_POST['drugActive'];
+		$specif_name = $_POST['specif_name'];
+		$specif_EAN = $_POST['specif_EAN'];
+		//$drugUnit = $_POST['drugUnit'];
+		$specif_per_package = $_POST['specif_per_package'];
+		$specif_price = $_POST['specif_price'];
+		$specif_active = $_POST['specif_active'];
 
 		//Validate inputs - TBA
 
-		specif_new_record($drugName, $drugEAN, $drugUnit, $drugSize, $drugActive);
+		specif_new_record($specif_name, $specif_EAN, $specif_per_package, $specif_price, $specif_active);
 
 		header("Location: specif_new.php");
 		exit();
@@ -57,12 +58,12 @@
 					<div class="col-md-12">
 						<form action="" method="POST">
 							<div class="form-group">
-								<label for="drugName"><i class="fa fa-tags"></i> Nazwa leku</label>
-								<input type="text" class="form-control" name="drugName" placeholder="Wpisz nazwę nowego leku" required="required">
+								<label for="specif_name"><i class="fa fa-tags"></i> Nazwa leku</label>
+								<input type="text" class="form-control" name="specif_name" placeholder="Wpisz nazwę nowego leku" required="required">
 							</div>
 							<div class="form-group">
-								<label for="drugName"><i class="fa fa-hashtag"></i> Kod EAN</label>
-								<input type="text" class="form-control" name="drugEAN" placeholder="Wpisz kod EAN" required="required">
+								<label for="specif_EAN"><i class="fa fa-hashtag"></i> Kod EAN</label>
+								<input type="text" class="form-control" name="specif_EAN" placeholder="Wpisz kod EAN" required="required">
 							</div>
 							<div class="form-group">
 								<label>
@@ -80,12 +81,16 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="drugPrice"><i class="fa fa-database"></i> Ilość leku w opakowaniu</label>
-								<input type="number" min="1" class="form-control" name="drugSize" placeholder="Wpisz ilość leku w opakowaniu" required="required">
+								<label for="specif_per_package"><i class="fa fa-database"></i> Ilość leku w opakowaniu</label>
+								<input type="number" min="1" class="form-control" name="specif_per_package" placeholder="Wpisz ilość leku w opakowaniu" required="required">
 							</div>
 							<div class="form-group">
-								<label for="drugPrice"><i class="fa fa-flask"></i> Substancja czynna</label>
-								<input type="text" class="form-control" name="drugActive" placeholder="Wpisz substancję czynną" required="required">
+								<label for="specif_price"><i class="fa fa-money"></i> Cena za opakowanie</label>
+								<input type="number" min="1" class="form-control" name="specif_price" placeholder="Wpisz cenę" required="required">
+							</div>
+							<div class="form-group">
+								<label for="specif_active"><i class="fa fa-flask"></i> Substancja czynna</label>
+								<input type="text" class="form-control" name="specif_active" placeholder="Wpisz substancję czynną" required="required">
 							</div>
 							<br />
 							<button type="submit" class="btn btn-col btn-block">Dodaj nową specyfikację</button>
