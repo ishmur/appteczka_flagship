@@ -231,4 +231,13 @@
         }
     }
 
+    function get_users_of_group($group_id){
+
+        require("config/sql_connect.php");
+        $sql = "SELECT email FROM users WHERE id IN (SELECT user_id FROM connections WHERE group_id = ?)";
+        $result = db_statement($sql, "i", array(&$group_id));
+        return $result;
+
+    }
+
 ?>

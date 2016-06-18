@@ -49,13 +49,40 @@
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-sm-9 col-sm-offset-3">
+			<div class="col-sm-3">
+				<form action = "" method = "POST">
+					<div class="form-group">
+						<label for="email"><i class="fa"></i>Wybierz użytkownika apteczki</label><br/>
+						<input name="user_filter" list="users_list" placeholder="Wybierz użytkownika" class="form-control">
+						<datalist id="users_list">
+							<?php
+							$result = get_users_of_group($_SESSION['groupID']);
+							while ($row = mysqli_fetch_assoc($result)) {
+								echo "<option value=" .$row['email']. "></option>";
+							}
+							?>
+						</datalist>
+					</div>
+					<button type="submit" class="btn btn-primary">Filtruj</button>
+				</form>
+				<form action="" method="POST">
+					<button type = "submit" class="btn btn-info" name="clear" value="1">Wyczyść filtry</button>
+				</form>
+			</div>
 
-			<? parse_feed($_SESSION['groupID']); ?>
+				<?
+					if(isset($_POST['user_filter']) && ($_POST['clear'] != 1)) {
+						parse_feed($_SESSION['groupID'], $_POST['user_filter']);
+					}
+					else {
+						parse_feed($_SESSION['groupID']);
+					}
+				?>
 		</div>
 	</div>
+</div>
 
 	
-</div>
 
 
 <!-- Modal -->
