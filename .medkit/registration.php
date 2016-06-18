@@ -4,9 +4,9 @@
     require_once("include/functions.php");
 
     if($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $username = trim_input($_POST['username']);
-        $password = trim_input($_POST['password']);
-        $password_check = trim_input($_POST['password_check']);
+        $username = validate_trim_input($_POST['username']);
+        $password = validate_trim_input($_POST['password']);
+        $password_check = validate_trim_input($_POST['password_check']);
 
         $is_email_valid = login_valid($username, $login_error);
         $are_passwords_valid = password_valid($password, $password_check, $password_error);

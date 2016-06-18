@@ -12,9 +12,9 @@ $group_name_error;
 $password_error;
 
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $group_name = trim_input($_POST['group_name']);
-    $password = trim_input($_POST['password']);
-    $password_check = trim_input($_POST['password_check']);
+    $group_name = validate_trim_input($_POST['group_name']);
+    $password = validate_trim_input($_POST['password']);
+    $password_check = validate_trim_input($_POST['password_check']);
 
     $is_group_name_valid = groups_check_name_valid($group_name, $group_name_error);
     $are_passwords_valid = password_valid($password, $password_check, $password_error);
