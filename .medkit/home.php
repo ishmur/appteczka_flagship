@@ -71,11 +71,12 @@
 			</div>
 
 				<?
+					if(!isset($_GET['p'])) $_GET['p'] = 1;
 					if(isset($_POST['user_filter']) && ($_POST['clear'] != 1)) {
-						parse_feed($_SESSION['groupID'], $_POST['user_filter']);
+						parse_feed($_SESSION['groupID'], $_POST['user_filter'], $_GET['p']);
 					}
 					else {
-						parse_feed($_SESSION['groupID']);
+						parse_feed($_SESSION['groupID'], '', $_GET['p']);
 					}
 				?>
 		</div>

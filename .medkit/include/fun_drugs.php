@@ -53,7 +53,8 @@
 
     }
 
-    function drugs_print_table($groupID){
+
+    function drugs_print_table($groupID, $page){
 
         require("config/sql_connect.php");
 
@@ -61,7 +62,10 @@
                     FROM DrugsDB 
                     WHERE group_id = ?";
 
-        $result = db_statement($sql, "i", array(&$groupID));
+        $href = "drugs_overview.php";
+        $sql_pag = paginate($sql, $href, 10, $page, array('i', array(&$groupID)));
+
+        $result = db_statement($sql_pag, "i", array(&$groupID));
 
         if (mysqli_num_rows($result) > 0) {
 

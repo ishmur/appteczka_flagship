@@ -92,7 +92,8 @@
 							  
 								
 									<?php
-										drugs_print_table($groupID);
+										if(!isset($_GET['p'])) $_GET['p'] = 1;
+										drugs_print_table($groupID, $_GET['p']);
 									?>
 
 						</div>
