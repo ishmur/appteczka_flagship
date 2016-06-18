@@ -203,6 +203,7 @@
         $prev = $page - 1;
         $next = $page + 1;
         
+        if ($pages > 1) {
             echo "<row><div class='col-md-8'><ul class='pagination pagination-sm'>";
             // disable button <<, jeśli ZNAJDUJESZ SIĘ na pierwszej stronie
             if ($page != 1) echo "<li><a href='$href?p=$prev'>&laquo;</span></a></li><li><a href = '$href?p=1'>1   </a></li>";
