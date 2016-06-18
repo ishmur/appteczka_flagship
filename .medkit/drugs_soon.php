@@ -50,8 +50,9 @@
                             <br><br><h2>Lista leków, których termin ważności wkrótce minie:</h2><hr>
 
                             <?php
+                                if(!isset($_GET['p'])) $_GET['p'] = 1;
                                 $soonInt = 14; //how many days
-                                drugs_overdue_soon_print_table($groupID, $soonInt);
+                                drugs_overdue_soon_print_table($groupID, $soonInt, $_GET['p']);
                             ?>
 
                         </div>

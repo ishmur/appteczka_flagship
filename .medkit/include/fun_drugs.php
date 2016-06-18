@@ -193,7 +193,7 @@
 
     }
 
-    function drugs_overdue_print_table($groupID){
+    function drugs_overdue_print_table($groupID, $page){
 
         require("config/sql_connect.php");
         
@@ -203,7 +203,9 @@
                     WHERE group_id = ?
                     AND DATE(overdue) < CURRENT_DATE()";
 
-        $result = db_statement($sql, "i", array(&$groupID));
+        $href = "drugs_overdue.php";
+        $sql_pag = paginate($sql, $href, 10, $page, array("i", array(&$groupID)));
+        $result = db_statement($sql_pag, "i", array(&$groupID));
 
         if (mysqli_num_rows($result) > 0) {
 
@@ -249,7 +251,7 @@
         }
     }
 
-    function drugs_overdue_soon_print_table($groupID, $soonInt){
+    function drugs_overdue_soon_print_table($groupID, $soonInt, $page){
 
         require("config/sql_connect.php");
 
@@ -259,7 +261,10 @@
                     AND DATE(overdue) < CURRENT_DATE() + INTERVAL ? day
                     AND DATE(overdue) > CURRENT_DATE()";
 
-        $result = db_statement($sql, "ii", array(&$groupID, &$soonInt));
+        $href = "drugs_soon.php";
+
+        $sql_pag = paginate($sql, $href, 10, $page, array("ii", array(&$groupID, &$soonInt)));
+        $result = db_statement($sql_pag, "ii", array(&$groupID, &$soonInt));
 
         if (mysqli_num_rows($result) > 0) {
 
