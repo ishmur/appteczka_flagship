@@ -87,8 +87,9 @@
 
         require("config/sql_connect.php");
 
-        $sql = "SELECT name FROM DrugsDB
-                    WHERE id = ?";
+        $sql = "SELECT name 
+                FROM DrugsDB
+                WHERE id = ?";
 
         $result = db_statement($sql, "i", array(&$drug_id));
         if (mysqli_num_rows($result) == 1) {

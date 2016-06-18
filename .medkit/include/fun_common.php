@@ -1,5 +1,7 @@
 <?php
 
+    define("E_DUPLICATE_KEY", 1062);
+
     function trim_input($input){
         $input = trim($input);
         $input = stripcslashes($input);
@@ -38,8 +40,18 @@
 
             $exec = mysqli_stmt_execute($stmt);
             if ($exec === false) {
-                trigger_error('Statement execute failed! ' . htmlspecialchars(mysqli_stmt_error($stmt)), E_USER_ERROR);
-                return false;
+
+                // check for EAN duplicate entry
+                if (mysqli_errno($dbConnection) == E_DUPLICATE_KEY){
+                    $error = "duplicate";
+                    mysqli_stmt_close($stmt);
+                    mysqli_close($dbConnection);
+                    return $error;
+                } else {
+                    trigger_error('Statement execute failed! ' . htmlspecialchars(mysqli_stmt_error($stmt)), E_USER_ERROR);
+                    return false;
+                }
+
             } else {
                 $result = mysqli_stmt_get_result($stmt);
             }

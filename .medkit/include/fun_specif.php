@@ -1,28 +1,34 @@
 <?php
 
-    function specif_new_record($specif_name, $specif_EAN, $specif_per_package, $specif_price, $specif_active){
+    function specif_new_record($specif_name, $specif_EAN, $specif_per_package, $specif_unit, $specif_price, $specif_active){
 
         require("config/sql_connect.php");
         
 
-        $sql = "INSERT INTO drug_spec (drug_name, ean, per_package, price_per_package, active, user_defined, price_per_unit)
-                    VALUES (?,?,?,?,?,1,?)";
+        $sql = "INSERT INTO drug_spec (drug_name, ean, per_package, unit, price_per_package, active, user_defined, price_per_unit)
+                    VALUES (?,?,?,?,?,?,1,?)";
 
         $specif_price_per_unit = round($specif_price/$specif_per_package, 2);
-        $processed = db_statement($sql, "ssddsd", array(&$specif_name, &$specif_EAN, &$specif_per_package, &$specif_price, &$specif_active, &$specif_price_per_unit));
+        $processed = db_statement($sql, "ssdsdsd", array(&$specif_name, &$specif_EAN, &$specif_per_package, &$specif_unit, &$specif_price, &$specif_active, &$specif_price_per_unit));
+        if($processed == "duplicate"){
+            return $processed;
+        }
     }
 
-    function specif_update_record($specif_name, $specif_EAN, $specif_per_package, $specif_price, $specif_active, $specif_id){
+    function specif_update_record($specif_name, $specif_EAN, $specif_per_package, $specif_unit, $specif_price, $specif_active, $specif_id){
 
         require("config/sql_connect.php");
         
 
         $sql = "UPDATE drug_spec 
-                SET drug_name = ?, ean = ?, per_package = ?, price_per_package = ?, active = ?, price_per_unit = ?
+                SET drug_name = ?, ean = ?, per_package = ?, unit = ?, price_per_package = ?, active = ?, price_per_unit = ?
                 WHERE id_spec = ?";
         
         $specif_price_per_unit = round($specif_price/$specif_per_package, 2);
-        $processed = db_statement($sql, "ssddsdi", array(&$specif_name, &$specif_EAN, &$specif_per_package, &$specif_price, &$specif_active, &$specif_price_per_unit, &$specif_id));
+        $processed = db_statement($sql, "ssdsdsdi", array(&$specif_name, &$specif_EAN, &$specif_per_package, &$specif_unit, &$specif_price, &$specif_active, &$specif_price_per_unit, &$specif_id));
+        if($processed == "duplicate"){
+            return $processed;
+        }
     }
 
     function specif_pagination($page = 1){
@@ -242,7 +248,7 @@
 
         $specif = null;
 
-        $sql = "SELECT  drug_name, ean, per_package, price_per_package, active
+        $sql = "SELECT  drug_name, ean, per_package, unit, price_per_package, active
                 FROM drug_spec
                 WHERE id_spec = ?";
         
@@ -254,6 +260,7 @@
                 $specif['drug_name'] = $row["drug_name"];
                 $specif['ean'] = $row["ean"];
                 $specif['per_package'] = $row["per_package"];
+                $specif['unit'] = $row["unit"];
                 $specif['price_per_package'] = $row["price_per_package"];
                 $specif['active'] = $row["active"];
                 $specif['id_spec'] = $specif_id;
@@ -261,6 +268,12 @@
         
         return $specif;
 
+    }
+
+    function specif_check_unit($unit_array, $unit_string){
+
+        if ($unit_array == $unit_string)
+            echo "selected";
     }
 
 ?>
