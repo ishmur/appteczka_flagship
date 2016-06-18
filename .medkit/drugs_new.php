@@ -95,7 +95,7 @@
 
 							<div class="form-group">
 								<label for="drug_name"><i class="fa fa-life-ring"></i> Nazwa leku</label>
-								<input type="text" class="form-control" name="drug_name" placeholder="Wpisz nazwę nowego leku" required="required" value=<?php echo "$drug_name" ?>>
+								<input type="text" class="form-control" name="drug_name" placeholder="Wpisz nazwę nowego leku" required="required" value='<?php echo $drug_name ?>'>
 							</div>
 							<div class="form-group">
 								<label for="drug_unit">
