@@ -8,6 +8,13 @@
         exit();
     }
 
+    if(!isset($_POST["drugs_edit"]) && !isset($_POST["edit-drug"]) && !isset($_POST['ean'])){
+
+        header("Location: drugs_overview.php");
+        exit();
+
+    }
+
     $username = $_SESSION['username'];
     $groupID = $_SESSION["groupID"];
 

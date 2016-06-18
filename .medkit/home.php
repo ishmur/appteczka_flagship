@@ -13,12 +13,18 @@
 //			exit();
 //		}
 //	}
-	
+
 	if(!isset($_SESSION['username'])){
 		header("Location: index.php?logout=1");
 		exit();
 	}
-	
+
+	if(!empty($_SESSION["redirect"])){
+        $_SESSION["redirect"] = "";
+		header("Location: group_choose.php");
+		exit();
+	}
+
 	if($_SESSION['drugsOverdueModal'] == "show"){
 		$show_modal = "style='display:block'";
 		$_SESSION['drugsOverdueModal'] = "hide";
@@ -49,6 +55,20 @@
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-sm-9 col-sm-offset-3">
+
+            <?php if(empty($_SESSION["groupID"])) { ?>
+
+                <div class="col-md-8 col-md-offset-2">
+                    <div class="container-fluid">
+                        <div class="col-md-12 inline-element-center">
+                            <h1 style="color:red">Nie należysz do żadnej grupy - proszę wybrać grupę.</h1><br>
+                            <a href="group_choose.php"><button type="button" class="btn btn-danger col-xs-12">Wybierz grupę</button></a>
+                        </div>
+                    </div>
+                </div>
+
+            <?php } else { ?>
+
 			<div class="col-sm-3">
 				<form action = "" method = "POST">
 					<div class="form-group">
@@ -79,6 +99,9 @@
 						parse_feed($_SESSION['groupID'], '', $_GET['p']);
 					}
 				?>
+
+            <?php } ?>
+
 		</div>
 	</div>
 </div>

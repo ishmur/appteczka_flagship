@@ -56,7 +56,8 @@
         if (mysqli_num_rows($result) > 0) {
 
             echo
-                "<table class='table table-hover'>
+                "<h2>Lista grup, do których należysz:</h2><hr />
+                <table class='table table-hover'>
                 <thead>
                      <tr>
                         <th>Nazwa grupy</th>
@@ -98,8 +99,17 @@
         } else {
 
             echo
-                "<p>Nie należysz do żadnej grupy.</p>" .
-                "<p><a href='group_join.php'>Dołącz do istniejącej grupy</a> lub <a href='group_new.php'>załóż nową.</a></p>";
+                    "<div class='col-md-12 inline-element-center'>
+                        <h1>Nie należysz do żadnej grupy.</h1><br>
+                        <div class='container-fluid'>
+                            <div class='col-sm-6'>
+                                <a href='group_join.php'><button type='button' class='btn btn-warning col-xs-12'>Dołącz do istniejącej grupy</button></a>
+                            </div>
+                            <div class='col-sm-6'>
+                                <a href='group_new.php'><button type='button' class='btn btn-info col-xs-12'>Załóż nową grupę</button></a>
+                            </div>
+                        </div>
+                    </div>";
 
         }
 
@@ -140,6 +150,10 @@
                     $sql = "UPDATE users 
                             SET show_group_id = ?
                             WHERE email = ?";
+
+                    if($setNULL){
+                        $groupID = null;
+                    }
 
                     $processed = db_statement($sql, "is", array(&$groupID, &$username));
                     $changed = true;

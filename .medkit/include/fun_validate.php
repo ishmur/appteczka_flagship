@@ -99,4 +99,22 @@
 
     }
 
+    function validate_active($var, &$error_text, &$error_flag){
+
+        if (empty($var)){
+            $error_text = "Pole nie może być puste.";
+            $error_flag = "has-error";
+            return false;
+        }
+
+        if (!preg_match("/^[ąćęłńóśźżĄĆĘŁŃÓŚŹŻa-zA-Z ]*$/",$var)) {
+            $error_text = "Nieprawidłowa nazwa substancji czynnej leku.";
+            $error_flag = "has-error";
+            return false;
+        }
+
+        return true;
+
+    }
+
 ?>
