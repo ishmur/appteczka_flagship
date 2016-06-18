@@ -11,13 +11,14 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = trim_input($_POST['password']);
 
     $group_exists = groups_check_if_exists($group_name, $group_name_error);
+    $already_in_group = is_user_in_group($_SESSION['username'], $group_name, $group_name_error);
     $is_password_correct = groups_check_password_correct($group_name, $password, $password_error);
     
     if(isset($group_name_error) || isset($password_error)){
         $form_style = "has-error";
     }
 
-    if($group_exists && $is_password_correct){
+    if($group_exists && $is_password_correct && (!$already_in_group) ){
         $password = md5($password);
         if(groups_add_user_to_group($group_name, $_SESSION['username'])){
             header("Location: group_choose.php");
