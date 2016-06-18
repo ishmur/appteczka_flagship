@@ -8,6 +8,9 @@
                     VALUES (?,?,?,?,?)";
 
         $processed = db_statement($sql, "sissi", array(&$drugName, &$drugPrice, &$drugDate, &$username, &$groupID));
+        if(!$processed){
+            add_event($username, $groupID, 'drugs_new', $drugName);
+        }
     }
 
     function drugs_print_table($groupID){
@@ -90,6 +93,10 @@
                     AND group_id = ?";
 
         $processed = db_statement($sql, "ii", array(&$drugID, &$groupID));
+        if(!$processed){
+            add_event($username, $groupID, 'drugs_delete', $drugName);
+        }
+
     }
 
     function drugs_overdue_check_date($groupID){

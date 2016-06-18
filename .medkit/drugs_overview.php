@@ -9,10 +9,11 @@
 	}
 
 	$groupID = $_SESSION["groupID"];
+	$username = $_SESSION["username"];
 
 	if(isset($_POST['drugs'])) {
 		foreach ($_POST['drugs'] as $drugID) {
-			drugs_delete_record($drugID, $groupID);
+			drugs_delete_record($username, $drugID, $groupID);
 		}
 	}
 
