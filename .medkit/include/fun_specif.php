@@ -19,7 +19,6 @@
 
         require("config/sql_connect.php");
         
-
         $sql = "UPDATE drug_spec 
                 SET drug_name = ?, ean = ?, per_package = ?, unit = ?, price_per_package = ?, active = ?, price_per_unit = ?
                 WHERE id_spec = ?";

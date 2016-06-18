@@ -73,7 +73,7 @@
                             "<input form='change_group' type='checkbox' name='group_change[]' value='".$row['id']."'>".
                         "</div></td>".
                         "<td class=''>
-                            <button type='button' class='btn btn-info btn-change'>Wybierz</button>
+                            <button type='button' class='btn btn-info btn-change'>Ustaw jako domyślną</button>
                         </td>".
                         "<td class='hidden'><div class=''>".
                             "<input form='leave_groups' type='checkbox' name='groups[]' value='".$row['id']."'>".

@@ -8,17 +8,12 @@
 		exit();
 	}
 
+    $username = $_SESSION['username'];
 	$groupID = $_SESSION["groupID"];
-
-	if (isset($_POST['overdueSoon'])){
-		foreach ($_POST['overdueSoon'] as $drugID) {
-			drugs_delete_record($drugID, $groupID);
-		}
-	}
 
 	if (isset($_POST['overdue'])){
 		foreach ($_POST['overdue'] as $drugID) {
-			drugs_delete_record($drugID, $groupID);
+			drugs_delete_record($username, $drugID, $groupID);
 		}
 	}
 
@@ -63,22 +58,6 @@
 				</div>
 			</div>
 
-			<div class="col-md-8 col-md-offset-2">
-				<div class="container-fluid">
-					<div class="col-md-12">
-						<div class="container-fluid">
-								<br><br><h2>Lista leków, których termin ważności wkrótce minie:</h2><hr>
-
-									<?php
-										$soonInt = 14; //how many days
-										drugs_overdue_soon_print_table($groupID, $soonInt);
-									?>
-
-						</div>
-					</div>
-				</div>
-			</div>
-			
 		</div>
 	</div>
 	

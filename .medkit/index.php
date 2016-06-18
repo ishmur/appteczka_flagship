@@ -24,8 +24,8 @@
 
 	if($_SERVER['REQUEST_METHOD'] == 'POST'){
 		//General validation of inputs
-		$username = trim_input($_POST['email']);
-		$password = trim_input($_POST['password']);
+		$username = validate_trim_input($_POST['email']);
+		$password = validate_trim_input($_POST['password']);
 		$remember_me = isset($_POST['remember']);
 
 		$user_check = login_basic_check($username, $user_error_message);

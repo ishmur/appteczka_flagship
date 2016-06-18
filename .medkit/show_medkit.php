@@ -5,7 +5,7 @@ session_start();
 require_once("include/functions.php");
 
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $group_name = trim_input($_POST['group_name']);
+    $group_name = validate_trim_input($_POST['group_name']);
     $group_exists = groups_check_if_exists($group_name, $group_name_error);
     
     if($group_exists){

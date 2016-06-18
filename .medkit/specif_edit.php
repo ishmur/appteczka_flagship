@@ -137,7 +137,7 @@
                                     <a href="specif_overview.php"><button type="button" class="btn btn-danger col-sm-12">Anuluj</button></a>
                                 </div>
                                 <div class="col-sm-6">
-                                    <button type="submit" name="edit-specification" class="btn btn-col btn-block">Zatwierdź nową specyfikację</button>
+                                    <button type="submit" name="edit-specification" class="btn btn-col btn-block">Zatwierdź zmiany</button>
                                 </div>
                             </div>
                         </form>

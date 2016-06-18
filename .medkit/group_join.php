@@ -7,8 +7,8 @@ $group_name_error;
 $password_error;
 
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $group_name = trim_input($_POST['group_name']);
-    $password = trim_input($_POST['password']);
+    $group_name = validate_trim_input($_POST['group_name']);
+    $password = validate_trim_input($_POST['password']);
 
     $group_exists = groups_check_if_exists($group_name, $group_name_error);
     $already_in_group = is_user_in_group($_SESSION['username'], $group_name, $group_name_error);

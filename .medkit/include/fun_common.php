@@ -2,13 +2,6 @@
 
     define("E_DUPLICATE_KEY", 1062);
 
-    function trim_input($input){
-        $input = trim($input);
-        $input = stripcslashes($input);
-        $input = htmlspecialchars($input);
-        return $input;
-    }
-
     function db_statement(){
 
         require(__DIR__."/../config/sql_connect.php");

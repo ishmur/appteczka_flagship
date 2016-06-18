@@ -24,8 +24,8 @@
 
 		if ($result == "duplicate"){
 
-            $error_flag_ean = "has-error";
-            $error_ean = "Kod EAN musi być unikatowy (w bazie znajduje się już specyfik o danym kodzie).";
+            $error_ean_flag = "has-error";
+            $error_ean_text = "Kod EAN musi być unikatowy (w bazie znajduje się już specyfik o danym kodzie).";
 
 		} else {
 			header("Location: specif_overview.php");
@@ -71,9 +71,9 @@
 								<label for="specif_name"><i class="fa fa-tags"></i> Nazwa leku</label>
 								<input type="text" class="form-control" name="specif_name" placeholder="Wpisz nazwę nowego leku" required="required" value=<?php echo "$specif_name" ?>>
 							</div>
-							<div class="form-group <? echo $error_flag_ean; ?>">
+							<div class="form-group <? echo $error_ean_flag; ?>">
 								<label for="specif_EAN"><i class="fa fa-hashtag"></i> Kod EAN</label>
-                                <p style="color:red"><?php echo $error_ean ?></p>
+                                <p style="color:red"><?php echo $error_ean_text ?></p>
 								<input type="text" class="form-control" name="specif_EAN" placeholder="Wpisz kod EAN" required="required" value=<?php echo "$specif_EAN" ?>>
 							</div>
 							<div class="form-group">
