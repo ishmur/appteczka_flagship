@@ -4,8 +4,8 @@
 
         require("config/sql_connect.php");
 
-        $sql = "INSERT INTO DrugsDB (name, price, overdue, user_added, group_id)
-                    VALUES (?,?,?,?,?)";
+        $sql = "INSERT INTO DrugsDB (name, price, overdue, user_added, group_id, amount)
+                    VALUES (?,?,?,?,?,10)";
 
         $processed = db_statement($sql, "sissi", array(&$drugName, &$drugPrice, &$drugDate, &$username, &$groupID));
     }
@@ -45,7 +45,7 @@
                         "<td>" . $row["amount"] . "</td>" .
                         "<td>" . date("d-m-Y", strtotime($row["overdue"])). "</td>" .
                         "<td class=''>" .
-                            "<button type='button' class='btn btn-info btn-take'>Weź lek</button>".
+                            "<button type='button' id='takeDrug-".$row["id"]."' class='btn btn-info btn-take'>Weź lek</button>".
                         "</td>".
                         "<td class='hidden'><div class=''>".
                             "<input form='edit_drugs' type='checkbox' name='drugs_edit[]' value='".$row['id']."'>".
@@ -78,6 +78,19 @@
                 "<a href='drugs_new.php'>Dodaj nowy lek</a>";
 
         }
+    }
+
+    function drugs_take_drug($amount, $drugID, $amount_present){
+
+        require("config/sql_connect.php");
+
+        $sql = "UPDATE DrugsDB 
+                SET amount = ?
+                WHERE id = ?";
+
+        $new_amount = $amount_present - $amount;
+
+        $processed = db_statement($sql, "ii", array(&$new_amount, &$drugID));
     }
 
     function drugs_delete_record($drugID, $groupID){

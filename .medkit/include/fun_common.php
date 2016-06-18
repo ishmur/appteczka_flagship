@@ -9,7 +9,7 @@
 
     function db_statement(){
 
-        require("config/sql_connect.php");
+        require(__DIR__."/../config/sql_connect.php");
 
         $args = func_get_args();
 

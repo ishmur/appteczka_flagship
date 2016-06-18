@@ -20,6 +20,13 @@
         //tba
     }
 
+    if(isset($_POST["drugs_take_amount"])){
+        $amount = $_POST["drugs_take_amount"];
+        $id = $_POST["drugs_take_id"];
+        $amount_present = $_POST["drugs_take_present"];
+        drugs_take_drug($amount, $id, $amount_present);
+    }
+
 ?>
 
 <!DOCTYPE html>
@@ -90,20 +97,19 @@
 				<h4 style="color:white;"><i class="fa fa-hourglass-end"></i> Weź lek</h4>
 			</div>
 
-			<div class="modal-body">
-				<h5><b>W apteczce znajdują się przeterminowane leki.</b></h5>
-				<p>Proszę przejść do zakładki "Lista leków przeterminowanych" i sprawdzić, których leków nie należy stosować</p>
+			<div class="modal-body" id="ajaxCall">
+                <!-- table from AJAX call -->
 			</div>
 
 			<div class="modal-footer">
 				<button type="button" class="btn btn-danger pull-left" id="modalCancelBtn">
-					<i class="fa fa-ban"></i> Anuluj.
+					<i class="fa fa-ban"></i> Anuluj
 				</button>
-				<a href="">
-                    <button type="button" class="btn btn-success pull-right">
-						<i class="fa fa-share"></i> Akceptuj.
-					</button>
-                </a>
+                <form action='' method='POST' id='take_drugs'>
+                    <button type='submit' name='take-submit' class='btn btn-success pull-right' id="take_drugs_submit">
+                        <i class="fa fa-share"></i> Akceptuj
+                    </button>
+                </form>
 			</div>
 
 		</div>
