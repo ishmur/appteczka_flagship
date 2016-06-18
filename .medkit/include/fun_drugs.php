@@ -53,7 +53,6 @@
 
     }
 
-
     function drugs_print_table($groupID, $page){
 
         require("config/sql_connect.php");
