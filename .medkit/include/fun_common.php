@@ -184,6 +184,62 @@
 
     }
 
-    
+    function paginate($sql, $href, $rows_per_page = 10, $page = 1, $array_of_arg = array()){
+        require("config/sql_connect.php");
 
+        if(count($array_of_arg) == 0) $result = mysqli_query($dbConnection, $sql);
+        else {
+            $types = $array_of_arg[0];
+            $ref_array = $array_of_arg[1];
+            $result = db_statement($sql, $types, $ref_array);
+        }
+        // sprawdzenie, ile rekordów trzeba "spaginować"
+        $rows = mysqli_num_rows($result);
+        $pages = intval(ceil($rows / $rows_per_page)); //ile stron
+        //start, end - sąsiedztwo obecnie wybranej strony
+        $start = $page - 2; //page = obecnie wybrana strona
+        $end = $start + 4;
+        //prev, next - poprzednia, kolejna strona względem obecnej
+        $prev = $page - 1;
+        $next = $page + 1;
+        
+            echo "<row><div class='col-md-8'><ul class='pagination pagination-sm'>";
+            // disable button <<, jeśli ZNAJDUJESZ SIĘ na pierwszej stronie
+            if ($page != 1) echo "<li><a href='$href?p=$prev'>&laquo;</span></a></li><li><a href = '$href?p=1'>1   </a></li>";
+            else echo "<li class='disabled'><a href='$href?p=$prev'>&laquo;</span></a></li><li class='active'><a>1 </a></li>";
+
+            // jeśli "sąsiedztwo" danej strony wychodzi poza zakres 2:pages-1, odpowiednio ogranicz
+            if ($start <= 2) $start = 2;
+            else echo "<li><a>...</a></li>";
+            if ($end >= $pages) $end = $pages - 1;
+            // wyświetl "sąsiedztwo" obecnej strony w pętli
+            while ($start <= $end) {
+                if ($start == $page) echo "<li class='active'><a>$start</a></li>"; //wybraną stronę zaznacz jako "aktywną"
+                else echo "<li><a href = '$href?p=$start'>$start</a></li>";
+                $start = $start + 1;
+            }
+            if ($end != $pages - 1) echo "<li><a>...</a></li>";
+
+            //disable button >> jeśli ZNAJDUJESZ SIĘ na ostatniej stronie
+            if ($page != $pages) echo "<li><a href = '$href?p=$pages'>$pages</a></li><li><a href='$href?p=$next'>&raquo;</span></a></li>";
+            else {
+                if ($pages != 1) echo "<li class='active'><a>$pages</a></li>";
+                echo "<li class='disabled'><a>&raquo;</span></a></li>";
+            }
+            echo "</ul></div>";
+
+
+            echo "<form><div class='col-md-4'>
+                        <div class='input-group' style='padding-top: 20px;><form class='' method='GET'>
+                        <input type='number' min='1' max='$pages' step = '1' name='p' class='form-control input-sm' style='width:90px;'  placeholder='Strona'>
+                        <span class='input-group-btn' style='width:0;'>
+                        <button type='button' class='btn btn-sm btn-primary'>>>></button></span>
+                        </div></div></row></form>";
+        }
+        //oblicz, od którego rekordu pokazywać
+        $start_limit = ($rows_per_page * ($page - 1));
+
+        //sformułowanie zapytania do SQL
+        return $sql . " LIMIT " . $start_limit . "," . $rows_per_page;
+    }
 ?>

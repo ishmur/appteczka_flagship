@@ -30,6 +30,11 @@
         $result2 = db_statement($sql, "s", array(&$username));
 
         $sql = "SELECT * FROM connections WHERE user_id = ? AND group_id = ?";
+        $result1 = mysqli_fetch_assoc($result1);
+        $result2 = mysqli_fetch_assoc($result2);
+        $result1 = $result1['id'];
+        $result2 = $result2['id'];
+
 
         $result = db_statement($sql, "ii", array(&$result1, &$result2));
         if (mysqli_num_rows($result) > 0) {

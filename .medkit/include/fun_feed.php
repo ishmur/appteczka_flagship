@@ -32,15 +32,19 @@
         }
     }
 
-    function parse_feed($group_id, $username = ""){
+    function parse_feed($group_id, $username = "", $page){
+
+        require('config/sql_connect.php');
 
         if ($username == "") {
             $sql = "SELECT * FROM user_actions_log WHERE group_id = ? ORDER BY created DESC";
-            $result = db_statement($sql, "i", array(&$group_id));
+            $sql_pag = paginate($sql, 'home.php', 10, $page, array('i', array(&$group_id)));
+            $result = db_statement($sql_pag, 'i', array(&$group_id));
         }
         else {
             $sql = "SELECT * FROM user_actions_log WHERE group_id = ? AND email = ? ORDER BY created DESC";
-            $result = db_statement($sql, "is", array(&$group_id, &$username));
+            $sql_pag = paginate($sql, 'home.php', 10, $page, array('is', array(&$group_id, &$username)));
+            $result = db_statement($sql_pag, 'is', array(&$group_id, &$username));
         }
 
         if (mysqli_num_rows($result) > 0) {
