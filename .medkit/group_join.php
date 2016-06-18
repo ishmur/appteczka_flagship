@@ -20,8 +20,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     if($group_exists && $is_password_correct){
         $password = md5($password);
         if(groups_add_user_to_group($group_name, $_SESSION['username'])){
-            header("Location: group_choose.php?reg=2");
-            $_SESSION['new_group'] = $group_name;
+            header("Location: group_choose.php");
+            $_SESSION['joined_group'] = $group_name;
             exit();
         } else {
             die("Database error");

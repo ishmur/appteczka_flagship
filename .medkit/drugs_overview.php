@@ -20,6 +20,13 @@
         //tba
     }
 
+    if(isset($_POST["drugs_take_amount"])){
+        $amount = $_POST["drugs_take_amount"];
+        $id = $_POST["drugs_take_id"];
+        $amount_present = $_POST["drugs_take_present"];
+        drugs_take_drug($amount, $id, $amount_present);
+    }
+
 ?>
 
 <!DOCTYPE html>
@@ -30,6 +37,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="css/modal.css">
   <link rel="stylesheet" type="text/css" href="css/navigation.css">
 </head>
 
@@ -76,6 +84,36 @@
 		</div>
 	</div>
 	
+</div>
+
+<!-- Modal -->
+<div class="modal" role="dialog">
+	<div class="modal-dialog">
+		<!-- Modal content-->
+
+		<div class="modal-content" >
+
+			<div class="modal-header">
+				<h4 style="color:white;"><i class="fa fa-hourglass-end"></i> Weź lek</h4>
+			</div>
+
+			<div class="modal-body" id="ajaxCall">
+                <!-- table from AJAX call -->
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger pull-left" id="modalCancelBtn">
+					<i class="fa fa-ban"></i> Anuluj
+				</button>
+                <form action='' method='POST' id='take_drugs'>
+                    <button type='submit' name='take-submit' class='btn btn-success pull-right' id="take_drugs_submit">
+                        <i class="fa fa-share"></i> Akceptuj
+                    </button>
+                </form>
+			</div>
+
+		</div>
+	</div>
 </div>
 
 <script src="js/drugs_overview.js"></script>
