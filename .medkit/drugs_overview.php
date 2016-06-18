@@ -30,6 +30,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="css/modal.css">
   <link rel="stylesheet" type="text/css" href="css/navigation.css">
 </head>
 
@@ -76,6 +77,37 @@
 		</div>
 	</div>
 	
+</div>
+
+<!-- Modal -->
+<div class="modal" role="dialog">
+	<div class="modal-dialog">
+		<!-- Modal content-->
+
+		<div class="modal-content" >
+
+			<div class="modal-header">
+				<h4 style="color:white;"><i class="fa fa-hourglass-end"></i> Weź lek</h4>
+			</div>
+
+			<div class="modal-body">
+				<h5><b>W apteczce znajdują się przeterminowane leki.</b></h5>
+				<p>Proszę przejść do zakładki "Lista leków przeterminowanych" i sprawdzić, których leków nie należy stosować</p>
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger pull-left" id="modalCancelBtn">
+					<i class="fa fa-ban"></i> Anuluj.
+				</button>
+				<a href="">
+                    <button type="button" class="btn btn-success pull-right">
+						<i class="fa fa-share"></i> Akceptuj.
+					</button>
+                </a>
+			</div>
+
+		</div>
+	</div>
 </div>
 
 <script src="js/drugs_overview.js"></script>
