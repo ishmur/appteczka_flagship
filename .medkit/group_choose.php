@@ -92,7 +92,8 @@
                            
 
                                     <?php
-                                        groups_print_table($username);
+                                        if(!isset($_GET['p'])) $_GET['p'] = 1;
+                                        groups_print_table($username, $_GET['p']);
                                     ?>
 
 

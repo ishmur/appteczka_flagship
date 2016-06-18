@@ -65,6 +65,8 @@
 							  <br><h2>Wykaz przeterminowanych leków:</h2><hr>
 
 									<?php
+										if(!isset($_GET['p'])) $_GET['p'] = 1;
+										drugs_print_table($groupID, $_GET['p']);
 										drugs_overdue_print_table($groupID);
 									?>
 
