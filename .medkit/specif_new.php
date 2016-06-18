@@ -9,30 +9,42 @@
 		exit();
 	}
 
-	if($_SERVER['REQUEST_METHOD'] == 'POST') {
+	if(isset($_POST['specif-submit'])) {
 
-		$specif_name = $_POST['specif_name'];
-		$specif_EAN = $_POST['specif_EAN'];
-		$specif_per_package = $_POST['specif_per_package'];
-		$specif_unit = $_POST['specif_unit'];
-		$specif_price = $_POST['specif_price'];
-		$specif_active = $_POST['specif_active'];
+        $specif_name = validate_trim_input($_POST['specif_name']);
+        $specif_EAN = validate_trim_input($_POST['specif_EAN']);
+        $specif_per_package = validate_trim_input($_POST['specif_per_package']);
+        $specif_unit = validate_trim_input($_POST['specif_unit']);
+        $specif_price = validate_trim_input($_POST['specif_price']);
+        $specif_active = validate_trim_input($_POST['specif_active']);
 
-		//Validate inputs - TBA
+        $name_valid = validate_drug_name($specif_name, $error_name_text, $error_name_flag);
+        $ean_valid = validate_ean($specif_EAN, $error_ean_text, $error_ean_flag);
+        $unit_valid = validate_drug_unit($specif_unit, $error_unit_text, $error_unit_flag);
+        $amount_valid = validate_numeric_amount($specif_per_package, $error_per_package_text, $error_per_package_flag);
+        $price_valid = validate_numeric_amount($specif_price, $error_price_text, $error_price_flag);
+        $active_valid = validate_active($specif_active, $error_active_text, $error_active_flag);
 
-		$result = specif_new_record($specif_name, $specif_EAN, $specif_per_package, $specif_unit, $specif_price, $specif_active);
 
-		if ($result == "duplicate"){
+        if ($name_valid && $ean_valid && $unit_valid && $amount_valid && $price_valid && $active_valid) {
 
-            $error_ean_flag = "has-error";
-            $error_ean_text = "Kod EAN musi być unikatowy (w bazie znajduje się już specyfik o danym kodzie).";
+            $result = specif_new_record($specif_name, $specif_EAN, $specif_per_package, $specif_unit, $specif_price, $specif_active);
 
-		} else {
-			header("Location: specif_overview.php");
-			exit();
-		}
+            if ($result == "duplicate") {
 
-	}
+                $error_ean_flag = "has-error";
+                $error_ean_text = "Kod EAN musi być unikatowy (w bazie danych znajduje się już specyfik o danym kodzie).";
+
+            } else {
+
+                $_SESSION['edit_specif'] = $specif_name;
+                header("Location: specif_overview.php");
+                exit();
+
+            }
+
+        }
+    }
 
 ?>
 
@@ -67,8 +79,9 @@
 				<div class="container-fluid">
 					<div class="col-md-12">
 						<form action="" method="POST">
-							<div class="form-group">
+							<div class="form-group <? echo $error_name_flag; ?>">
 								<label for="specif_name"><i class="fa fa-tags"></i> Nazwa leku</label>
+								<p style="color:red"><?php echo $error_name_text; ?></p>
 								<input type="text" class="form-control" name="specif_name" placeholder="Wpisz nazwę nowego leku" required="required" value=<?php echo "$specif_name" ?>>
 							</div>
 							<div class="form-group <? echo $error_ean_flag; ?>">
@@ -76,10 +89,11 @@
                                 <p style="color:red"><?php echo $error_ean_text ?></p>
 								<input type="text" class="form-control" name="specif_EAN" placeholder="Wpisz kod EAN" required="required" value=<?php echo "$specif_EAN" ?>>
 							</div>
-							<div class="form-group">
+                            <div class="form-group <? echo $error_unit_flag; ?>">
 								<label for="specif_unit">
 									<i class="fa fa-pencil-square-o"></i> Rodzaj leku w opakowaniu</label>
-								</label><br>
+								</label>
+                                <p style="color:red"><?php echo $error_unit_text; ?></p>
 
 								<select name="specif_unit" id="specif_unit" class="form-control" required>
 									<?php if(!isset($specif_unit)) echo "<option value='' disabled selected>Proszę wybrać rodzaj leku w opakowaniu</option>" ?>
@@ -104,20 +118,23 @@
                                     <option value="zest." <?php specif_check_unit($specif_unit, "zest.") ?>>zest.</option>
 								</select>
 							</div>
-							<div class="form-group">
+                            <div class="form-group <? echo $error_per_package_flag; ?>">
 								<label for="specif_per_package"><i class="fa fa-database"></i> Ilość leku w opakowaniu</label>
+                                <p style="color:red"><?php echo $error_per_package_text; ?></p>
 								<input type="number" min="0" step='0.01' class="form-control" name="specif_per_package" placeholder="Wpisz ilość leku w opakowaniu" required="required" value=<?php echo "$specif_per_package" ?>>
 							</div>
-							<div class="form-group">
+                            <div class="form-group <? echo $error_price_flag; ?>">
 								<label for="specif_price"><i class="fa fa-money"></i> Cena za opakowanie</label>
+                                <p style="color:red"><?php echo $error_price_text; ?></p>
 								<input type="number" min="0" step='0.01' class="form-control" name="specif_price" placeholder="Wpisz cenę" required="required" value=<?php echo "$specif_price" ?>>
 							</div>
-							<div class="form-group">
+                            <div class="form-group <? echo $error_active_flag; ?>">
 								<label for="specif_active"><i class="fa fa-flask"></i> Substancja czynna</label>
+                                <p style="color:red"><?php echo $error_active_text; ?></p>
 								<input type="text" class="form-control" name="specif_active" placeholder="Wpisz substancję czynną" required="required" value=<?php echo "$specif_active" ?>>
 							</div>
 							<br />
-							<button type="submit" class="btn btn-col btn-block">Dodaj nową specyfikację</button>
+							<button type="submit" name="specif-submit" class="btn btn-col btn-block">Dodaj nową specyfikację</button>
 						</form>
 					</div>
 				</div>

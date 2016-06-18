@@ -8,6 +8,24 @@
         exit();
     }
 
+    if(isset($_SESSION['new_specif'])){
+        ?>
+        <div class="alert alert-success">
+            Zdefiniowano nową specyfikację leku o nazwie: <strong><? echo $_SESSION['new_specif']?></strong>!
+        </div>
+        <?php
+        $_SESSION['new_specif'] = null;
+    }
+
+    if(isset($_SESSION['edit_specif'])){
+        ?>
+        <div class="alert alert-success">
+            Edytowano specyfikację! Obecna nazwa tego leku to: <strong><? echo $_SESSION['edit_specif']?></strong>.
+        </div>
+        <?php
+        $_SESSION['edit_specif'] = null;
+    }
+
     if(isset($_POST['specif'])) {
         foreach ($_POST['specif'] as $specifID) {
             specif_delete_record($specifID);
