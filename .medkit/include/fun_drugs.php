@@ -1,75 +1,52 @@
 <?php
-
-    function drugs_new_record($drug_name, $drug_unit, $drug_amount, $drug_price, $drug_date, $username, $groupID){
-
-        require("config/sql_connect.php");
-
-        $sql = "INSERT INTO DrugsDB (name, unit, amount, price, overdue, user_added, group_id)
+function drugs_new_record($drug_name, $drug_unit, $drug_amount, $drug_price, $drug_date, $username, $groupID){
+    require("config/sql_connect.php");
+    $sql = "INSERT INTO DrugsDB (name, unit, amount, price, overdue, user_added, group_id)
                     VALUES (?, ?, ?, ?, ?, ?, ?)";
-
-        $processed = db_statement($sql, "ssidssi", array(&$drug_name, &$drug_unit, &$drug_amount, &$drug_price, &$drug_date, &$username, &$groupID));
-        if(!$processed){
-            add_event($username, $groupID, 'drugs_new', $drug_name);
-        }
+    $processed = db_statement($sql, "ssidssi", array(&$drug_name, &$drug_unit, &$drug_amount, &$drug_price, &$drug_date, &$username, &$groupID));
+    if(!$processed){
+        add_event($username, $groupID, 'drugs_new', $drug_name);
     }
-
-    function drugs_update_record($drug_name, $drug_unit, $drug_amount, $drug_price, $drug_date, $drug_id){
-
-        require("config/sql_connect.php");
-
-        $sql = "UPDATE DrugsDB 
+}
+function drugs_update_record($drug_name, $drug_unit, $drug_amount, $drug_price, $drug_date, $drug_id){
+    require("config/sql_connect.php");
+    $sql = "UPDATE DrugsDB 
                 SET name = ?, unit = ?, amount = ?, price = ?, overdue = ?
                 WHERE id = ?";
-
-        $processed = db_statement($sql, "ssidsi", array(&$drug_name, &$drug_unit, &$drug_amount, &$drug_price, &$drug_date, &$drug_id));
-        if(!$processed){
-            // event for edit
-        }
+    $processed = db_statement($sql, "ssidsi", array(&$drug_name, &$drug_unit, &$drug_amount, &$drug_price, &$drug_date, &$drug_id));
+    if(!$processed){
+        // event for edit
     }
-
-    function drugs_get_info_from_id($drug_id){
-
-        require("config/sql_connect.php");
-
-        $drug = null;
-
-        $sql = "SELECT  name, unit, amount, price, overdue, user_added, group_id
+}
+function drugs_get_info_from_id($drug_id){
+    require("config/sql_connect.php");
+    $drug = null;
+    $sql = "SELECT  name, unit, amount, price, overdue, user_added, group_id
                 FROM DrugsDB
                 WHERE id = ?";
-
-        $result = db_statement($sql, "i", array(&$drug_id));
-
-        if (mysqli_num_rows($result) == 1) {
-            $row = mysqli_fetch_assoc($result);
-            $drug['name'] = $row["name"];
-            $drug['unit'] = $row["unit"];
-            $drug['amount'] = $row["amount"];
-            $drug['price'] = $row["price"];
-            $drug['overdue'] = $row["overdue"];
-            $drug['id'] = $drug_id;
-        }
-
-        return $drug;
-
+    $result = db_statement($sql, "i", array(&$drug_id));
+    if (mysqli_num_rows($result) == 1) {
+        $row = mysqli_fetch_assoc($result);
+        $drug['name'] = $row["name"];
+        $drug['unit'] = $row["unit"];
+        $drug['amount'] = $row["amount"];
+        $drug['price'] = $row["price"];
+        $drug['overdue'] = $row["overdue"];
+        $drug['id'] = $drug_id;
     }
-
-    function drugs_print_table($groupID, $page){
-
-        require("config/sql_connect.php");
-
-        $sql = "SELECT id, name, price, amount, overdue 
+    return $drug;
+}
+function drugs_print_table($groupID, $page){
+    require("config/sql_connect.php");
+    $sql = "SELECT id, name, price, amount, overdue 
                     FROM DrugsDB 
                     WHERE group_id = ?";
-
-        $href = "drugs_overview.php";
-        $sql_pag = paginate($sql, $href, 10, $page, array('i', array(&$groupID)));
-
-        $result = db_statement($sql_pag, "i", array(&$groupID));
-
-        if (mysqli_num_rows($result) > 0) {
-
-            echo
-                "<table class='table table-hover'>
+    $href = "drugs_overview.php";
+    $sql_pag = paginate($sql, $href, 10, $page, array('i', array(&$groupID)));
+    $result = db_statement($sql_pag, "i", array(&$groupID));
+    if (mysqli_num_rows($result) > 0) {
+        echo
+        "<table class='table table-hover'>
                 <thead>
                   <tr>
                     <th>Nazwa leku</th>
@@ -82,135 +59,104 @@
                   </tr>
                 </thead>
                 <tbody>";
-
-            while ($row = mysqli_fetch_assoc($result)) {
-                echo
-                    "<tr>".
-                        "<td>" . $row["name"] . "</td>" .
-                        "<td>" . $row["price"] . "</td>" .
-                        "<td>" . $row["amount"] . "</td>" .
-                        "<td>" . date("d-m-Y", strtotime($row["overdue"])). "</td>" .
-                        "<td class=''>" .
-                            "<button type='button' id='takeDrug-".$row["id"]."' class='btn btn-info btn-take'>Weź lek</button>".
-                        "</td>".
-                        "<td class='hidden'><div class=''>".
-                            "<input form='edit_drugs' type='checkbox' name='drugs_edit[]' value='".$row['id']."'>".
-                        "</div></td>".
-                        "<td class=''>
+        while ($row = mysqli_fetch_assoc($result)) {
+            echo
+                "<tr>".
+                "<td>" . $row["name"] . "</td>" .
+                "<td>" . $row["price"] . "</td>" .
+                "<td>" . $row["amount"] . "</td>" .
+                "<td>" . date("d-m-Y", strtotime($row["overdue"])). "</td>" .
+                "<td class=''>" .
+                "<button type='button' id='takeDrug-".$row["id"]."' class='btn btn-info btn-take'>Weź lek</button>".
+                "</td>".
+                "<td class='hidden'><div class=''>".
+                "<input form='edit_drugs' type='checkbox' name='drugs_edit[]' value='".$row['id']."'>".
+                "</div></td>".
+                "<td class=''>
                             <button type='button' class='btn btn-warning btn-edit'>Edytuj</button>
                         </td>".
-                        "<td class='hidden'><div class=''>".
-                            "<input form='delete_drugs' type='checkbox' name='drugs[]' value='".$row['id']."'>".
-                        "</div></td>".
-                        "<td class=''>" .
-                            "<button type='button' class='btn btn-danger btn-delete'>Zaznacz</button>".
-                        "</td>";
-                    "</tr>";
-            }
-
-            echo
-                    "</tbody>
+                "<td class='hidden'><div class=''>".
+                "<input form='delete_drugs' type='checkbox' name='drugs[]' value='".$row['id']."'>".
+                "</div></td>".
+                "<td class=''>" .
+                "<button type='button' class='btn btn-danger btn-delete'>Zaznacz</button>".
+                "</td>";
+            "</tr>";
+        }
+        echo
+        "</tbody>
                     </table>
                     <form action='' method='POST' id='delete_drugs'>
                         <button type='submit' name='delete-submit' class='btn btn-col btn-block'>Usuń zaznaczone lekarstwa</button>
                     </form>
                     <form action='drugs_edit.php' method='POST' id='edit_drugs'>
                     </form>";
-
-        } else {
-
-            echo
-                "<p>Apteczka jest pusta.</p>" .
-                "<a href='drugs_new.php'>Dodaj nowy lek</a>";
-
-        }
+    } else {
+        echo
+            "<p>Apteczka jest pusta.</p>" .
+            "<a href='drugs_new.php'>Dodaj nowy lek</a>";
     }
-
-    function drug_name_from_id($drug_id){
-
-        require("config/sql_connect.php");
-
-        $sql = "SELECT name 
+}
+function drug_name_from_id($drug_id){
+    require("config/sql_connect.php");
+    $sql = "SELECT name 
                 FROM DrugsDB
                 WHERE id = ?";
-
-        $result = db_statement($sql, "i", array(&$drug_id));
-        if (mysqli_num_rows($result) == 1) {
-            $row = mysqli_fetch_assoc($result);
-            return $row['name'];
-        }
-        else return false;
+    $result = db_statement($sql, "i", array(&$drug_id));
+    if (mysqli_num_rows($result) == 1) {
+        $row = mysqli_fetch_assoc($result);
+        return $row['name'];
     }
+    else return false;
+}
+function drugs_take_drug($username, $groupID, $amount, $drugID, $amount_present){
+    require("config/sql_connect.php");
+    $drugName = drug_name_from_id($drugID);
 
-    function drugs_take_drug($username, $groupID, $amount, $drugID, $amount_present){
-
-        require("config/sql_connect.php");
-
-        $drugName = drug_name_from_id($drugID);
-        
-        $sql = "UPDATE DrugsDB 
+    $sql = "UPDATE DrugsDB 
                 SET amount = ?
                 WHERE id = ?";
-
-        $new_amount = $amount_present - $amount;
-
-        $processed = db_statement($sql, "ii", array(&$new_amount, &$drugID));
-        if(!$processed){
-            add_event($username, $groupID, 'drugs_take', $drugName, $amount, "tabl.");
-        }
+    $new_amount = $amount_present - $amount;
+    $processed = db_statement($sql, "ii", array(&$new_amount, &$drugID));
+    if(!$processed){
+        add_event($username, $groupID, 'drugs_take', $drugName, $amount, "tabl.");
     }
-
-    function drugs_delete_record($username, $drugID, $groupID){
-
-        require("config/sql_connect.php");
-
-        $drugName = drug_name_from_id($drugID);
-
-        $sql = "DELETE FROM DrugsDB 
+}
+function drugs_delete_record($username, $drugID, $groupID){
+    require("config/sql_connect.php");
+    $drugName = drug_name_from_id($drugID);
+    $sql = "DELETE FROM DrugsDB 
                     WHERE id = ?
                     AND group_id = ?";
-
-        $processed = db_statement($sql, "ii", array(&$drugID, &$groupID));
-        if(!$processed){
-            add_event($username, $groupID, 'drugs_delete', $drugName);
-        }
+    $processed = db_statement($sql, "ii", array(&$drugID, &$groupID));
+    if(!$processed){
+        add_event($username, $groupID, 'drugs_delete', $drugName);
     }
+}
+function drugs_overdue_check_date($groupID){
+    require("config/sql_connect.php");
 
-    function drugs_overdue_check_date($groupID){
-
-        require("config/sql_connect.php");
-        
-
-        $sql = "SELECT id, name, overdue, amount
+    $sql = "SELECT id, name, overdue, amount
                     FROM DrugsDB 
                     WHERE group_id = ?
                     AND DATE(overdue) < CURRENT_DATE()";
+    $result = db_statement($sql, "i", array(&$groupID));
+    if (mysqli_num_rows($result) > 0) return true;
+    else return false;
+}
+function drugs_overdue_print_table($groupID, $page){
+    require("config/sql_connect.php");
 
-        $result = db_statement($sql, "i", array(&$groupID));
-
-        if (mysqli_num_rows($result) > 0) return true;
-        else return false;
-
-    }
-
-    function drugs_overdue_print_table($groupID, $page){
-
-        require("config/sql_connect.php");
-        
-
-        $sql = "SELECT id, name, overdue, amount
+    $sql = "SELECT id, name, overdue, amount
                     FROM DrugsDB 
                     WHERE group_id = ?
                     AND DATE(overdue) < CURRENT_DATE()";
-
-        $href = "drugs_overdue.php";
-        $sql_pag = paginate($sql, $href, 10, $page, array("i", array(&$groupID)));
-        $result = db_statement($sql_pag, "i", array(&$groupID));
-
-        if (mysqli_num_rows($result) > 0) {
-
-            echo
-                    "<table class='table table-hover'>
+    $href = "drugs_overdue.php";
+    $sql_pag = paginate($sql, $href, 10, $page, array("i", array(&$groupID)));
+    $result = db_statement($sql_pag, "i", array(&$groupID));
+    if (mysqli_num_rows($result) > 0) {
+        echo
+        "<table class='table table-hover'>
                     <thead>
                       <tr>
                         <th>Nazwa leku</th>
@@ -219,57 +165,43 @@
                       </tr>
                     </thead>
                     <tbody>";
-
-            while ($row = mysqli_fetch_assoc($result)) {
-
-                echo
-                    "<tr>".
-                        "<td>" . $row["name"] . "</td>" .
-                        "<td>" . $row["amount"] . "</td>" .
-                        "<td class='hidden'><div class=''>".
-                            "<input form='delete_overdue' type='checkbox' name='overdue[]' value='".$row['id']."'>".
-                        "</div></td>".
-                        "<td class=''>
+        while ($row = mysqli_fetch_assoc($result)) {
+            echo
+                "<tr>".
+                "<td>" . $row["name"] . "</td>" .
+                "<td>" . $row["amount"] . "</td>" .
+                "<td class='hidden'><div class=''>".
+                "<input form='delete_overdue' type='checkbox' name='overdue[]' value='".$row['id']."'>".
+                "</div></td>".
+                "<td class=''>
                             <button type='button' class='btn btn-danger btn-delete-overdue'>Zaznacz</button>
                          </td>";
-                    "</tr>";
-
-            }
-
-            echo
-                    "</table>
+            "</tr>";
+        }
+        echo
+        "</table>
                     </tbody>
                     <form action='' method='POST' id='delete_overdue'>
                             <button type='submit' name='delete-submit' class='btn btn-col btn-block'>Usuń zaznaczone lekarstwa</button>
                     </form>";
-
-        } else {
-
-            echo
-            "<p>Wszystkie leki znajdujące się w apteczce są przydatne do spożycia.</p>";
-
-        }
+    } else {
+        echo
+        "<p>Wszystkie leki znajdujące się w apteczce są przydatne do spożycia.</p>";
     }
-
-    function drugs_overdue_soon_print_table($groupID, $soonInt, $page){
-
-        require("config/sql_connect.php");
-
-        $sql = "SELECT id, name, overdue, amount
+}
+function drugs_overdue_soon_print_table($groupID, $soonInt, $page){
+    require("config/sql_connect.php");
+    $sql = "SELECT id, name, overdue, amount
                     FROM DrugsDB 
                     WHERE group_id = ?
                     AND DATE(overdue) < CURRENT_DATE() + INTERVAL ? day
                     AND DATE(overdue) > CURRENT_DATE()";
-
-        $href = "drugs_soon.php";
-
-        $sql_pag = paginate($sql, $href, 10, $page, array("ii", array(&$groupID, &$soonInt)));
-        $result = db_statement($sql_pag, "ii", array(&$groupID, &$soonInt));
-
-        if (mysqli_num_rows($result) > 0) {
-
-            echo
-                    "<table class='table table-hover'>
+    $href = "drugs_soon.php";
+    $sql_pag = paginate($sql, $href, 10, $page, array("ii", array(&$groupID, &$soonInt)));
+    $result = db_statement($sql_pag, "ii", array(&$groupID, &$soonInt));
+    if (mysqli_num_rows($result) > 0) {
+        echo
+        "<table class='table table-hover'>
                     <thead>
                       <tr>
                         <th>Nazwa leku</th>
@@ -280,43 +212,34 @@
                       </tr>
                     </thead>
                     <tbody>";
-
-            while ($row = mysqli_fetch_assoc($result)) {
-
-                $dateNow = date_create(date('d-m-Y'));
-                $dateOverdue = date_create(date("d-m-Y", strtotime($row["overdue"])));
-                $dateDiffInterval = date_diff($dateNow, $dateOverdue);
-
-                echo
-                    "<tr>" .
-                        "<td>" . $row["name"] . "</td>" .
-                        "<td>" . $row["amount"] . "</td>" .
-                        "<td>" . date_format($dateOverdue, "d-m-Y") . "</td>" .
-                        "<td>" . $dateDiffInterval->format("%a") . // show result in days
-                        "</td>" .
-                        "<td class='hidden'><div class=''>".
-                            "<input form='delete_soon' type='checkbox' name='overdueSoon[]' value='".$row['id']."'>".
-                        "</div></td>".
-                        "<td class=''>
+        while ($row = mysqli_fetch_assoc($result)) {
+            $dateNow = date_create(date('d-m-Y'));
+            $dateOverdue = date_create(date("d-m-Y", strtotime($row["overdue"])));
+            $dateDiffInterval = date_diff($dateNow, $dateOverdue);
+            echo
+                "<tr>" .
+                "<td>" . $row["name"] . "</td>" .
+                "<td>" . $row["amount"] . "</td>" .
+                "<td>" . date_format($dateOverdue, "d-m-Y") . "</td>" .
+                "<td>" . $dateDiffInterval->format("%a") . // show result in days
+                "</td>" .
+                "<td class='hidden'><div class=''>".
+                "<input form='delete_soon' type='checkbox' name='overdueSoon[]' value='".$row['id']."'>".
+                "</div></td>".
+                "<td class=''>
                             <button type='button' class='btn btn-danger btn-delete-soon'>Zaznacz</button>
                          </td>".
-                    "</tr>";
-
-            }
-
-            echo
-                    "</table>
+                "</tr>";
+        }
+        echo
+        "</table>
                     </tbody>
                     <form action='' method='POST' id='delete_soon'>
                         <button type='submit' name='delete-submit' class='btn btn-col btn-block'>Usuń zaznaczone lekarstwa</button>
                     </form>";
-
-        } else {
-
-            echo
-            "<p>Okres ważności wszystkich pozostałych leków w apteczce jest dłuższy niż $soonInt dni.</p>";
-
-        }
+    } else {
+        echo
+        "<p>Okres ważności wszystkich pozostałych leków w apteczce jest dłuższy niż $soonInt dni.</p>";
     }
-
+}
 ?>

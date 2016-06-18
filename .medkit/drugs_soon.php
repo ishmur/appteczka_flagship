@@ -1,22 +1,17 @@
 <?php
-    session_start();
-
-    require_once("include/functions.php");
-
-    if(!isset($_SESSION['username'])){
-        header("Location: index.php?logout=1");
-        exit();
+session_start();
+require_once("include/functions.php");
+if(!isset($_SESSION['username'])){
+    header("Location: index.php?logout=1");
+    exit();
+}
+$username = $_SESSION['username'];
+$groupID = $_SESSION["groupID"];
+if (isset($_POST['overdueSoon'])){
+    foreach ($_POST['overdueSoon'] as $drugID) {
+        drugs_delete_record($username, $drugID, $groupID);
     }
-
-    $username = $_SESSION['username'];
-    $groupID = $_SESSION["groupID"];
-
-    if (isset($_POST['overdueSoon'])){
-        foreach ($_POST['overdueSoon'] as $drugID) {
-            drugs_delete_record($username, $drugID, $groupID);
-        }
-    }
-
+}
 ?>
 
 <!DOCTYPE html>
@@ -33,10 +28,10 @@
 <body id="bodyTag">
 
 <?php
-    $drugsSoon = 'class="active"'; // set "active" class for current page
-    $showDropdownDrugs = "show"; // set drugs side-menu item to be permanently visible
-    $header = "Lista leków o krótkim terminie ważności"; // set header string for current page
-    include("include/navigation.php"); // load template html with top-navigation bar, side-navigation bar and header
+$drugsSoon = 'class="active"'; // set "active" class for current page
+$showDropdownDrugs = "show"; // set drugs side-menu item to be permanently visible
+$header = "Lista leków o krótkim terminie ważności"; // set header string for current page
+include("include/navigation.php"); // load template html with top-navigation bar, side-navigation bar and header
 ?>
 
 <div class="container-fluid">
@@ -50,9 +45,9 @@
                             <br><br><h2>Lista leków, których termin ważności wkrótce minie:</h2><hr>
 
                             <?php
-                                if(!isset($_GET['p'])) $_GET['p'] = 1;
-                                $soonInt = 14; //how many days
-                                drugs_overdue_soon_print_table($groupID, $soonInt, $_GET['p']);
+                            if(!isset($_GET['p'])) $_GET['p'] = 1;
+                            $soonInt = 14; //how many days
+                            drugs_overdue_soon_print_table($groupID, $soonInt, $_GET['p']);
                             ?>
 
                         </div>
