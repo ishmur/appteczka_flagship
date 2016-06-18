@@ -1,6 +1,6 @@
 <?php
 
-    function groups_get_user_groups($user){
+    function groups_get_user_groups($user, $page, $pag = false){
 
         require("config/sql_connect.php");
         
@@ -14,6 +14,8 @@
                                                 (SELECT id 
                                                 FROM `users` 
                                                 WHERE email = ?))";
+
+        if($pag != false) $sql = paginate($sql, "group_choose.php", 10, $page, array("s", array(&$user)));
 
         $result = db_statement($sql, "s", array(&$user));
         return $result;
@@ -45,11 +47,11 @@
 
     }
 
-    function groups_print_table($username){
+    function groups_print_table($username, $page){
 
-        require("config/sql_connect.php"); //czy potrzebne tu?
+        require("config/sql_connect.php");
 
-        $result = groups_get_user_groups($username);
+        $result = groups_get_user_groups($username, $page, true);
 
         if (mysqli_num_rows($result) > 0) {
 
