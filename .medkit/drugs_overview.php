@@ -9,10 +9,11 @@
 	}
 
 	$groupID = $_SESSION["groupID"];
+	$username = $_SESSION["username"];
 
 	if(isset($_POST['drugs'])) {
 		foreach ($_POST['drugs'] as $drugID) {
-			drugs_delete_record($drugID, $groupID);
+			drugs_delete_record($username, $drugID, $groupID);
 		}
 	}
 
@@ -24,7 +25,7 @@
         $amount = $_POST["drugs_take_amount"];
         $id = $_POST["drugs_take_id"];
         $amount_present = $_POST["drugs_take_present"];
-        drugs_take_drug($amount, $id, $amount_present);
+        drugs_take_drug($username, $groupID, $amount, $id, $amount_present);
     }
 
 ?>
@@ -69,7 +70,7 @@
 						</form>
 						<div class="container-fluid">
 							
-							  <br /><h2>Wyniki wyszukiwania</h2><hr />					  
+							  <br /><h2>Wyniki wyszukiwania</h2><hr />
 							  
 								
 									<?php

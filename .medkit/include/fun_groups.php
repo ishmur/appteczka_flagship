@@ -93,6 +93,9 @@
                     WHERE email = ?)";
 
         $processed = db_statement($sql, "is", array(&$groupID, &$username));
+        if(!$processed){
+            add_event($username, $groupID, "groups_leave");
+        }
     }
 
     function groups_change($groupID, $username, $setNULL=false){
@@ -151,7 +154,7 @@
         return $result;
     }
 
-    function groups_give_admin_rights($group, $login){
+    function groups_add_user_to_group($group, $login, $admin = 0){
 
         require("config/sql_connect.php");
 
@@ -163,46 +166,17 @@
             $result2 = db_statement($sql, "s", array(&$login));
 
             if (mysqli_num_rows($result2) == 1) {
-                $sql = "INSERT INTO connections (group_id, user_id, admin_rights) VALUES (?,?,?)";/////TU TRZEBA ZMIENIC!!
+                $sql = "INSERT INTO connections (group_id, user_id, admin_rights) VALUES (?,?,?)";
 
                 $result1 = mysqli_fetch_assoc($result1);
                 $result2 = mysqli_fetch_assoc($result2);
                 $result1 = $result1["id"];
                 $result2 = $result2["id"];
-                $admin = 1;
 
                 $processed = db_statement($sql, "iii", array(&$result1, &$result2, &$admin));
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
-    }
-
-    function groups_add_user_to_group($group, $login){/////POLACZYC Z FUNKCJA give_admin_rights
-
-        require("config/sql_connect.php");
-        
-
-        $sql = "SELECT id FROM groups WHERE group_name = ?";
-        $result1 = db_statement($sql, "s", array(&$group));
-
-        if (mysqli_num_rows($result1) == 1) {
-            $sql = "SELECT id FROM users WHERE email = ?";
-            $result2 = db_statement($sql, "s", array(&$login));
-
-            if (mysqli_num_rows($result2) == 1) {
-                $sql = "INSERT INTO connections (group_id, user_id, admin_rights) VALUES (?,?,?)";/////TU TRZEBA ZMIENIC!!
-
-                $result1 = mysqli_fetch_assoc($result1);
-                $result2 = mysqli_fetch_assoc($result2);
-                $result1 = $result1["id"];
-                $result2 = $result2["id"];
-                $admin = 0;
-
-                $processed = db_statement($sql, "iii", array(&$result1, &$result2, &$admin));
+                if(!$processed){
+                    add_event($login, $result1, "groups_join");
+                }
                 return true;
             } else {
                 return false;

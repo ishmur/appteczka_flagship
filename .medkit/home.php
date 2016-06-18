@@ -49,51 +49,11 @@
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-sm-9 col-sm-offset-3">
-	
-			<div class="col-sm-2 inline-element-center">
-				<h2>13.04.2016</h2><br />
-			</div>
 
-			<div class="col-sm-10 col-sm-offset-2">
-				<p>Użytkownik <b>Jan Kowalski</b> dodał do systemu lek <b>Proctohemolan Comfort</b>.</p>
-				<p>Użytkownik <b>Elżbieta Kowalska</b> usunęła z systemu lek <b>Rutinoscorbin</b>.<p>
-				<p>Użytkownik <b>Jan Kowalski</b> dodał do systemu lek <b>Lactocontrol</b>.</p>
-				<p>...</p>
-			</div>
+			<? parse_feed($_SESSION['groupID']); ?>
 		</div>
 	</div>
-	
-	<div class="row">
-		<div class="col-sm-9 col-sm-offset-3">
-	
-			<div class="col-sm-2 inline-element-center">
-				<br /><h2>11.04.2016</h2><br />
-			</div>
 
-			<div class="col-sm-10 col-sm-offset-2">
-				<p>Użytkownik <b>Jan Kowalski</b> dodał do systemu lek <b>Proctohemolan Comfort</b>.</p>
-				<p>Użytkownik <b>Elżbieta Kowalska</b> usunęła z systemu lek <b>Rutinoscorbin</b>.<p>
-				<p>Użytkownik <b>Jan Kowalski</b> dodał do systemu lek <b>Lactocontrol</b>.</p>
-				<p>...</p>
-			</div>
-		</div>
-	</div>
-	
-	<div class="row">
-		<div class="col-sm-9 col-sm-offset-3">
-	
-			<div class="col-sm-2 inline-element-center">
-				<br /><h2>27.03.2016</h2><br />
-			</div>
-
-			<div class="col-sm-10 col-sm-offset-2">
-				<p>Użytkownik <b>Jan Kowalski</b> dodał do systemu lek <b>Proctohemolan Comfort</b>.</p>
-				<p>Użytkownik <b>Elżbieta Kowalska</b> usunęła z systemu lek <b>Rutinoscorbin</b>.<p>
-				<p>Użytkownik <b>Jan Kowalski</b> dodał do systemu lek <b>Lactocontrol</b>.</p>
-				<p>...</p>
-			</div>
-		</div>
-	</div>
 	
 </div>
 
