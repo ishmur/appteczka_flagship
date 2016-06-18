@@ -20,6 +20,26 @@
 
     }
 
+    function is_user_in_group($username, $group_name, &$error){
+
+        require("config/sql_connect.php");
+
+        $sql = "SELECT id FROM groups WHERE group_name = ?";
+        $result1 = db_statement($sql, "s", array(&$group_name));
+        $sql = "SELECT id FROM users WHERE email = ?";
+        $result2 = db_statement($sql, "s", array(&$username));
+
+        $sql = "SELECT * FROM connections WHERE user_id = ? AND group_id = ?";
+
+        $result = db_statement($sql, "ii", array(&$result1, &$result2));
+        if (mysqli_num_rows($result) > 0) {
+            $error = "Jesteś już w tej grupie!";
+            return true;
+        }
+        else return false;
+
+    }
+
     function groups_print_table($username){
 
         require("config/sql_connect.php"); //czy potrzebne tu?
@@ -229,6 +249,15 @@
             $error = "Nieprawdiłowe dane logowania do grupy";
             return false;
         }
+    }
+
+    function get_users_of_group($group_id){
+
+        require("config/sql_connect.php");
+        $sql = "SELECT email FROM users WHERE id IN (SELECT user_id FROM connections WHERE group_id = ?)";
+        $result = db_statement($sql, "i", array(&$group_id));
+        return $result;
+
     }
 
 ?>

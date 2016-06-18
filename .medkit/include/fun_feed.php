@@ -32,9 +32,16 @@
         }
     }
 
-    function parse_feed($group_id){
-        $sql = "SELECT * FROM user_actions_log WHERE group_id = ? ORDER BY created DESC";
-        $result = db_statement($sql, "i", array(&$group_id));
+    function parse_feed($group_id, $username = ""){
+
+        if ($username == "") {
+            $sql = "SELECT * FROM user_actions_log WHERE group_id = ? ORDER BY created DESC";
+            $result = db_statement($sql, "i", array(&$group_id));
+        }
+        else {
+            $sql = "SELECT * FROM user_actions_log WHERE group_id = ? AND email = ? ORDER BY created DESC";
+            $result = db_statement($sql, "is", array(&$group_id, &$username));
+        }
 
         if (mysqli_num_rows($result) > 0) {
 
@@ -54,7 +61,7 @@
                 echo
                     "<tr>" .
                     "<td>" . $msg . "</td>" .
-                    "<td>" . timeAgo($row["created"]) . "</td>"."</tr>";
+                    "<td>" . time_description($row["created"]) . "</td>"."</tr>";
             }
             echo "</tbody></table>";
         }
@@ -82,70 +89,52 @@
         return $output_string;
     }
 
-    function timeAgo($time_ago)
-    {
+    function time_description($time_ago){
+
         $time_ago = strtotime($time_ago);
+        $mysqldate = date( 'd.m.Y H:i', $time_ago );
         $cur_time   = time();
         $time_elapsed   = $cur_time - $time_ago;
         $seconds    = $time_elapsed ;
         $minutes    = round($time_elapsed / 60 );
         $hours      = round($time_elapsed / 3600);
         $days       = round($time_elapsed / 86400 );
-        $weeks      = round($time_elapsed / 604800);
-        $months     = round($time_elapsed / 2600640 );
-        $years      = round($time_elapsed / 31207680 );
-        // Seconds
-        if($seconds <= 60){
-            return "just now";
+
+        if($days > 7){
+            return $mysqldate;
         }
-        //Minutes
-        else if($minutes <=60){
-            if($minutes==1){
-                return "one minute ago";
+        else if($days < 3) {
+            if ($seconds <= 60) {
+                return "teraz";
             }
-            else{
-                return "$minutes minutes ago";
+
+            if ($minutes <= 60) {
+                if ($minutes == 1) {
+                    return "minutę temu";
+                } elseif ($minutes < 4 || ($minutes < 25 && $minutes > 21) || ($minutes < 35 && $minutes > 31)
+                    || ($minutes < 45 && $minutes > 41) || ($minutes < 55 && $minutes > 51)
+                ) {
+                    return "$minutes minuty temu";
+                } else {
+                    return "$minutes minut temu";
+                }
             }
-        }
-        //Hours
-        else if($hours <=24){
-            if($hours==1){
-                return "an hour ago";
-            }else{
-                return "$hours hrs ago";
-            }
-        }
-        //Days
-        else if($days <= 7){
-            if($days==1){
-                return "yesterday";
-            }else{
-                return "$days days ago";
-            }
-        }
-        //Weeks
-        else if($weeks <= 4.3){
-            if($weeks==1){
-                return "a week ago";
-            }else{
-                return "$weeks weeks ago";
+            if ($hours <= 72) {
+                if ($hours == 1) {
+                    return "godzinę temu";
+                } elseif ($hours < 4 || ($hours < 25 && $hours > 21) || ($hours < 35 && $hours > 31)
+                    || ($minutes < 45 && $minutes > 41) || ($minutes < 55 && $minutes > 51) ||
+                    ($minutes < 65 && $minutes > 61) || ($minutes == 72)
+                ) {
+                    return "$hours godziny temu";
+                } else {
+                    return "$hours godzin temu";
+                }
             }
         }
-        //Months
-        else if($months <=12){
-            if($months==1){
-                return "a month ago";
-            }else{
-                return "$months months ago";
-            }
-        }
-        //Years
         else{
-            if($years==1){
-                return "one year ago";
-            }else{
-                return "$years years ago";
-            }
+            return "$days dni temu";
         }
+        return "";
     }
 ?>
