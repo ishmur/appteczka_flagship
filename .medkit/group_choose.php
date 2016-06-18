@@ -16,6 +16,13 @@
         if ($result){
             $_SESSION["groupID"] = $groupID;
             $_SESSION["groupName"] = groups_get_selected_name($groupID);
+
+            if (drugs_overdue_check_date($_SESSION["groupID"])){
+                $_SESSION['drugsOverdueModal'] = "show";
+            }
+
+            header("Location: home.php");
+            exit();
         }
     }
 
@@ -83,8 +90,6 @@
                     <div class="col-md-12">
                         <div class="container-fluid">
                            
-                                <h2>Lista grup, do których należysz:</h2><hr />
-
 
                                     <?php
                                         groups_print_table($username);

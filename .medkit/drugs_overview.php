@@ -16,7 +16,7 @@
         <div class="alert alert-success">
             Dodano nowy lek: <strong><? echo $_SESSION['new_drug']?></strong>!
         </div>
-        <?
+        <?php
         $_SESSION['new_drug'] = null;
     }
 
@@ -25,7 +25,7 @@
         <div class="alert alert-success">
             Edytowano lek! Obecna nazwa leku to: <strong><? echo $_SESSION['edit_drug']?></strong>.
         </div>
-        <?
+        <?php
         $_SESSION['edit_drug'] = null;
     }
 
@@ -74,6 +74,19 @@
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-sm-9 col-sm-offset-3">
+
+            <?php if(empty($groupID)) { ?>
+
+                <div class="col-md-8 col-md-offset-2">
+                    <div class="container-fluid">
+                        <div class="col-md-12 inline-element-center">
+                            <h1 style="color:red">Nie należysz do żadnej grupy - proszę wybrać grupę.</h1><br>
+                            <a href="group_choose.php"><button type="button" class="btn btn-danger col-xs-12">Wybierz grupę</button></a>
+                        </div>
+                    </div>
+                </div>
+
+            <?php } else { ?>
 		
 			<div class="col-md-8 col-md-offset-2">
 				<div class="container-fluid">
@@ -100,6 +113,8 @@
 					</div>
 				</div>
 			</div>
+
+            <?php } ?>
 			
 		</div>
 	</div>

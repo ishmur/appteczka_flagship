@@ -16,6 +16,13 @@
 
     }
 
+    if(!isset($specif)){
+
+        header("Location: specif_overview.php");
+        exit();
+
+    }
+
     if(isset($_POST["edit-specification"])){
 
         $specif_name = $_POST['specif_name'];

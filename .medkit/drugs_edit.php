@@ -23,6 +23,13 @@
 
     }
 
+    if(!isset($drug)){
+
+        header("Location: drugs_overview.php");
+        exit();
+
+    }
+
     if(isset($_POST['ean'])){
         $specif_ean = validate_trim_input($_POST['ean']);
 
