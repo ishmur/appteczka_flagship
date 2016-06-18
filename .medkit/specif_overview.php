@@ -47,12 +47,12 @@
                 <div class="container-fluid">
 
                         <form class="" method="POST">
-                        <div class="form-group">
-                            <label for="drugsSearch"><i class="fa fa-question-circle"></i> Szukaj specyfikacji...</label>
-                            <input type="text" name="ean" class="form-control" id="ean" placeholder="Wpisz kod EAN">
-                            <br />
-                            <button type="submit" class="btn btn-col btn-block">Szukaj</button>
-                        </div>
+                            <div class="form-group">
+                                <label for="drugsSearch"><i class="fa fa-question-circle"></i> Szukaj specyfikacji...</label>
+                                <input type="text" name="ean" class="form-control" id="ean" placeholder="Wpisz kod EAN">
+                                <br />
+                                <button type="submit" class="btn btn-col btn-block">Szukaj</button>
+                            </div>
                         </form>
                         <div class="container-fluid">
 
@@ -60,11 +60,17 @@
                                 
                                     <?php
                                         if(!isset($_POST['ean'])) {
-                                            if (isset($_GET['p'])) $pag_query = specif_pagination($_GET['p']);
-                                            else $pag_query = specif_pagination();
+                                            if (isset($_GET['p']))
+                                                $pag_query = specif_pagination($_GET['p']);
+                                            else
+                                                $pag_query = specif_pagination();
                                             specif_print_table($pag_query);
                                         } else {
-                                            specif_print_ean($_POST['ean']);
+                                            if (empty($_POST['ean'])) {
+                                                $pag_query = specif_pagination();
+                                                specif_print_table($pag_query);
+                                            } else
+                                                specif_print_ean($_POST['ean']);
                                         }
                                     ?>
 

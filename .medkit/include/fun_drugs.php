@@ -1,15 +1,15 @@
 <?php
 
-    function drugs_new_record($drugName, $drugPrice, $drugDate, $username, $groupID){
+    function drugs_new_record($drug_name, $drug_unit, $drug_amount, $drug_price, $drug_date, $username, $groupID){
 
         require("config/sql_connect.php");
 
-        $sql = "INSERT INTO DrugsDB (name, price, overdue, user_added, group_id, amount)
-                    VALUES (?,?,?,?,?,10)";
+        $sql = "INSERT INTO DrugsDB (name, unit, amount, price, overdue, user_added, group_id)
+                    VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        $processed = db_statement($sql, "sissi", array(&$drugName, &$drugPrice, &$drugDate, &$username, &$groupID));
+        $processed = db_statement($sql, "ssidssi", array(&$drug_name, &$drug_unit, &$drug_amount, &$drug_price, &$drug_date, &$username, &$groupID));
         if(!$processed){
-            add_event($username, $groupID, 'drugs_new', $drugName);
+            add_event($username, $groupID, 'drugs_new', $drug_name);
         }
     }
 
@@ -87,8 +87,9 @@
 
         require("config/sql_connect.php");
 
-        $sql = "SELECT name FROM DrugsDB
-                    WHERE id = ?";
+        $sql = "SELECT name 
+                FROM DrugsDB
+                WHERE id = ?";
 
         $result = db_statement($sql, "i", array(&$drug_id));
         if (mysqli_num_rows($result) == 1) {

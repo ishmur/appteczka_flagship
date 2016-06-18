@@ -12,7 +12,7 @@
 
     if(isset($_POST["specif_edit"])) {
 
-        $specif = specif_get_info($_POST['specif_edit'][0]);
+        $specif = specif_get_info_from_id($_POST['specif_edit'][0]);
 
     }
 
@@ -20,18 +20,33 @@
 
         $specif_name = $_POST['specif_name'];
         $specif_EAN = $_POST['specif_EAN'];
-        //$drugUnit = $_POST['drugUnit'];
         $specif_per_package = $_POST['specif_per_package'];
+        $specif_unit = $_POST['specif_unit'];
         $specif_price = $_POST['specif_price'];
         $specif_active = $_POST['specif_active'];
         $specif_id = $_POST['id_spec'];
 
         //Validate inputs - TBA
 
-        specif_update_record($specif_name, $specif_EAN, $specif_per_package, $specif_price, $specif_active, $specif_id);
+        $result = specif_update_record($specif_name, $specif_EAN, $specif_per_package, $specif_unit, $specif_price, $specif_active, $specif_id);
 
-        header("Location: specif_overview.php");
-        exit();
+        if ($result == "duplicate"){
+
+            $error_flag_ean = "has-error";
+            $error_ean = "Kod EAN musi być unikatowy (w bazie znajduje się już specyfik o danym kodzie).";
+
+            $specif['drug_name'] = $specif_name;
+            $specif['ean'] = $specif_EAN;
+            $specif['per_package'] = $specif_per_package;
+            $specif['unit'] = $specif_unit;
+            $specif['price_per_package'] = $specif_price;
+            $specif['active'] = $specif_active;
+            $specif['id_spec'] = $specif_id;
+
+        } else {
+            header("Location: specif_overview.php");
+            exit();
+        }
 
     }
 
@@ -71,32 +86,45 @@
                                 <label for="specif_name"><i class="fa fa-tags"></i> Nazwa leku</label>
                                 <input type="text" class="form-control" name="specif_name" placeholder="Wpisz nową nazwę leku" required="required" value="<?php echo $specif['drug_name'] ?>">
                             </div>
-                            <div class="form-group">
+                            <div class="form-group <? echo $error_flag_ean; ?>">
                                 <label for="specif_EAN"><i class="fa fa-hashtag"></i> Kod EAN</label>
+                                <p style="color:red"><?php echo $error_ean ?></p>
                                 <input type="text" class="form-control" name="specif_EAN" placeholder="Wpisz nowy kod EAN" required="required" value="<?php echo $specif['ean'] ?>">
                             </div>
                             <div class="form-group">
-                                <label>
+                                <label for="specif_unit">
                                     <i class="fa fa-pencil-square-o"></i> Rodzaj leku w opakowaniu</label>
                                 </label><br>
-                                <div class="radio">
-                                    <label>
-                                        <input type="radio" name="drugUnit" value="ml" required="required">płyn (wyrażony w ml)
-                                    </label>
-                                </div>
-                                <div class="radio">
-                                    <label>
-                                        <input type="radio" name="drugUnit" value="tabletki">tabletki
-                                    </label>
-                                </div>
+
+                                <select name="specif_unit" id="specif_unit" class="form-control" required>
+                                    <option value="szt." <?php specif_check_unit($specif['unit'], "szt.") ?>>szt.</option>
+                                    <option value="g" <?php specif_check_unit($specif['unit'], "g") ?>>g</option>
+                                    <option value="tabl." <?php specif_check_unit($specif['unit'], "tabl.") ?>>tabl.</option>
+                                    <option value="amp." <?php specif_check_unit($specif['unit'], "amp.") ?>>amp.</option>
+                                    <option value="sasz." <?php specif_check_unit($specif['unit'], "sasz.") ?>>sasz.</option>
+                                    <option value="fiol." <?php specif_check_unit($specif['unit'], "fiol.") ?>>fiol.</option>
+                                    <option value="but." <?php specif_check_unit($specif['unit'], "but.") ?>>but.</option>
+                                    <option value="kaps." <?php specif_check_unit($specif['unit'], "kaps.") ?>>kaps.</option>
+                                    <option value="amp.-strz." <?php specif_check_unit($specif['unit'], "amp.-strz.") ?>>amp.-strz.</option>
+                                    <option value="ml" <?php specif_check_unit($specif['unit'], "ml") ?>>ml</option>
+                                    <option value="op." <?php specif_check_unit($specif['unit'], "op.") ?>>op.</option>
+                                    <option value="j." <?php specif_check_unit($specif['unit'], "j.") ?>>j.</option>
+                                    <option value="inh." <?php specif_check_unit($specif['unit'], "inh.") ?>>inh.</option>
+                                    <option value="daw." <?php specif_check_unit($specif['unit'], "daw.") ?>>daw.</option>
+                                    <option value="wlew." <?php specif_check_unit($specif['unit'], "wlew.") ?>>wlew.</option>
+                                    <option value="plast." <?php specif_check_unit($specif['unit'], "plast.") ?>>plast.</option>
+                                    <option value="wkł." <?php specif_check_unit($specif['unit'], "wkł.") ?>>wkł.</option>
+                                    <option value="wstrz." <?php specif_check_unit($specif['unit'], "wstrz.") ?>>wstrz.</option>
+                                    <option value="zest." <?php specif_check_unit($specif['unit'], "zest.") ?>>zest.</option>
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label for="specif_per_package"><i class="fa fa-database"></i> Ilość leku w opakowaniu</label>
-                                <input type="number" min="1" class="form-control" name="specif_per_package" placeholder="Wpisz ilość leku w opakowaniu" required="required" value="<?php echo $specif['per_package'] ?>">
+                                <input type="number" min="0" step='0.01' class="form-control" name="specif_per_package" placeholder="Wpisz ilość leku w opakowaniu" required="required" value="<?php echo $specif['per_package'] ?>">
                             </div>
                             <div class="form-group">
                                 <label for="specif_price"><i class="fa fa-money"></i> Cena za opakowanie</label>
-                                <input type="number" min="1" class="form-control" name="specif_price" placeholder="Wpisz cenę" required="required" value="<?php echo $specif['price_per_package'] ?>">
+                                <input type="number" min="0" step='0.01' class="form-control" name="specif_price" placeholder="Wpisz cenę" required="required" value="<?php echo $specif['price_per_package'] ?>">
                             </div>
                             <div class="form-group">
                                 <label for="specif_active"><i class="fa fa-flask"></i> Substancja czynna</label>
