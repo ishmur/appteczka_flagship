@@ -172,17 +172,53 @@
         $processed = db_statement($sql, "i", array(&$specifID));
     }
 
-    function specif_print_ean($ean){
+    function specif_get_info_from_ean($ean){
+
         require("config/sql_connect.php");
-        
+
+        $sql = "SELECT id_spec, drug_name, ean, per_package, unit, active, price_per_package, user_defined
+                FROM drug_spec 
+                WHERE ean = ?";
+
+        $result = db_statement($sql, "s", array(&$ean));
+
+        return $result;
+
+    }
+
+    function specif_get_info_from_id($specif_id){
+    
+        require("config/sql_connect.php");
+    
+    
+        $specif = null;
+    
+        $sql = "SELECT  drug_name, ean, per_package, unit, price_per_package, active
+                    FROM drug_spec
+                    WHERE id_spec = ?";
+    
+        $result = db_statement($sql, "i", array(&$specif_id));
+
+        if (mysqli_num_rows($result) == 1) {
+            $row = mysqli_fetch_assoc($result);
+            $specif['drug_name'] = $row["drug_name"];
+            $specif['ean'] = $row["ean"];
+            $specif['per_package'] = $row["per_package"];
+            $specif['unit'] = $row["unit"];
+            $specif['price_per_package'] = $row["price_per_package"];
+            $specif['active'] = $row["active"];
+            $specif['id_spec'] = $specif_id;
+        }
+    
+        return $specif;
+    
+    }
+
+    function specif_print_ean($ean){
 
         $userDefinedCounter = 0;
 
-        $sql = "SELECT id_spec, drug_name, ean, per_package, unit, active, price_per_package, user_defined
-                    FROM drug_spec 
-                    WHERE ean = ?";
-
-        $result = db_statement($sql, "s", array(&$ean));
+        $result = specif_get_info_from_ean($ean);
         
             if (mysqli_num_rows($result) == 1) {
 
@@ -238,35 +274,6 @@
                     "<a href='specif_new.php'>Dodaj nową specyfikację</a>";
 
             }
-
-    }
-
-    function specif_get_info($specif_id){
-
-        require("config/sql_connect.php");
-
-
-        $specif = null;
-
-        $sql = "SELECT  drug_name, ean, per_package, unit, price_per_package, active
-                FROM drug_spec
-                WHERE id_spec = ?";
-        
-        $result = db_statement($sql, "i", array(&$specif_id));
-
-        
-        if (mysqli_num_rows($result) == 1) {
-                $row = mysqli_fetch_assoc($result);
-                $specif['drug_name'] = $row["drug_name"];
-                $specif['ean'] = $row["ean"];
-                $specif['per_package'] = $row["per_package"];
-                $specif['unit'] = $row["unit"];
-                $specif['price_per_package'] = $row["price_per_package"];
-                $specif['active'] = $row["active"];
-                $specif['id_spec'] = $specif_id;
-        }
-        
-        return $specif;
 
     }
 

@@ -106,11 +106,11 @@
 							</div>
 							<div class="form-group">
 								<label for="specif_per_package"><i class="fa fa-database"></i> Ilość leku w opakowaniu</label>
-								<input type="number" min="1" class="form-control" name="specif_per_package" placeholder="Wpisz ilość leku w opakowaniu" required="required" value=<?php echo "$specif_per_package" ?>>
+								<input type="number" min="0" step='0.01' class="form-control" name="specif_per_package" placeholder="Wpisz ilość leku w opakowaniu" required="required" value=<?php echo "$specif_per_package" ?>>
 							</div>
 							<div class="form-group">
 								<label for="specif_price"><i class="fa fa-money"></i> Cena za opakowanie</label>
-								<input type="number" min="1" class="form-control" name="specif_price" placeholder="Wpisz cenę" required="required" value=<?php echo "$specif_price" ?>>
+								<input type="number" min="0" step='0.01' class="form-control" name="specif_price" placeholder="Wpisz cenę" required="required" value=<?php echo "$specif_price" ?>>
 							</div>
 							<div class="form-group">
 								<label for="specif_active"><i class="fa fa-flask"></i> Substancja czynna</label>
