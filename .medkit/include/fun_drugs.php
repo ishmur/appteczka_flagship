@@ -83,10 +83,27 @@
         }
     }
 
-    function drugs_take_drug($amount, $drugID, $amount_present){
+    function drug_name_from_id($drug_id){
 
         require("config/sql_connect.php");
 
+        $sql = "SELECT name FROM DrugsDB
+                    WHERE id = ?";
+
+        $result = db_statement($sql, "i", array(&$drug_id));
+        if (mysqli_num_rows($result) == 1) {
+            $row = mysqli_fetch_assoc($result);
+            return $row['name'];
+        }
+        else return false;
+    }
+
+    function drugs_take_drug($username, $groupID, $amount, $drugID, $amount_present){
+
+        require("config/sql_connect.php");
+
+        $drugName = drug_name_from_id($drugID);
+        
         $sql = "UPDATE DrugsDB 
                 SET amount = ?
                 WHERE id = ?";
@@ -94,12 +111,16 @@
         $new_amount = $amount_present - $amount;
 
         $processed = db_statement($sql, "ii", array(&$new_amount, &$drugID));
+        if(!$processed){
+            add_event($username, $groupID, 'drugs_take', $drugName, $amount, "tabl.");
+        }
     }
 
-    function drugs_delete_record($drugID, $groupID){
+    function drugs_delete_record($username, $drugID, $groupID){
 
         require("config/sql_connect.php");
-        
+
+        $drugName = drug_name_from_id($drugID);
 
         $sql = "DELETE FROM DrugsDB 
                     WHERE id = ?
@@ -109,7 +130,6 @@
         if(!$processed){
             add_event($username, $groupID, 'drugs_delete', $drugName);
         }
-
     }
 
     function drugs_overdue_check_date($groupID){

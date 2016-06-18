@@ -21,7 +21,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     if($is_group_name_valid && $are_passwords_valid){
         $password = md5($password);
         if(register($group_name, $password, 'group')){
-            groups_give_admin_rights($group_name, $_SESSION['username']);
+            groups_add_user_to_group($group_name, $_SESSION['username'], 1);
             header("Location: group_choose.php");
             $_SESSION['new_group'] = $group_name;
             exit();
