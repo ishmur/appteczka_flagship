@@ -13,6 +13,46 @@
         }
     }
 
+    function drugs_update_record($drug_name, $drug_unit, $drug_amount, $drug_price, $drug_date, $drug_id){
+
+        require("config/sql_connect.php");
+
+        $sql = "UPDATE DrugsDB 
+                SET name = ?, unit = ?, amount = ?, price = ?, overdue = ?
+                WHERE id = ?";
+
+        $processed = db_statement($sql, "ssidsi", array(&$drug_name, &$drug_unit, &$drug_amount, &$drug_price, &$drug_date, &$drug_id));
+        if(!$processed){
+            // event for edit
+        }
+    }
+
+    function drugs_get_info_from_id($drug_id){
+
+        require("config/sql_connect.php");
+
+        $drug = null;
+
+        $sql = "SELECT  name, unit, amount, price, overdue, user_added, group_id
+                FROM DrugsDB
+                WHERE id = ?";
+
+        $result = db_statement($sql, "i", array(&$drug_id));
+
+        if (mysqli_num_rows($result) == 1) {
+            $row = mysqli_fetch_assoc($result);
+            $drug['name'] = $row["name"];
+            $drug['unit'] = $row["unit"];
+            $drug['amount'] = $row["amount"];
+            $drug['price'] = $row["price"];
+            $drug['overdue'] = $row["overdue"];
+            $drug['id'] = $drug_id;
+        }
+
+        return $drug;
+
+    }
+
     function drugs_print_table($groupID){
 
         require("config/sql_connect.php");
@@ -71,7 +111,7 @@
                     <form action='' method='POST' id='delete_drugs'>
                         <button type='submit' name='delete-submit' class='btn btn-col btn-block'>Usuń zaznaczone lekarstwa</button>
                     </form>
-                    <form action='' method='POST' id='edit_drugs'>
+                    <form action='drugs_edit.php' method='POST' id='edit_drugs'>
                     </form>";
 
         } else {

@@ -2,7 +2,6 @@
 
     function validate_trim_input($input){
         $input = trim($input);
-        $input = stripcslashes($input);
         $input = htmlspecialchars($input);
         return $input;
     }
@@ -15,8 +14,8 @@
             return false;
         }
 
-        if (!preg_match("/^[ąćęłńóśźżĄĆĘŁŃÓŚŹŻ a-zA-Z0-9,.]*$/",$var)) {
-            $error_text = "Nazwa leku może składać się wyłącznie z liter, cyfr, kropek, przecinków i spacji.";
+        if (!preg_match("/^[ąćęłńóśźżĄĆĘŁŃÓŚŹŻ a-zA-Z0-9,.\/]*$/",$var)) {
+            $error_text = "Nazwa leku może składać się wyłącznie z liter, cyfr, kropek, przecinków, spacji i znaku '/'.";
             $error_flag = "has-error";
             return false;
         }

@@ -185,22 +185,22 @@
 							</div>
                             <div class="form-group <? echo $error_price_flag; ?>">
 								<label for="drug_price"><i class="fa fa-money"></i> Cena za opakowanie</label>
-                                <?php echo $error_price_text; ?></p>
+                                <p style="color:red"><?php echo $error_price_text; ?></p>
 								<input type="number" min="0" step='0.01' class="form-control" name="drug_price" placeholder="Wpisz cenę" required="required" value=<?php echo "$drug_price" ?>>
 							</div>
                             <div class="form-group <? echo $error_date_flag; ?>">
 								<label for="drug_date"><i class="fa fa-hourglass-end"></i> Data ważności leku</label>
-                                <?php echo $error_date_text; ?></p>
+                                <p style="color:red"><?php echo $error_date_text; ?></p>
 								<input type="date" class="form-control" name="drug_date" required value=<?php echo "$drug_date" ?>>
 							</div>
 							<br />
 
                             <div class="container-fluid">
                                 <div class="col-sm-6">
-                                    <a href="drugs_overview.php"><button type="button" class="btn btn-danger col-sm-12">Wróć do spisu leków</button></a>
+                                    <a href="drugs_overview.php"><button type="button" class="btn btn-danger col-xs-12">Wróć do spisu leków</button></a>
                                 </div>
                                 <div class="col-sm-6">
-                                    <button type="submit" name="drug-submit" class="btn btn-col btn-block">Dodaj nowy lek</button>
+                                    <button type="submit" name="drug-submit" class="btn btn-col btn-block col-xs-12">Dodaj nowy lek</button>
                                 </div>
                             </div>
 

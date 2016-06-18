@@ -20,6 +20,15 @@
         $_SESSION['new_drug'] = null;
     }
 
+    if(isset($_SESSION['edit_drug'])){
+        ?>
+        <div class="alert alert-success">
+            Edytowano lek! Obecna nazwa leku to: <strong><? echo $_SESSION['edit_drug']?></strong>.
+        </div>
+        <?
+        $_SESSION['edit_drug'] = null;
+    }
+
 	if(isset($_POST['drugs'])) {
 		foreach ($_POST['drugs'] as $drugID) {
 			drugs_delete_record($username, $drugID, $groupID);
