@@ -57,7 +57,7 @@
 
         require("config/sql_connect.php");
 
-        $sql = "SELECT id, name, price, amount, overdue 
+        $sql = "SELECT id, name, price, amount, unit, overdue 
                     FROM DrugsDB 
                     WHERE group_id = ?";
 
@@ -73,7 +73,7 @@
                 <thead>
                   <tr>
                     <th>Nazwa leku</th>
-                    <th>Cena w złotówkach</th>
+                    <th>Cena</th>
                     <th>Ilość</th>
                     <th>Data ważności</th>
                     <th></th>
@@ -88,7 +88,7 @@
                     "<tr>".
                         "<td>" . $row["name"] . "</td>" .
                         "<td>" . $row["price"] . "</td>" .
-                        "<td>" . $row["amount"] . "</td>" .
+                        "<td>" . $row["amount"] . " " . $row["unit"] . "</td>" .
                         "<td>" . date("d-m-Y", strtotime($row["overdue"])). "</td>" .
                         "<td class=''>" .
                             "<button type='button' id='takeDrug-".$row["id"]."' class='btn btn-info btn-take'>Weź lek</button>".
@@ -193,7 +193,7 @@
 
     }
 
-    function drugs_overdue_print_table($groupID){
+    function drugs_overdue_print_table($groupID, $page){
 
         require("config/sql_connect.php");
         
@@ -203,7 +203,10 @@
                     WHERE group_id = ?
                     AND DATE(overdue) < CURRENT_DATE()";
 
-        $result = db_statement($sql, "i", array(&$groupID));
+        $href = "drugs_overdue.php";
+        $sql_pag = paginate($sql, $href, 10, $page, array('i', array(&$groupID)));
+
+        $result = db_statement($sql_pag, "i", array(&$groupID));
 
         if (mysqli_num_rows($result) > 0) {
 
@@ -249,7 +252,7 @@
         }
     }
 
-    function drugs_overdue_soon_print_table($groupID, $soonInt){
+    function drugs_overdue_soon_print_table($groupID, $soonInt, $page){
 
         require("config/sql_connect.php");
 
@@ -259,7 +262,10 @@
                     AND DATE(overdue) < CURRENT_DATE() + INTERVAL ? day
                     AND DATE(overdue) > CURRENT_DATE()";
 
-        $result = db_statement($sql, "ii", array(&$groupID, &$soonInt));
+        $href = "drugs_overview.php";
+        $sql_pag = paginate($sql, $href, 10, $page, array('ii', array(&$groupID, &$soonInt)));
+
+        $result = db_statement($sql_pag, "ii", array(&$groupID, &$soonInt));
 
         if (mysqli_num_rows($result) > 0) {
 

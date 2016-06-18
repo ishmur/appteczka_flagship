@@ -56,7 +56,7 @@
 	<div class="row">
 		<div class="col-sm-9 col-sm-offset-3">
 
-            <?php if(empty($groupID)) { ?>
+            <?php if(empty($_SESSION["groupID"])) { ?>
 
                 <div class="col-md-8 col-md-offset-2">
                     <div class="container-fluid">

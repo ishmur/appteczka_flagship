@@ -8,6 +8,13 @@
         exit();
     }
 
+    if(!isset($_POST["drugs_edit"]) && !isset($_POST["edit-drug"]) && !isset($_POST['ean'])){
+
+        header("Location: drugs_overview.php");
+        exit();
+
+    }
+
     $username = $_SESSION['username'];
     $groupID = $_SESSION["groupID"];
 
@@ -20,13 +27,6 @@
         $drug_price = $drug['price'];
         $drug_date = $drug['overdue'];
         $drug_id = $drug['id'];
-
-    }
-
-    if(!isset($drug)){
-
-        header("Location: drugs_overview.php");
-        exit();
 
     }
 

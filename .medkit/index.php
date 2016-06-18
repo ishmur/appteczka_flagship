@@ -40,8 +40,16 @@
 				$_SESSION["groupID"] = users_get_last_group_id($_SESSION['username']);
 				$_SESSION["groupName"] = groups_get_selected_name($_SESSION["groupID"]);
 
-				if (drugs_overdue_check_date($_SESSION["groupID"])){
-					$_SESSION['drugsOverdueModal'] = "show";
+				if (!isset($_SESSION["groupID"])){
+
+					$_SESSION['redirect'] = 'redirect';
+
+				} else {
+
+					if (drugs_overdue_check_date($_SESSION["groupID"])){
+						$_SESSION['drugsOverdueModal'] = "show";
+					}
+
 				}
 
 				header("Location: home.php");

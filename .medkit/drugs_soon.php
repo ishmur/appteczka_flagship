@@ -66,7 +66,8 @@
 
                             <?php
                                 $soonInt = 14; //how many days
-                                drugs_overdue_soon_print_table($groupID, $soonInt);
+                                if(!isset($_GET['p'])) $_GET['p'] = 1;
+                                drugs_overdue_soon_print_table($groupID, $soonInt, $_GET['p']);
                             ?>
 
                         </div>
