@@ -29,14 +29,16 @@
         $amount = validate_trim_input($_POST["drugs_take_amount"]);
         $amount_valid = validate_numeric_amount($amount, $error_take_text, $error_take_flag);
 
-        $result = drugs_take_drug($username, $groupID, $amount, $unit, $id, $amount_present);
-		$_SESSION['taken_drug'] = $name;
-        $_SESSION['taken_drug_amount'] = $amount . " " . $unit;
-        if($result){
-            $_SESSION['taken_drug_delete_prompt'] = true;
+        if ($amount_valid) {
+            $result = drugs_take_drug($username, $groupID, $amount, $unit, $id, $amount_present);
+            $_SESSION['taken_drug'] = $name;
+            $_SESSION['taken_drug_amount'] = $amount . " " . $unit;
+            if ($result) {
+                $_SESSION['taken_drug_delete_prompt'] = true;
+            }
+            header("Location: drugs_overview.php");
+            exit();
         }
-		header("Location: drugs_overview.php");
-		exit();
     }
 
 ?>
@@ -86,6 +88,12 @@
 				</div>
 			<?php $_SESSION['deleted_drugs'] = null; } ?>
 
+            <?php if(isset($error_take_flag)){ ?>
+                <div class="alert alert-danger">
+                    Coś poszło nie tak... prosimy spróbować ponownie później.
+                </div>
+            <?php $error_take_flag = null; } ?>
+
 			<?php if(isset($_SESSION['taken_drug'])){ ?>
 				<div class="alert alert-success">
                     Wzięto lek <strong><? echo $_SESSION['taken_drug']?></strong> w ilości <strong><? echo $_SESSION['taken_drug_amount']?></strong>.
@@ -93,10 +101,10 @@
                         <br>Opakowanie jest puste!
                     <?php } ?>
 				</div>
-				<?php
-                    $_SESSION['taken_drug'] = null;
-                    $_SESSION['taken_drug_amount'] = null;
-                } ?>
+			<?php
+               $_SESSION['taken_drug'] = null;
+                $_SESSION['taken_drug_amount'] = null;
+            } ?>
 
             <?php if(empty($groupID)) { ?>
 
