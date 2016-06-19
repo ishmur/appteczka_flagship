@@ -144,23 +144,25 @@
 			<div class="container-fluid inline-element-center">
 				<i class="fa fa-user-md" style="font-size:300px"></i>
 			</div>
+
+			<?php if(isset($_SESSION['new_user'] )){ ?>
+				<div class="alert alert-success">
+					Utworzono nowe konto o nazwie: <strong><? echo $_SESSION['new_user']?></strong>!
+				</div>
+			<?php } $_SESSION['new_user'] = null; ?>
+			
 		</div>
 
 		<div class="col-sm-6">
 
-            <?php if(isset($_SESSION['new_user'] )){ ?>
-                <div class="alert alert-success">
-                    Utworzono nowe konto o nazwie: <strong><? echo $_SESSION['new_user']?></strong>!
-                </div>
-            <?php } $_SESSION['new_user'] = null; ?>
-
-			<div class="container-fluid">
+            <div class="container-fluid">
 				<div class="row">
 					<div class="container-fluid jumbotron inline-element-center">
 						<h1 style="font-size:25px">
 							<i class="fa fa-medkit" ></i> App.teczka<br /><br />
 							System zarządzania <br />domową apteczką</h1>
 					</div>
+
 				</div>
 			</div>
 

@@ -28,7 +28,7 @@ $settings = Ustawienia
 
 	  <a href="index.php?logout=1" class="navbar-button"><i class="fa fa-sign-out"></i></a>
       <p class="navbar-brand inline-element-center">
-		<i class="fa fa-medkit" style="font-size:30px"></i>	App.teczka
+		<i class="fa fa-medkit" style="font-size:30px"></i>
 	  </p>
     </div>
     <div class="collapse navbar-collapse" id="NavbarTopMain">
