@@ -14,8 +14,8 @@
             return false;
         }
 
-        if (!preg_match("/^[ąćęłńóśźżĄĆĘŁŃÓŚŹŻ a-zA-Z0-9,.\/]*$/",$var)) {
-            $error_text = "Nazwa leku może składać się wyłącznie z liter, cyfr, kropek, przecinków, spacji i znaku '/'.";
+        if (!preg_match("/^[ąćęłńóśźżĄĆĘŁŃÓŚŹŻ a-zA-Z0-9,.\-\/]*$/",$var)) {
+            $error_text = "Nazwa leku może składać się wyłącznie z liter, cyfr, kropek, przecinków, spacji i znaków '/-'.";
             $error_flag = "has-error";
             return false;
         }
