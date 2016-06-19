@@ -34,11 +34,11 @@ $settings = Ustawienia
     <div class="collapse navbar-collapse" id="NavbarTopMain">
       <ul class="nav navbar-nav">
         <li <?php echo $activity ?> ><a href="home.php">Ostatnia aktywność</a></li>
+        <li <?php echo $statistics ?> ><a href="statistics.php">Statystyki</a></li>
         <li <?php echo $drugsOverview ?> ><a href="drugs_overview.php">Przegląd leków</a></li>
         <li <?php echo $drugsNew ?> ><a href="drugs_new.php">Dodaj nowy lek</a></li>
 		<li <?php echo $drugsOverdue ?> ><a href="drugs_overdue.php">Lista leków przeterminowanych</a></li>
 		<li <?php echo $drugsSoon ?> ><a href="drugs_soon.php">Lista leków o krótkim terminie ważności</a></li>
-		<li <?php echo $statistics ?> ><a href="statistics.php">Statystyki</a></li>
       </ul>
     </div>
 	  <div class="collapse navbar-collapse" id="NavbarTopSpecification">
@@ -65,6 +65,7 @@ $settings = Ustawienia
 			<h3><i class="fa fa-medkit" style="font-size:30px"></i> App.teczka<hr /></h3>
 			<ul class="nav nav-pills nav-stacked">
 				<li <?php echo $activity ?> ><a href="home.php">Ostatnia aktywność</a></li>
+				<li <?php echo $statistics ?> ><a href="statistics.php">Statystyki</a></li>
 				<li class="dropdown">
 					<a class="dropdown-toggle">Stan apteczki</a>
 					<div class="dropdown-content col-sm-offset-2 <?php echo $showDropdownDrugs ?>">
@@ -81,7 +82,6 @@ $settings = Ustawienia
 						<a <?php echo $specificationNew ?> href="specif_new.php">Dodaj specyfikację leku</a>
 					</div>
 				</li>
-				<li <?php echo $statistics ?> ><a href="statistics.php">Statystyki</a></li>
 				<li class="dropdown">
 					<a class="dropdown-toggle">Ustawienia</a>
 					<div class="dropdown-content col-sm-offset-2 <?php echo $showDropdownSettings ?>">

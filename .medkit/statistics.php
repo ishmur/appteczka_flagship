@@ -31,8 +31,8 @@
 
 <div class="fluid-container">
 <div class="row" style="background-color: #cce;">
-	<div class="col-md-3 col-md-offset-3"><h3>Koszt leków, które zutylizowano</h3></div>
-	<div class="col-md-3">
+	<div class="col-sm-3 col-sm-offset-3"><h3>Koszt leków, które zutylizowano</h3></div>
+	<div class="col-sm-3">
 		<form action='' method='POST' id='utilized' class="form-inline">
 			<button type='submit' name='time' value = 'week' class='btn btn-col btn-block'>W ostatnim tygodniu</button>
 			<button type='submit' name='time' value = 'month' class='btn btn-col btn-block'>W ostatnim miesiącu</button>
@@ -52,8 +52,8 @@
 	</div>
 </div>
 <div class="row top-buffer" style="background-color: #cce">
-	<div class="col-md-3 col-md-offset-3"><h3>Koszt leków, które ulegną przeterminowaniu</h3></div>
-	<div class="col-md-3">
+	<div class="col-sm-3 col-sm-offset-3"><h3>Koszt leków, które ulegną przeterminowaniu</h3></div>
+	<div class="col-sm-3">
 		<form action='' method='POST' id='to_utilize' class="form-inline">
 			<button type='submit' name='time_to' value = 'week' class='btn btn-col btn-block'>W następnym tygodniu</button>
 			<button type='submit' name='time_to' value = 'month' class='btn btn-col btn-block'>W następnym miesiącu</button>

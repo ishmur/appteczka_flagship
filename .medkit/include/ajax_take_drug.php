@@ -5,7 +5,7 @@
 
     $drugID = intval($_GET['id']);
 
-    $sql = "SELECT name, amount 
+    $sql = "SELECT name, amount, unit 
             FROM DrugsDB 
             WHERE id = ?";
 
@@ -28,8 +28,10 @@
             echo
                 "<tr>" .
                     "<td>" . $row["name"] . "</td>" .
-                    "<td>" . $row["amount"] . "</td>" .
+                    "<td>" . $row["amount"] . " " . $row["unit"] . "</td>" .
                     "<td>".
+                        "<input form='take_drugs' type='hidden' name='drugs_take_name' value='".$row["name"]."'>".
+                        "<input form='take_drugs' type='hidden' name='drugs_take_unit' value='".$row["unit"]."'>".
                         "<input form='take_drugs' type='hidden' name='drugs_take_id' value='".$drugID."'>".
                         "<input form='take_drugs' type='hidden' name='drugs_take_present' value='".$row["amount"]."'>".
                         "<input form='take_drugs' type='number' name='drugs_take_amount' min='0' max='".$row["amount"]."'>".
@@ -40,6 +42,12 @@
         echo
             "</tbody>
              </table>";
+
+        echo
+            "<hr><ul><b>Przydatne jednostki miary:</b>
+                <li>łyżeczka - 5 ml</li>
+                <li>łyżka stołowa - 15 ml</li>
+            </ul></p>";
     }
 
 ?>

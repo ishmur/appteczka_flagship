@@ -37,7 +37,7 @@
 
             } else {
 
-                $_SESSION['edit_specif'] = $specif_name;
+                $_SESSION['new_specif'] = $specif_name;
                 header("Location: specif_overview.php");
                 exit();
 
