@@ -38,7 +38,7 @@ function drugs_get_info_from_id($drug_id){
 }
 function drugs_print_table($groupID, $page){
     require("config/sql_connect.php");
-    $sql = "SELECT id, name, price, amount, overdue 
+    $sql = "SELECT id, name, price, amount, overdue, unit 
                     FROM DrugsDB 
                     WHERE group_id = ?";
     $href = "drugs_overview.php";
@@ -50,7 +50,7 @@ function drugs_print_table($groupID, $page){
                 <thead>
                   <tr>
                     <th>Nazwa leku</th>
-                    <th>Cena w złotówkach</th>
+                    <th>Cena</th>
                     <th>Ilość</th>
                     <th>Data ważności</th>
                     <th></th>
@@ -64,7 +64,7 @@ function drugs_print_table($groupID, $page){
                 "<tr>".
                 "<td>" . $row["name"] . "</td>" .
                 "<td>" . $row["price"] . "</td>" .
-                "<td>" . $row["amount"] . "</td>" .
+                "<td>" . $row["amount"] . " " . $row["unit"] . "</td>" .
                 "<td>" . date("d-m-Y", strtotime($row["overdue"])). "</td>" .
                 "<td class=''>" .
                 "<button type='button' id='takeDrug-".$row["id"]."' class='btn btn-info btn-take'>Weź lek</button>".
@@ -109,7 +109,7 @@ function drug_name_from_id($drug_id){
     }
     else return false;
 }
-function drugs_take_drug($username, $groupID, $amount, $drugID, $amount_present){
+function drugs_take_drug($username, $groupID, $amount, $unit, $drugID, $amount_present){
     require("config/sql_connect.php");
     $drugName = drug_name_from_id($drugID);
 
@@ -119,8 +119,13 @@ function drugs_take_drug($username, $groupID, $amount, $drugID, $amount_present)
     $new_amount = $amount_present - $amount;
     $processed = db_statement($sql, "ii", array(&$new_amount, &$drugID));
     if(!$processed){
-        add_event($username, $groupID, 'drugs_take', $drugName, $amount, "tabl.");
+        add_event($username, $groupID, 'drugs_take', $drugName, $amount, $unit);
     }
+    if ($new_amount == 0){
+        drugs_delete_record($username, $drugID, $groupID);
+        return true;
+    }
+    return false;
 }
 function drugs_delete_record($username, $drugID, $groupID){
     require("config/sql_connect.php");
@@ -155,7 +160,7 @@ function drugs_overdue_check_date($groupID){
 function drugs_overdue_print_table($groupID, $page){
     require("config/sql_connect.php");
 
-    $sql = "SELECT id, name, overdue, amount
+    $sql = "SELECT id, name, overdue, amount, unit
                     FROM DrugsDB 
                     WHERE group_id = ?
                     AND DATE(overdue) < CURRENT_DATE()";
@@ -177,7 +182,7 @@ function drugs_overdue_print_table($groupID, $page){
             echo
                 "<tr>".
                 "<td>" . $row["name"] . "</td>" .
-                "<td>" . $row["amount"] . "</td>" .
+                "<td>" . $row["amount"] . " " . $row["unit"] . "</td>" .
                 "<td class='hidden'><div class=''>".
                 "<input form='delete_overdue' type='checkbox' name='overdue[]' value='".$row['id']."'>".
                 "</div></td>".
@@ -199,11 +204,11 @@ function drugs_overdue_print_table($groupID, $page){
 }
 function drugs_overdue_soon_print_table($groupID, $soonInt, $page){
     require("config/sql_connect.php");
-    $sql = "SELECT id, name, overdue, amount
+    $sql = "SELECT id, name, overdue, amount, unit
                     FROM DrugsDB 
                     WHERE group_id = ?
                     AND DATE(overdue) < CURRENT_DATE() + INTERVAL ? day
-                    AND DATE(overdue) > CURRENT_DATE()";
+                    AND DATE(overdue) > CURRENT_DATE() - INTERVAL 1 day";
     $href = "drugs_soon.php";
     $sql_pag = paginate($sql, $href, 10, $page, array("ii", array(&$groupID, &$soonInt)));
     $result = db_statement($sql_pag, "ii", array(&$groupID, &$soonInt));
@@ -227,7 +232,7 @@ function drugs_overdue_soon_print_table($groupID, $soonInt, $page){
             echo
                 "<tr>" .
                 "<td>" . $row["name"] . "</td>" .
-                "<td>" . $row["amount"] . "</td>" .
+                "<td>" . $row["amount"] . " " . $row["unit"] . "</td>" .
                 "<td>" . date_format($dateOverdue, "d-m-Y") . "</td>" .
                 "<td>" . $dateDiffInterval->format("%a") . // show result in days
                 "</td>" .

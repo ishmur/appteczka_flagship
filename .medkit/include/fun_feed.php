@@ -81,13 +81,13 @@
                 $output_string = $output_string . "dołączył do apteczki.";
                 break;
             case 2:
-                $output_string = $output_string . "dodał lek ". $db_row['drug_name'] . " do apteczki.";
+                $output_string = $output_string . "dodał lek <strong>". $db_row['drug_name'] . "</strong> do apteczki.";
                 break;
             case 3:
-                $output_string = $output_string . "usunął lek ". $db_row['drug_name'] . " z apteczki.";
+                $output_string = $output_string . "usunął lek <strong>". $db_row['drug_name'] . "</strong> z apteczki.";
                 break;
             case 4:
-                $output_string = $output_string . "przyjął lek ". $db_row['drug_name'] . " w ilości " . $db_row['amount'] . " " . $db_row['unit'];
+                $output_string = $output_string . "przyjął lek <strong>". $db_row['drug_name'] . "</strong> w ilości <strong>" . $db_row['amount'] . " " . $db_row['unit'] . "</strong>";
                 break;
         }
         return $output_string;

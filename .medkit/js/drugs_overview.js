@@ -103,6 +103,7 @@ for (index = 0; index < btnTakeArray.length; index++) {
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
                 modalBody.innerHTML = xmlhttp.responseText;
                 btnTakeSubmit.disabled = false;
+                vertCenter(modalContent, 'margin-top');
             }
         };
         xmlhttp.open("GET","include/ajax_take_drug.php?id="+drugID,true);
