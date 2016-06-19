@@ -22,4 +22,16 @@
 
     }
 
+    function change_password($username, $password){
+
+        require("config/sql_connect.php");
+
+        $sql = "UPDATE users
+                    SET password = ?
+                    WHERE email = ?";
+
+        $processed = db_statement($sql, "ss", array(&$password, &$username));
+        return $processed;
+    }
+
 ?>

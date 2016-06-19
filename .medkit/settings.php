@@ -1,9 +1,37 @@
 <?php
+
 	session_start();
+	require_once("include/functions.php");
+
+	$newpass_error;
+	$oldpass_error;
 	
 	if(!isset($_SESSION['username'])){
 		header("Location: index.php?logout=1");
 		exit();
+	}
+
+	if($_SERVER['REQUEST_METHOD'] == 'POST') {
+		$username = $_SESSION['username'];
+		$oldpassword = md5(validate_trim_input($_POST['pswOld']));
+		$password = md5(validate_trim_input($_POST['pswNew1']));
+		$password_check = md5(validate_trim_input($_POST['pswNew2']));
+
+		$correct_old_password = correct_password($username, $oldpassword);
+		$are_passwords_valid = password_valid($password, $password_check, $newpass_error);
+
+		if(!$correct_old_password) $oldpass_error = "Podałeś złe hasło";
+
+		if($correct_old_password && $are_passwords_valid) {
+			if (!change_password($username, $password)) {
+				header("Location: index.php?reg=1");
+				exit();
+			} else {
+				die("Database error");
+			}
+		} else {
+			$form_style = "has-error";
+		}
 	}
 ?>
 
@@ -39,18 +67,20 @@
 			<div class="col-sm-9 col-sm-offset-3">
 				<div class="container-fluid">
 					<div class="col-sm-8">
-						<form class="action="#">
-							<div class="form-group">
+						<form action = "" method = "POST">
+							<div class="form-group <? echo $form_style; ?>">
 								<label for="pswOld"><i class="fa fa-lock"></i> Stare hasło</label>
-								<input type="password" class="form-control" id="pswOld" placeholder="Wpisz swoje stare hasło">
+								<p style="color:red"><?php echo $oldpass_error ?></p>
+								<input type="password" class="form-control" name="pswOld" id="pswOld" placeholder="Wpisz swoje stare hasło">
 							</div>
-							<div class="form-group">
+							<div class="form-group <? echo $form_style; ?>">
 								<label for="pswNew1"><i class="fa fa-plus"></i> Nowe hasło</label>
-								<input type="password" class="form-control" id="pswNew1" placeholder="Wpisz nowe hasło">
+								<p style="color:red"><?php echo $newpass_error ?></p>
+								<input type="password" class="form-control" name="pswNew1" id="pswNew1" placeholder="Wpisz nowe hasło">
 							</div>
-							<div class="form-group">
+							<div class="form-group <? echo $form_style; ?>">
 								<label for="pswNew2"><i class="fa fa-plus-circle"></i> Potwierdź nowe hasło</label>
-								<input type="password" class="form-control" id="pswNew2" placeholder="Wpisz nowe hasło jeszcze raz">
+								<input type="password" class="form-control" name="pswNew2" id="pswNew2" placeholder="Wpisz nowe hasło jeszcze raz">
 							</div>
 							<br />
 							<button type="submit" class="btn btn-col btn-block">Zatwierdź zmiany</button>
