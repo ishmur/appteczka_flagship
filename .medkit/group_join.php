@@ -1,34 +1,38 @@
 <?php
-session_start();
+    session_start();
 
-require_once("include/functions.php");
+    require_once("include/functions.php");
 
-$group_name_error;
-$password_error;
+    if(isset($_POST['join-grp-submit'])) {
 
-if($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $group_name = validate_trim_input($_POST['group_name']);
-    $password = validate_trim_input($_POST['password']);
+        $group_name = validate_trim_input($_POST['group_name']);
+        $password = validate_trim_input($_POST['password']);
 
-    $group_exists = groups_check_if_exists($group_name, $group_name_error);
-    $already_in_group = is_user_in_group($_SESSION['username'], $group_name, $group_name_error);
-    $is_password_correct = groups_check_password_correct($group_name, $password, $password_error);
-    
-    if(isset($group_name_error) || isset($password_error)){
-        $form_style = "has-error";
-    }
+        $group_exists = groups_check_if_exists($group_name, $error_name_text, $error_name_flag);
+        $already_in_group = groups_is_user_in_group($_SESSION['username'], $group_name, $group_name_error, $error_name_flag);
+        $is_password_correct = groups_check_password_correct($group_name, $password, $error_psw_text, $error_psw_flag);
 
-    if($group_exists && $is_password_correct && (!$already_in_group) ){
-        $password = md5($password);
-        if(groups_add_user_to_group($group_name, $_SESSION['username'])){
-            header("Location: group_choose.php");
-            $_SESSION['joined_group'] = $group_name;
-            exit();
-        } else {
-            die("Database error");
+        if($group_exists && $is_password_correct && (!$already_in_group) ){
+            
+            $password = md5($password);
+            
+            if(groups_add_user_to_group($group_name, $_SESSION['username'])){
+
+                $_SESSION['joined_group'] = $group_name;
+                header("Location: group_choose.php");
+                exit();
+
+            } else {
+
+                ?>
+                <div class="alert alert-danger">
+                    Wystąpił błąd połączenia z serwerem, prosimy spróbować ponownie później.
+                </div>
+                <?
+                
+            }
         }
     }
-}
 ?>
 
 <!DOCTYPE html>
@@ -68,10 +72,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="container-fluid">
                     <div class="col-sm-8">
                         <form action = "" method = "POST">
-                            <div class="form-group <? echo $form_style; ?>">
+                            <div class="form-group <? echo $error_name_flag; ?>">
                                 <label for="email"><i class="fa"></i>Wybierz apteczkę</label><br/>
-                                <p style="color:red"><?php echo $group_name_error ?></p>
-                                <input name="group_name" id="choose_group" list="group_list" placeholder="Wprowadź nazwę grupy" class="form-control">
+                                <p style="color:red"><?php echo $error_name_text ?></p>
+                                <input name="group_name" id="choose_group" list="group_list" required placeholder="Wprowadź nazwę grupy" class="form-control" value=<?php echo "$group_name" ?>>
                                 <datalist id="group_list">
                                     <?php
                                         $result = groups_get_all_names();
@@ -81,13 +85,13 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     ?>
                                 </datalist>
                             </div>
-                            <div class="form-group <? echo $form_style; ?>">
+                            <div class="form-group <? echo $error_psw_flag; ?>">
                                 <label for="password"><i class="fa"></i>Hasło </label>
-                                <p style="color:red"><?php echo $password_error ?></p>
-                                <input type="password" class="form-control" name="password" placeholder="Hasło grupy">
+                                <p style="color:red"><?php echo $error_psw_text ?></p>
+                                <input type="password" class="form-control" name="password" required placeholder="Hasło grupy">
                             </div>
                             <br />
-                            <button type="submit" class="btn btn-col btn-block">Dołącz do grupy!</button>
+                            <button type="submit" name='join-grp-submit' class="btn btn-col btn-block">Dołącz do grupy!</button>
                         </form>
                     </div>
                 </div>

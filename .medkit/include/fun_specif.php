@@ -42,8 +42,7 @@
     function specif_print_table($sql){
 
         require("config/sql_connect.php");
-        
-
+       
         $userDefinedCounter = 0;
 
         $result = mysqli_query($dbConnection, $sql);

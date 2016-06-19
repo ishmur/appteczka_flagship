@@ -11,33 +11,14 @@
 	$groupID = $_SESSION["groupID"];
 	$username = $_SESSION["username"];
 
-    if(isset($_SESSION['new_drug'])){
-        ?>
-        <div class="alert alert-success">
-            Dodano nowy lek: <strong><? echo $_SESSION['new_drug']?></strong>!
-        </div>
-        <?php
-        $_SESSION['new_drug'] = null;
-    }
-
-    if(isset($_SESSION['edit_drug'])){
-        ?>
-        <div class="alert alert-success">
-            Edytowano lek! Obecna nazwa leku to: <strong><? echo $_SESSION['edit_drug']?></strong>.
-        </div>
-        <?php
-        $_SESSION['edit_drug'] = null;
-    }
-
 	if(isset($_POST['drugs'])) {
 		foreach ($_POST['drugs'] as $drugID) {
 			drugs_delete_record($username, $drugID, $groupID);
 		}
+		$_SESSION['deleted_drugs'] = true;
+		header("Location: drugs_overview.php");
+		exit();
 	}
-
-    if(isset($_POST["drugs_edit"])){
-        //tba
-    }
 
     if(isset($_POST["drugs_take_amount"])){
         $amount = $_POST["drugs_take_amount"];
@@ -74,6 +55,24 @@
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-sm-9 col-sm-offset-3">
+
+			<?php if(isset($_SESSION['new_drug'])){ ?>
+				<div class="alert alert-success">
+					Dodano nowy lek: <strong><? echo $_SESSION['new_drug']?></strong>!
+				</div>
+			<?php $_SESSION['new_drug'] = null; } ?>
+
+			<?php if(isset($_SESSION['edit_drug'])){ ?>
+				<div class="alert alert-success">
+					Edytowano lek! Obecna nazwa leku to: <strong><? echo $_SESSION['edit_drug']?></strong>.
+				</div>
+			<?php $_SESSION['edit_drug'] = null; } ?>
+
+			<?php if(isset($_SESSION['deleted_drugs'])){ ?>
+				<div class="alert alert-success">
+					Usunięto zaznaczone leki!
+				</div>
+			<?php $_SESSION['deleted_drugs'] = null; } ?>
 
             <?php if(empty($groupID)) { ?>
 

@@ -117,4 +117,145 @@
 
     }
 
+    function validate_group_name($var, &$error_text, &$error_flag){
+
+        if (empty($var)){
+
+            $error_text = "Grupa musi mieć nazwę.";
+            $error_flag = "has-error";
+            return false;
+
+        } else {
+
+            if (!preg_match("/^[ąćęłńóśźżĄĆĘŁŃÓŚŹŻ a-zA-Z0-9]*$/",$var)) {
+                $error_text = "Nazwa grupy może się składać wyłącznie z cyfr i liter.";
+                $error_flag = "has-error";
+                return false;
+            }
+
+            if(is_in_database($var, 'groups')){
+                $error_text = "Grupa o podanej nazwie już istnieje.";
+                $error_flag = "has-error";
+                return false;
+            }
+
+            return true;
+        }
+    }
+
+    function validate_password_fields($password, $password_check, &$error_text, &$error_flag) {
+
+        if ($password != $password_check){
+
+            $error_text = "Wartości obu pól haseł muszą być identyczne";
+            $error_flag = "has-error";
+            return false;
+
+        } else {
+
+            if (empty($password)) {
+
+                $error_text = "Pole nie może być puste";
+                $error_flag = "has-error";
+                return false;
+
+            }
+
+            if (!preg_match("/^[ąćęłńóśźżĄĆĘŁŃÓŚŹŻa-zA-Z0-9@_]*$/",$password)) {
+                $error_text = "Hasło może składać się wyłącznie z liter, cyfr, znaku podkreślenia lub @.";
+                $error_flag = "has-error";
+                return false;
+            }
+
+            return true;
+
+        }
+
+    }
+
+    function validate_new_email($var, &$error_text, &$error_flag){
+
+        if (filter_var($var, FILTER_VALIDATE_EMAIL)) {
+
+            if (is_in_database($var, 'users')) {
+
+                $error_text = "Podany adres email jest już przypisany do konta.";
+                $error_flag = "has-error";
+                return false;
+
+            } else {
+
+                return true;
+
+            }
+
+        } else {
+
+            if (empty($var)) {
+
+                $error_text = "Pole nie może być puste.";
+                $error_flag = "has-error";
+                return false;
+
+            } else {
+
+                $error_text = "Nieprawidłowy adres email.";
+                $error_flag = "has-error";
+                return false;
+
+            }
+
+        }
+
+    }
+
+    function validate_email($var, &$error_text, &$error_flag){
+
+        if (filter_var($var, FILTER_VALIDATE_EMAIL)) {
+
+            return true;
+
+        } else {
+
+            if (empty($var)){
+
+                $error_text = "Pole nie może być puste.";
+                $error_flag = "has-error";
+                return false;
+
+            } else {
+
+                $error_text = "Nieprawidłowy adres email.";
+                $error_flag = "has-error";
+                return false;
+
+            }
+
+        }
+
+    }
+
+    function validate_password($password, &$error_text, &$error_flag) {
+
+        if (empty($password)) {
+
+            $error_text = "Pole nie może być puste";
+            $error_flag = "has-error";
+            return false;
+
+        }
+
+        if (!preg_match("/^[ąćęłńóśźżĄĆĘŁŃÓŚŹŻa-zA-Z0-9@_]*$/",$password)) {
+            $error_text = "Hasło może składać się wyłącznie z liter, cyfr, znaku podkreślenia lub @.";
+            $error_flag = "has-error";
+            return false;
+        }
+
+        return true;
+
+
+
+    }
+
+
 ?>

@@ -3,34 +3,40 @@
 	session_start();
 	require_once("include/functions.php");
 
-	$newpass_error;
-	$oldpass_error;
-	
 	if(!isset($_SESSION['username'])){
 		header("Location: index.php?logout=1");
 		exit();
 	}
 
-	if($_SERVER['REQUEST_METHOD'] == 'POST') {
+	if(isset($_POST['change-psw-submit'])){
+
 		$username = $_SESSION['username'];
 		$oldpassword = md5(validate_trim_input($_POST['pswOld']));
-		$password = md5(validate_trim_input($_POST['pswNew1']));
-		$password_check = md5(validate_trim_input($_POST['pswNew2']));
+		$password = validate_trim_input($_POST['pswNew1']);
+		$password_check = validate_trim_input($_POST['pswNew2']);
 
-		$correct_old_password = correct_password($username, $oldpassword);
-		$are_passwords_valid = password_valid($password, $password_check, $newpass_error);
-
-		if(!$correct_old_password) $oldpass_error = "Podałeś złe hasło";
+		$correct_old_password = users_is_password_correct($username, $oldpassword, $error_old_psw_text, $error_old_psw_flag);
+		$are_passwords_valid = validate_password_fields($password, $password_check, $error_new_psw_text, $error_new_psw_flag);
 
 		if($correct_old_password && $are_passwords_valid) {
-			if (!change_password($username, $password)) {
-				header("Location: index.php?reg=1");
+
+            $password = md5($password);
+
+			if (!users_change_password($username, $password)) {
+
+                $_SESSION['new_psw'] = true;
+				header("Location: settings.php");
 				exit();
+
 			} else {
-				die("Database error");
+
+                ?>
+                <div class="alert alert-danger">
+                    Wystąpił błąd połączenia z serwerem, prosimy spróbować ponownie później.
+                </div>
+                <?
+
 			}
-		} else {
-			$form_style = "has-error";
 		}
 	}
 ?>
@@ -59,6 +65,12 @@
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-sm-9 col-sm-offset-3">
+
+            <?php if(isset($_SESSION['new_psw'] )){ ?>
+                <div class="alert alert-success">
+                    Hasło do konta zostało zmienione.
+                </div>
+            <?php } $_SESSION['new_psw'] = null; ?>
 		
 			<div class="col-sm-3 inline-element-center">
 				<h2>Zmiana hasła</h2><br />
@@ -68,22 +80,22 @@
 				<div class="container-fluid">
 					<div class="col-sm-8">
 						<form action = "" method = "POST">
-							<div class="form-group <? echo $form_style; ?>">
+							<div class="form-group <? echo $error_old_psw_flag; ?>">
 								<label for="pswOld"><i class="fa fa-lock"></i> Stare hasło</label>
-								<p style="color:red"><?php echo $oldpass_error ?></p>
-								<input type="password" class="form-control" name="pswOld" id="pswOld" placeholder="Wpisz swoje stare hasło">
+								<p style="color:red"><?php echo $error_old_psw_text ?></p>
+								<input type="password" class="form-control" name="pswOld" id="pswOld" required placeholder="Wpisz swoje stare hasło">
 							</div>
-							<div class="form-group <? echo $form_style; ?>">
+							<div class="form-group <? echo $error_new_psw_flag; ?>">
 								<label for="pswNew1"><i class="fa fa-plus"></i> Nowe hasło</label>
-								<p style="color:red"><?php echo $newpass_error ?></p>
-								<input type="password" class="form-control" name="pswNew1" id="pswNew1" placeholder="Wpisz nowe hasło">
+								<p style="color:red"><?php echo $error_new_psw_text ?></p>
+								<input type="password" class="form-control" name="pswNew1" id="pswNew1" required placeholder="Wpisz nowe hasło">
 							</div>
-							<div class="form-group <? echo $form_style; ?>">
+							<div class="form-group <? echo $error_new_psw_flag; ?>">
 								<label for="pswNew2"><i class="fa fa-plus-circle"></i> Potwierdź nowe hasło</label>
-								<input type="password" class="form-control" name="pswNew2" id="pswNew2" placeholder="Wpisz nowe hasło jeszcze raz">
+								<input type="password" class="form-control" name="pswNew2" id="pswNew2" required placeholder="Wpisz nowe hasło jeszcze raz">
 							</div>
 							<br />
-							<button type="submit" class="btn btn-col btn-block">Zatwierdź zmiany</button>
+							<button type="submit" name='change-psw-submit' class="btn btn-col btn-block">Zatwierdź zmiany</button>
 						</form>
 					</div>
 				</div>

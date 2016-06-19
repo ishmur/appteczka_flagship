@@ -22,7 +22,7 @@
 
     }
 
-    function is_user_in_group($username, $group_name, &$error){
+    function groups_is_user_in_group($username, $group_name, &$error_text, &$error_flag){
 
         require("config/sql_connect.php");
 
@@ -39,10 +39,12 @@
 
         $result = db_statement($sql, "ii", array(&$result2, &$result1));
         if (mysqli_num_rows($result) > 0) {
-            $error = "Jesteś już w tej grupie!";
+            $error_text = "Należysz już do tej grupy!";
+            $error_flag = "has-error";
             return true;
         }
-        else return false;
+        else
+            return false;
 
     }
 
@@ -226,38 +228,34 @@
         }
     }
 
-    function groups_check_name_valid($group_name, &$error){
-        //Funkcje mogą być w przyszłości rozbudowane
-        if (empty($group_name)){
-            $error = "Grupa musi mieć nazwę";
-            return false;
-        } else {
-            if(is_in_database($group_name, 'groups')){
-                $error = "Grupa o podanej nazwie już istnieje";
-                return false;
-            }
-            return true;
-        }
-    }
+    function groups_check_if_exists($group_name, &$error_text, &$error_flag){
 
-    function groups_check_if_exists($group_name, &$error){
         if (empty($group_name)){
-            $error = "Grupa musi mieć nazwę";
+
+            $error_text = "Pole nie może być puste";
+            $error_flag = "has-error";
             return false;
+
         } else {
+
             if(!is_in_database($group_name, 'groups')){
-                $error = "Grupa o podanej nazwie nie istnieje";
+
+                $error_text = "Grupa o podanej nazwie nie istnieje";
+                $error_flag = "has-error";
                 return false;
+
             }
+
             return true;
+
         }
+
     }
 
-    function groups_check_password_correct($group_name, $password, &$error){
+    function groups_check_password_correct($group_name, $password, &$error_text, &$error_flag){
 
         require("config/sql_connect.php");
         
-
         $password = md5($password);
         $sql = "SELECT id FROM groups WHERE group_name = ? and password = ?";
         $result = db_statement($sql, "ss", array(&$group_name, &$password));
@@ -266,7 +264,8 @@
             return true;
         }
         else {
-            $error = "Nieprawdiłowe dane logowania do grupy";
+            $error_text = "Nieprawidłowe dane logowania do grupy.";
+            $error_flag = "has-error";
             return false;
         }
     }
