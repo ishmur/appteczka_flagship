@@ -91,9 +91,9 @@ $settings = Ustawienia
 						<a <?php echo $settingsGroupNew ?> href="group_new.php">Utwórz grupę</a>
 					</div>
 				</li>
-				<?php if(users_is_admin(users_get_id_from_name($_SESSION['username']), $_SESSION['groupID'])) {
-					echo "<li" . $panelAdmin . "><a href='group_manage.php'>Panel administratora</a></li>";
-				}?>
+				<?php if(users_is_admin(users_get_id_from_name($_SESSION['username']), $_SESSION['groupID'])) { ?>
+					<li <?php echo $panelAdmin ?> ><a href="group_manage.php">Panel administratora</a></li>
+				<?php } ?>
 
 				<li><a href="index.php?logout=1">Wyloguj</a></li>
 			</ul><br>
