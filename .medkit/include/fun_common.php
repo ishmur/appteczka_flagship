@@ -109,8 +109,7 @@
         $rows = mysqli_num_rows($result);
         $pages = intval(ceil($rows / $rows_per_page)); //ile stron
         //start, end - sąsiedztwo obecnie wybranej strony
-        if(($page < 1 || $page > $pages) && ($pages > 1)){
-            echo "Wybrano stronę spoza zakresu. Wyświetlana jest pierwsza strona";
+        if(($page < 1 || $page > $pages)){
             $page = 1;
         }
         $start = $page - 2; //page = obecnie wybrana strona
