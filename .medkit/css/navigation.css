@@ -128,3 +128,5 @@ h2 {
 
 .top-buffer { margin-top:50px; }
 .sm-top-buffer { margin-top:5px; }
+
+body { overflow-x: hidden;}

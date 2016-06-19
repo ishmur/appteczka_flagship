@@ -69,6 +69,10 @@
             }
             echo "</tbody></table>";
         }
+        else{
+            if ($username == "") echo "Brak aktualności do wyświetlenia";
+            else echo "Brak aktualności od tego użytkownika";
+        }
     }
 
     function form_message($db_row){
