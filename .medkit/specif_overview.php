@@ -19,28 +19,13 @@
 
     }
 
-    if(isset($_SESSION['new_specif'])){
-        ?>
-        <div class="alert alert-success">
-            Zdefiniowano nową specyfikację leku o nazwie: <strong><? echo $_SESSION['new_specif']?></strong>!
-        </div>
-        <?php
-        $_SESSION['new_specif'] = null;
-    }
-
-    if(isset($_SESSION['edit_specif'])){
-        ?>
-        <div class="alert alert-success">
-            Edytowano specyfikację! Obecna nazwa tego leku to: <strong><? echo $_SESSION['edit_specif']?></strong>.
-        </div>
-        <?php
-        $_SESSION['edit_specif'] = null;
-    }
-
     if(isset($_POST['specif'])) {
         foreach ($_POST['specif'] as $specifID) {
             specif_delete_record($specifID);
         }
+        $_SESSION['deleted_drugs'] = true;
+        header("Location: specif_overview.php");
+        exit();
     }
 
 ?>
@@ -71,6 +56,24 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-9 col-sm-offset-3">
+
+            <?php if(isset($_SESSION['new_specif'])){ ?>
+                <div class="alert alert-success">
+                    Zdefiniowano nową specyfikację leku o nazwie: <strong><? echo $_SESSION['new_specif']?></strong>!
+                </div>
+            <?php $_SESSION['new_specif'] = null; } ?>
+
+            <?php if(isset($_SESSION['edit_specif'])){ ?>
+                <div class="alert alert-success">
+                    Edytowano specyfikację! Obecna nazwa tego leku to: <strong><? echo $_SESSION['edit_specif']?></strong>.
+                </div>
+            <?php $_SESSION['edit_specif'] = null; } ?>
+
+            <?php if(isset($_SESSION['deleted_drugs'])){ ?>
+                <div class="alert alert-success">
+                    Usunięto zaznaczone specyfikacje!
+                </div>
+            <?php $_SESSION['deleted_drugs'] = null; } ?>
 
             <div class="col-md-8 col-md-offset-2">
                 <div class="container-fluid">

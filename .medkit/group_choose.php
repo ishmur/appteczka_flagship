@@ -16,6 +16,7 @@
         if ($result){
             $_SESSION["groupID"] = $groupID;
             $_SESSION["groupName"] = groups_get_selected_name($groupID);
+            $_SESSION['changed_group'] =  $_SESSION["groupName"];
 
             if (drugs_overdue_check_date($_SESSION["groupID"])){
                 $_SESSION['drugsOverdueModal'] = "show";
@@ -34,25 +35,10 @@
                 $_SESSION["groupName"] = null;
             }
             groups_leave($groupID, $username);
+            $_SESSION['left_group'] = true;
+            header("Location: group_choose.php");
+            exit();
         }
-    }
-
-    if(isset($_SESSION['joined_group'])){
-        ?>
-        <div class="alert alert-success">
-            Dołączono do apteczki: <strong><? echo $_SESSION['joined_group']?></strong>!
-        </div>
-        <?
-        $_SESSION['joined_group'] = null;
-    }
-
-    if(isset($_SESSION['new_group'])){
-        ?>
-        <div class="alert alert-success">
-            Utworzono nową apteczkę: <strong><? echo $_SESSION['new_group']?></strong>!
-        </div>
-        <?
-        $_SESSION['new_group'] = null;
     }
 
 ?>
@@ -84,6 +70,24 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-9 col-sm-offset-3">
+
+            <?php if(isset($_SESSION['joined_group'])){ ?>
+                <div class="alert alert-success">
+                    Dołączono do apteczki: <strong><? echo $_SESSION['joined_group']?></strong>!
+                </div>
+            <?php $_SESSION['joined_group'] = null; } ?>
+
+            <?php if(isset($_SESSION['new_group'])){ ?>
+                <div class="alert alert-success">
+                    Utworzono nową apteczkę: <strong><? echo $_SESSION['new_group']?></strong>!
+                </div>
+            <?php $_SESSION['new_group'] = null; } ?>
+
+            <?php if(isset($_SESSION['left_group'])){ ?>
+                <div class="alert alert-success">
+                    Opuszczono zaznaczone grupy!
+                </div>
+            <?php $_SESSION['left_group'] = null; } ?>
 
             <div class="col-md-8 col-md-offset-2">
                 <div class="container-fluid">

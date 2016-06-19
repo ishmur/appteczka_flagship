@@ -56,6 +56,12 @@
 	<div class="row">
 		<div class="col-sm-9 col-sm-offset-3">
 
+            <?php if(isset($_SESSION['changed_group'])){ ?>
+                <div class="alert alert-success">
+                    Zmieniono widoczną grupę! Oglądasz apteczkę: <strong><? echo $_SESSION['changed_group']?></strong>.
+                </div>
+            <?php $_SESSION['changed_group'] = null; } ?>
+
             <?php if(empty($_SESSION["groupID"])) { ?>
 
                 <div class="col-md-8 col-md-offset-2">

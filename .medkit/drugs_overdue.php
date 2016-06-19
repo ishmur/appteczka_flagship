@@ -15,6 +15,9 @@
 		foreach ($_POST['overdue'] as $drugID) {
 			drugs_delete_record($username, $drugID, $groupID);
 		}
+		$_SESSION['deleted_drugs'] = true;
+		header("Location: drugs_overdue.php");
+		exit();
 	}
 
 ?>
@@ -44,6 +47,12 @@
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-sm-9 col-sm-offset-3">
+
+            <?php if(isset($_SESSION['deleted_drugs'])){ ?>
+                <div class="alert alert-success">
+                    Usunięto zaznaczone leki!
+                </div>
+            <?php $_SESSION['deleted_drugs'] = null; } ?>
 
             <?php if(empty($groupID)) { ?>
 
