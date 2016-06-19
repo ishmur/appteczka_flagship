@@ -93,7 +93,6 @@
                             </div>
                             <div class="form-group <? echo $error_psw_flag; ?>">
                                 <label for="password_check"><i class="fa"></i>Powtórz hasło</label>
-                                <p style="color:red"><?php echo $error_psw_text ?></p>
                                 <input type="password" class="form-control" name="password_check" required placeholder="Powtórz hasło grupy">
                             </div>
                             <br />

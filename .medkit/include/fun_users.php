@@ -20,7 +20,24 @@
 
     }
 
-    function change_password($username, $password){
+    function users_is_password_correct($username, $password, &$error_text, &$error_flag){
+        
+        require("config/sql_connect.php");
+
+        $sql = "SELECT id FROM users WHERE email = ? and password = ?";
+        $result = db_statement($sql, "ss", array(&$username, &$password));
+
+        if (mysqli_num_rows($result) == 1) {
+            return true;
+        }
+        else {
+            $error_text = "Podane hasło jest nieprawidłowe.";
+            $error_flag = "has-error";
+            return false;
+        }
+    }
+
+    function users_change_password($username, $password){
 
         require("config/sql_connect.php");
 

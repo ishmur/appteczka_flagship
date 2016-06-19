@@ -153,19 +153,109 @@
 
         } else {
 
-            if (empty($password)){
+            if (empty($password)) {
 
                 $error_text = "Pole nie może być puste";
+                $error_flag = "has-error";
+                return false;
+
+            }
+
+            if (!preg_match("/^[ąćęłńóśźżĄĆĘŁŃÓŚŹŻa-zA-Z0-9@_]*$/",$password)) {
+                $error_text = "Hasło może składać się wyłącznie z liter, cyfr, znaku podkreślenia lub @.";
+                $error_flag = "has-error";
+                return false;
+            }
+
+            return true;
+
+        }
+
+    }
+
+    function validate_new_email($var, &$error_text, &$error_flag){
+
+        if (filter_var($var, FILTER_VALIDATE_EMAIL)) {
+
+            if (is_in_database($var, 'users')) {
+
+                $error_text = "Podany adres email jest już przypisany do konta.";
                 $error_flag = "has-error";
                 return false;
 
             } else {
 
                 return true;
-                
+
+            }
+
+        } else {
+
+            if (empty($var)) {
+
+                $error_text = "Pole nie może być puste.";
+                $error_flag = "has-error";
+                return false;
+
+            } else {
+
+                $error_text = "Nieprawidłowy adres email.";
+                $error_flag = "has-error";
+                return false;
+
             }
 
         }
+
     }
+
+    function validate_email($var, &$error_text, &$error_flag){
+
+        if (filter_var($var, FILTER_VALIDATE_EMAIL)) {
+
+            return true;
+
+        } else {
+
+            if (empty($var)){
+
+                $error_text = "Pole nie może być puste.";
+                $error_flag = "has-error";
+                return false;
+
+            } else {
+
+                $error_text = "Nieprawidłowy adres email.";
+                $error_flag = "has-error";
+                return false;
+
+            }
+
+        }
+
+    }
+
+    function validate_password($password, &$error_text, &$error_flag) {
+
+        if (empty($password)) {
+
+            $error_text = "Pole nie może być puste";
+            $error_flag = "has-error";
+            return false;
+
+        }
+
+        if (!preg_match("/^[ąćęłńóśźżĄĆĘŁŃÓŚŹŻa-zA-Z0-9@_]*$/",$password)) {
+            $error_text = "Hasło może składać się wyłącznie z liter, cyfr, znaku podkreślenia lub @.";
+            $error_flag = "has-error";
+            return false;
+        }
+
+        return true;
+
+
+
+    }
+
 
 ?>
