@@ -56,7 +56,8 @@
 
 		if ($name_valid && $unit_valid && $amount_valid && $price_valid && $date_valid && $groupID_valid) {
 
-            drugs_new_record($drug_name, $drug_unit, $drug_amount, $drug_price, $drug_date, $username, $groupID);
+            $drug_price_per_unit = round(($drug_price / $drug_amount), 2);
+            drugs_new_record($drug_name, $drug_unit, $drug_amount, $drug_price, $drug_price_per_unit, $drug_date, $username, $groupID);
             $_SESSION['new_drug'] = $drug_name;
 
             header("Location: drugs_overview.php");

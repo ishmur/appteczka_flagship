@@ -37,8 +37,7 @@
         $result1 = $result1['id'];
         $result2 = $result2['id'];
 
-
-        $result = db_statement($sql, "ii", array(&$result1, &$result2));
+        $result = db_statement($sql, "ii", array(&$result2, &$result1));
         if (mysqli_num_rows($result) > 0) {
             $error = "Jesteś już w tej grupie!";
             return true;

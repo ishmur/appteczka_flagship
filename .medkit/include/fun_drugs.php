@@ -1,9 +1,9 @@
 <?php
-function drugs_new_record($drug_name, $drug_unit, $drug_amount, $drug_price, $drug_date, $username, $groupID){
+function drugs_new_record($drug_name, $drug_unit, $drug_amount, $drug_price, $drug_price_per_unit, $drug_date, $username, $groupID){
     require("config/sql_connect.php");
-    $sql = "INSERT INTO DrugsDB (name, unit, amount, price, overdue, user_added, group_id)
-                    VALUES (?, ?, ?, ?, ?, ?, ?)";
-    $processed = db_statement($sql, "ssidssi", array(&$drug_name, &$drug_unit, &$drug_amount, &$drug_price, &$drug_date, &$username, &$groupID));
+    $sql = "INSERT INTO DrugsDB (name, unit, amount, price, price_per_unit, overdue, user_added, group_id)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    $processed = db_statement($sql, "ssiddssi", array(&$drug_name, &$drug_unit, &$drug_amount, &$drug_price, &$drug_price_per_unit, &$drug_date, &$username, &$groupID));
     if(!$processed){
         add_event($username, $groupID, 'drugs_new', $drug_name);
     }
@@ -15,7 +15,7 @@ function drugs_update_record($drug_name, $drug_unit, $drug_amount, $drug_price, 
                 WHERE id = ?";
     $processed = db_statement($sql, "ssidsi", array(&$drug_name, &$drug_unit, &$drug_amount, &$drug_price, &$drug_date, &$drug_id));
     if(!$processed){
-        // event for edit
+        // jasne XD sam se zrób XD
     }
 }
 function drugs_get_info_from_id($drug_id){
@@ -125,12 +125,20 @@ function drugs_take_drug($username, $groupID, $amount, $drugID, $amount_present)
 function drugs_delete_record($username, $drugID, $groupID){
     require("config/sql_connect.php");
     $drugName = drug_name_from_id($drugID);
+    $sql = "SELECT amount, price_per_unit FROM DrugsDB
+                    WHERE id = ?
+                    AND group_id = ?";
+    $result = db_statement($sql, "ii", array(&$drugID, &$groupID));
+    $row = mysqli_fetch_assoc($result);
+    $money_lost = $row['amount'] * $row['price_per_unit'];
+
+
     $sql = "DELETE FROM DrugsDB 
                     WHERE id = ?
                     AND group_id = ?";
     $processed = db_statement($sql, "ii", array(&$drugID, &$groupID));
     if(!$processed){
-        add_event($username, $groupID, 'drugs_delete', $drugName);
+        add_event($username, $groupID, 'drugs_delete', $drugName, 0, "", $money_lost);
     }
 }
 function drugs_overdue_check_date($groupID){
