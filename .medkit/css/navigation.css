@@ -139,3 +139,5 @@ h2 {
 .sm-top-buffer { margin-top:5px; }
 
 body { overflow-x: hidden;}
+
+.left-buffer { margin-left:20px; }
