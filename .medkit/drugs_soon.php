@@ -1,17 +1,20 @@
 <?php
-session_start();
-require_once("include/functions.php");
-if(!isset($_SESSION['username'])){
-    header("Location: index.php?logout=1");
-    exit();
-}
-$username = $_SESSION['username'];
-$groupID = $_SESSION["groupID"];
-if (isset($_POST['overdueSoon'])){
-    foreach ($_POST['overdueSoon'] as $drugID) {
-        drugs_delete_record($username, $drugID, $groupID);
+    session_start();
+    require_once("include/functions.php");
+    if(!isset($_SESSION['username'])){
+        header("Location: index.php?logout=1");
+        exit();
     }
-}
+    $username = $_SESSION['username'];
+    $groupID = $_SESSION["groupID"];
+    if (isset($_POST['overdueSoon'])){
+        foreach ($_POST['overdueSoon'] as $drugID) {
+            drugs_delete_record($username, $drugID, $groupID);
+        }
+        $_SESSION['deleted_drugs'] = true;
+        header("Location: drugs_soon.php");
+        exit();
+    }
 ?>
 
 <!DOCTYPE html>
@@ -39,6 +42,12 @@ include("include/navigation.php"); // load template html with top-navigation bar
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-9 col-sm-offset-3">
+
+            <?php if(isset($_SESSION['deleted_drugs'])){ ?>
+                <div class="alert alert-success">
+                    Usunięto zaznaczone leki!
+                </div>
+            <?php $_SESSION['deleted_drugs'] = null; } ?>
 
             <?php if(empty($groupID)) { ?>
 

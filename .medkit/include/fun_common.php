@@ -57,71 +57,7 @@
         }
     }
 
-    function login_valid($login, &$error) {
-
-        if (filter_var($login, FILTER_VALIDATE_EMAIL)) {
-
-            if (is_in_database($login, 'users')) {
-                $error = "Podany adres email jest już przypisany do konta";
-                return false;
-            } else {
-                return true;
-            }
-
-        } else {
-
-            if (empty($login)){
-                $error = "Pole nie może być puste";
-                return false;
-            } else {
-                $error = "Nieprawidłowy adres email";
-                return false;
-            }
-
-        }
-    }
-
-    
-
-    function login_basic_check($login, &$error){
-        if (filter_var($login, FILTER_VALIDATE_EMAIL)) {
-            return true;
-        } else {
-            if (empty($login)){
-                $error = "Pole nie może być puste";
-                return false;
-            } else {
-                $error = "Nieprawidłowa nazwa użytkownika";
-                return false;
-            }
-        }
-    }
-
-    function password_basic_check($password, &$error){
-        //Funkcje mogą być w przyszłości rozbudowane
-        if (empty($password)){
-            $error = "Pole nie może być puste";
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    function correct_password($username, $password){
-        require("config/sql_connect.php");
-
-        $sql = "SELECT id FROM users WHERE email = ? and password = ?";
-        $result = db_statement($sql, "ss", array(&$username, &$password));
-
-        if (mysqli_num_rows($result) == 1) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-
-    function is_in_database($entity, $db){
+   function is_in_database($entity, $db){
 
         require("config/sql_connect.php");
 

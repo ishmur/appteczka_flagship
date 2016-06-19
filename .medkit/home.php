@@ -1,18 +1,7 @@
 <?php
 	session_start();
-	
-	$show_modal;
 
 	require_once("include/functions.php");
-
-
-
-//	if (isset($_COOKIE['username']) && isset($_COOKIE['password'])){
-//		if (!correct_password($_COOKIE['username'], $_COOKIE['password'])) {
-//			header("Location: index.php?logout=1");
-//			exit();
-//		}
-//	}
 
 	if(!isset($_SESSION['username'])){
 		header("Location: index.php?logout=1");
@@ -55,6 +44,12 @@
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-sm-9 col-sm-offset-3">
+
+            <?php if(isset($_SESSION['changed_group'])){ ?>
+                <div class="alert alert-success">
+                    Zmieniono widoczną grupę! Oglądasz apteczkę: <strong><? echo $_SESSION['changed_group']?></strong>.
+                </div>
+            <?php $_SESSION['changed_group'] = null; } ?>
 
             <?php if(empty($_SESSION["groupID"])) { ?>
 

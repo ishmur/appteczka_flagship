@@ -3,23 +3,20 @@
         <br/><br/>
         <div class="container col-sm-6">
             <div class="container col-sm-6 col-sm-offset-6 footer-div-right">
-                <h4>Podziękowania dla:</h4>
+                <h4>Przydatne linki, np.:</h4>
                 <ul>
-                    <li>Stack Overflow</li>
-                    <li>Wikipedia</li>
-                    <li>9gag</li>
+                    <li>przykładowy EAN</li>
+                    <li>NFZ</li>
                 </ul>
             </div>
         </div>
         <div class="container col-sm-6">
             <div class="container col-sm-6 footer-div-left">
-                <h4>O autorach:</h4>
+                <h4>Kontakt:</h4>
                 <ul>
-                    <li>studenci Inżynierii Biomedycznej</li>
-                    <li>niezbyt zaradni życiowo</li>
-                    <li>party animals</li>
-					<li>hehe</li>
-					<li>he</li>
+                    <li>(numer telefonu)</li>
+                    <li>(mail 1)</li>
+                    <li>(mail 2)</li>
                 </ul>
             </div>
         </div>

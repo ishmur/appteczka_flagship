@@ -3,25 +3,36 @@
 
     require_once("include/functions.php");
 
-    if($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if(isset($_POST['reg-submit'])) {
+
         $username = validate_trim_input($_POST['username']);
         $password = validate_trim_input($_POST['password']);
         $password_check = validate_trim_input($_POST['password_check']);
 
-        $is_email_valid = login_valid($username, $login_error);
-        $are_passwords_valid = validate_password_fields($password, $password_check, $password_error);
+        $is_email_valid = validate_new_email($username, $error_name_text, $error_name_flag);
+        $are_passwords_valid = validate_password_fields($password, $password_check, $error_psw_text, $error_psw_flag);
 
         if($is_email_valid && $are_passwords_valid) {
+
             $password = md5($password);
+
             if (register($username, $password, 'user')) {
-                header("Location: index.php?reg=1");
+
+                $_SESSION['new_user'] = $username;
+                header("Location: index.php");
                 exit();
+
             } else {
-                die("Database error");
+
+                ?>
+                <div class="alert alert-danger">
+                    Wystąpił błąd połączenia z serwerem, prosimy spróbować ponownie później.
+                </div>
+                <?
+
             }
-        } else {
-            $form_style = "has-error";
         }
+        
     }
 ?>
 
@@ -53,31 +64,31 @@
                 <div class="container-fluid">
                     <div class="col-sm-12">
                         <form action = "" method = "POST" id="RegistrationForm">
-                            <div class="form-group <? echo $form_style; ?>">
+                            <div class="form-group <? echo $error_name_flag; ?>">
                                 <label for="email"><span class="glyphicon glyphicon-user"></span> E-mail </label>
-                                <p style="color:red"><?php echo $login_error ?></p>
-                                <input type="email" class="form-control" name="username" placeholder="Wpisz adres email" value=<?php echo "$username" ?>>
+                                <p style="color:red"><?php echo $error_name_text ?></p>
+                                <input type="email" class="form-control" name="username" required placeholder="Wpisz adres email" value=<?php echo "$username" ?>>
                             </div>
-                            <div class="form-group <? echo $form_style; ?>">
+                            <div class="form-group <? echo $error_psw_flag; ?>">
                                 <label for="password"><span class="glyphicon glyphicon-lock"></span> Hasło</label>
-                                <p style="color:red"><?php echo $password_error ?></p>
-                                <input type="password" class="form-control" name="password" placeholder="Wpisz hasło">
+                                <p style="color:red"><?php echo $error_psw_text ?></p>
+                                <input type="password" class="form-control" name="password" required placeholder="Wpisz hasło">
                             </div>
-                            <div class="form-group <? echo $form_style; ?>">
+                            <div class="form-group <? echo $error_psw_flag; ?>">
                                 <label for="password_check"><i class="fa fa-get-pocket" aria-hidden="true"></i> Powtórz hasło</label>
-                                <input type="password" class="form-control" name="password_check" placeholder="Powtórz hasło">
+                                <input type="password" class="form-control" name="password_check" required placeholder="Powtórz hasło">
                             </div>
                             <br />
                         </form>
 
                         <div class="row">
                             <div class="col-sm-6">
-                                <button type="submit" form="RegistrationForm" class="btn btn-col btn-block">Zarejestruj się!</button>
+                                <a href="index.php">
+                                    <button type="button" class="btn btn-danger col-xs-12">Powrót</button>
+                                </a>
                             </div>
                             <div class="col-sm-6">
-                                <a href="index.php">
-                                    <button type="button" class="btn btn-col btn-block">Powrót</button>
-                                </a>
+                                <button type="submit" form="RegistrationForm" name='reg-submit' class="btn btn-col btn-block col-xs-12">Zarejestruj się!</button>
                             </div>
                         </div>
                     </div>
@@ -101,7 +112,6 @@
                         <ul>
                             <li>porządek w domowej apteczce</li>
                             <li>przypomnienie o przeterminowanych lekach</li>
-                            <li>darmowe przepisy na wyśmienite latte macchiato</li>
                         </ul>
                     </div>
                 </div>

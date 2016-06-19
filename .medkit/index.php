@@ -13,28 +13,63 @@
 	}
 
 	else if (isset($_COOKIE['username']) && isset($_COOKIE['password'])){
-		if (correct_password($_COOKIE['username'], $_COOKIE['password'])) {
-			$_SESSION['username'] = $_COOKIE['username'];
-			$_SESSION["groupID"] = users_get_last_group_id($_SESSION['username']);
-			$_SESSION["groupName"] = groups_get_selected_name($_SESSION["groupID"]);
-			header("Location: home.php");
-			exit();
-		}
+
+        $username = validate_trim_input($_COOKIE['username']);
+        $password = validate_trim_input($_COOKIE['password']);
+
+        $user_check = validate_email($username, $error_name_text, $error_name_flag);
+        $password_check = validate_password($password, $error_psw_text, $error_psw_flag);
+
+        if($user_check && $password_check) {
+
+            if (users_is_password_correct($username, $password, $error_psw_text, $error_psw_flag)) {
+                $_SESSION['username'] = $username;
+                $_SESSION["groupID"] = users_get_last_group_id($_SESSION['username']);
+                $_SESSION["groupName"] = groups_get_selected_name($_SESSION["groupID"]);
+
+                if (!isset($_SESSION["groupID"])){
+
+                    $_SESSION['redirect'] = 'redirect';
+
+                } else {
+
+                    if (drugs_overdue_check_date($_SESSION["groupID"])){
+                        $_SESSION['drugsOverdueModal'] = "show";
+                    }
+
+                }
+
+                header("Location: home.php");
+                exit();
+
+            } else {
+                // nieprawidłowe dane logowania
+                $show_modal = "style='display:block'";
+
+            }
+
+        } else {
+            // zmienne nie przeszły walidacji
+            $show_modal = "style='display:block'";
+
+        }
+
 	}
 
-	if($_SERVER['REQUEST_METHOD'] == 'POST'){
-		//General validation of inputs
+	if(isset($_POST['login-submit']) || isset($_POST['admin-login-submit'])){
+
 		$username = validate_trim_input($_POST['email']);
 		$password = validate_trim_input($_POST['password']);
 		$remember_me = isset($_POST['remember']);
 
-		$user_check = login_basic_check($username, $user_error_message);
-		$password_check = password_basic_check($password, $password_error_message);
+		$user_check = validate_email($username, $error_name_text, $error_name_flag);
+		$password_check = validate_password($password, $error_psw_text, $error_psw_flag);
 
-		// Proceed if no errors
 		if($user_check && $password_check){
+
 			$password = md5($password);
-			if(correct_password($username, $password)) {
+
+			if(users_is_password_correct($username, $password, $error_psw_text, $error_psw_flag)) {
 				
 				$_SESSION['username'] = $username;
 				$_SESSION["groupID"] = users_get_last_group_id($_SESSION['username']);
@@ -55,21 +90,27 @@
 				header("Location: home.php");
 
 				if(!$remember_me) {
+
 					exit();
+
 				} else {
+
 					setcookie('username', $username, time()+60*60*24*365);
 					setcookie('password', $password, time()+60*60*24*365);
+
 					exit();
 				}
+
 			} else {
-				$user_error_message = "Nieprawidłowe dane logowania";
-				$password_error_message = "Nieprawidłowe dane logowania";
+                // nieprawidłowe dane logowania
 				$show_modal = "style='display:block'";
-				$form_style = "has-error";
-			}
+
+            }
+
 		} else {
+            // zmienne nie przeszły walidacji
 			$show_modal = "style='display:block'";
-			$form_style = "has-error";
+
 		}
 	}
 
@@ -93,14 +134,6 @@
 
 <?php
 	include("include/index_header.php");
-
-	if($_GET['reg']==1){
-		?>
-		<div class="alert alert-success overlay">
-			Welcome aboard the <strong>HMS App.teczka</strong>! Let's talk drugs, shall we?
-		</div>
-		<?
-	}
 ?>
 
 <div class="container" >
@@ -115,6 +148,12 @@
 
 		<div class="col-sm-6">
 
+            <?php if(isset($_SESSION['new_user'] )){ ?>
+                <div class="alert alert-success">
+                    Utworzono nowe konto o nazwie: <strong><? echo $_SESSION['new_user']?></strong>!
+                </div>
+            <?php } $_SESSION['new_user'] = null; ?>
+
 			<div class="container-fluid">
 				<div class="row">
 					<div class="container-fluid jumbotron inline-element-center">
@@ -124,6 +163,7 @@
 					</div>
 				</div>
 			</div>
+
 
 			<div class="row">
 				<div class="container-fluid">
@@ -144,28 +184,27 @@
 
 								<div class="modal-body">
 									<form action="" method="POST">
-										<div class="form-group <? echo $form_style; ?>">
+                                        <div class="form-group <? echo $error_name_flag; ?>">
 											<label for="usrname"><span class="glyphicon glyphicon-user"></span> Nazwa użytkownika</label>
-											<p style="color:red"><?php echo $user_error_message ?></p>
+                                            <p style="color:red"><?php echo $error_name_text ?></p>
 											<input type="email" name="email" class="form-control" id="usrname" placeholder="Nazwa użytkownika" value=<?php echo "$username" ?>>
 										</div>
-										<div class="form-group <? echo $form_style; ?>">
+                                        <div class="form-group <? echo $error_psw_flag; ?>">
 											<label for="psw"><span class="glyphicon glyphicon-lock"></span> Hasło</label>
-											<p style="color:red"><?php echo $password_error_message ?></p>
+                                            <p style="color:red"><?php echo $error_psw_text ?></p>
 											<input type="password" name="password" class="form-control" id="psw" placeholder="Hasło">
 										</div>
 										<div class="checkbox">
 											<label><input type="checkbox" name="remember" value="" checked>Zapamiętaj mnie</label>
 										</div>
-										<button type="submit" class="btn btn-col btn-block"><span class="glyphicon glyphicon-off"></span> Zaloguj</button>
+										<button type="submit" name='login-submit' class="btn btn-col btn-block"><span class="glyphicon glyphicon-off"></span> Zaloguj</button>
 									</form>
 								</div>
 
 								<div class="modal-footer">
-									<button type="button" class="btn btn-default btn-default pull-left" id="modalCancelBtn">
+									<button type="button" class="btn btn-danger pull-left" id="modalCancelBtn">
 										<span class="glyphicon glyphicon-remove"></span> Cofnij
 									</button>
-									<p><a href="#">Zapomniałem hasła</a></p>
 								</div>
 
 							</div>
@@ -186,9 +225,9 @@
 				<div class="container-fluid">
 					<!-- This button is temporary until login functionality has been implemented -->
 					<form action="" method="POST">
-						<input type="hidden" name="email" value="admin@a.pl">
+						<input type="hidden" name="email" value="admin2@a.pl">
 						<input type="hidden" name="password" value="admin">
-						<button type="submit" class="btn btn-lg btn-block btn-col index-btn">Zaloguj jako admin</button>
+						<button type="submit" name='admin-login-submit' class="btn btn-lg btn-block btn-col index-btn">Zaloguj jako admin</button>
 					</form>
 				</div>
 			</div>
