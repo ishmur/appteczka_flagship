@@ -1,24 +1,26 @@
 <?php
-	session_start();
+session_start();
+require_once("include/functions.php");
+if(!isset($_SESSION['username'])){
+    header("Location: index.php?logout=1");
+    exit();
+}
+if(!empty($_SESSION["redirect"])){
+    $_SESSION["redirect"] = "";
+    header("Location: group_choose.php");
+    exit();
+}
+if($_SESSION['drugsOverdueModal'] == "show"){
+    $show_modal = "style='display:block'";
+    $_SESSION['drugsOverdueModal'] = "hide";
+}
 
-	require_once("include/functions.php");
+if(!isset($_GET['p'])) $_GET['p'] = 1;
+if(isset($_POST['user_filter'])) {$_SESSION['user_filter'] = $_POST['user_filter'];}
+if($_POST['clear'] == 1) {unset($_SESSION['user_filter']);}
 
-	if(!isset($_SESSION['username'])){
-		header("Location: index.php?logout=1");
-		exit();
-	}
-
-	if(!empty($_SESSION["redirect"])){
-		$_SESSION["redirect"] = "";
-		header("Location: group_choose.php");
-		exit();
-	}
-
-	if($_SESSION['drugsOverdueModal'] == "show"){
-		$show_modal = "style='display:block'";
-		$_SESSION['drugsOverdueModal'] = "hide";
-	}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -61,7 +63,7 @@ include("include/navigation.php"); // load template html with top-navigation bar
                     <form action = "" method = "POST">
                         <div class="form-group">
                             <label for="email"><i class="fa"></i>Wybierz użytkownika apteczki</label><br/>
-                            <input name="user_filter" list="users_list" placeholder="Wybierz użytkownika" class="form-control">
+                            <input name="user_filter" list="users_list" placeholder="Wybierz użytkownika" class="form-control" value="<? echo $_SESSION['user_filter']; ?>">
                             <datalist id="users_list">
                                 <?php
                                 $result = get_users_of_group($_SESSION['groupID']);
@@ -79,14 +81,14 @@ include("include/navigation.php"); // load template html with top-navigation bar
                 </div>
 
                 <?
-                if(!isset($_GET['p'])) $_GET['p'] = 1;
-                if(isset($_POST['user_filter']) && ($_POST['clear'] != 1)) {
-                    parse_feed($_SESSION['groupID'], $_POST['user_filter'], $_GET['p']);
+                if(isset($_SESSION['user_filter'])){
+                    parse_feed($_SESSION['groupID'], $_SESSION['user_filter'], $_GET['p']);
                 }
                 else {
                     parse_feed($_SESSION['groupID'], '', $_GET['p']);
                 }
                 ?>
+
 
             <?php } ?>
 
