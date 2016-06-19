@@ -36,14 +36,25 @@ function drugs_get_info_from_id($drug_id){
     }
     return $drug;
 }
-function drugs_print_table($groupID, $page){
+function drugs_print_table($groupID, $page, $search = ''){
     require("config/sql_connect.php");
-    $sql = "SELECT id, name, price, amount, overdue, unit 
+    $href = "drugs_overview.php";
+    if($search == '') {
+        $sql = "SELECT id, name, price, amount, overdue, unit 
                     FROM DrugsDB 
                     WHERE group_id = ?";
-    $href = "drugs_overview.php";
-    $sql_pag = paginate($sql, $href, 10, $page, array('i', array(&$groupID)));
-    $result = db_statement($sql_pag, "i", array(&$groupID));
+        $sql_pag = paginate($sql, $href, 10, $page, array('i', array(&$groupID)));
+        $result = db_statement($sql_pag, "i", array(&$groupID));
+    }
+    else {
+        $search = "%" . $search . "%";
+        $sql = "SELECT id, name, price, amount, overdue, unit 
+                    FROM DrugsDB 
+                    WHERE group_id = ? AND name LIKE ?";
+        $sql_pag = paginate($sql, $href, 10, $page, array('is', array(&$groupID, &$search)));
+        $result = db_statement($sql_pag, "is", array(&$groupID, &$search));
+    }
+
     if (mysqli_num_rows($result) > 0) {
         echo
         "<table class='table table-hover'>

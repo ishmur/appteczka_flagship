@@ -91,7 +91,7 @@
                 $output_string = $output_string . "usunął lek <strong>". $db_row['drug_name'] . "</strong> z apteczki.";
                 break;
             case 4:
-                $output_string = $output_string . "przyjął lek <strong>". $db_row['drug_name'] . "</strong> w ilości <strong>" . $db_row['amount'] . " " . $db_row['unit'] . "</strong>";
+                $output_string = "<span class='glyphicon glyphicon-exclamation-sign' style='color:#c11'></span>  " . $output_string . "przyjął lek <strong>". $db_row['drug_name'] . "</strong> w ilości <strong>" . $db_row['amount'] . " " . $db_row['unit'] . "</strong>";
                 break;
         }
         return $output_string;
@@ -154,7 +154,7 @@
                     AND DATE(created) <= CURRENT_DATE()
                     AND action = 3";
             $result = db_statement($sql, "i", array(&$group_id));
-            $intro = "<h4>W ciągu ostatniego tygodnia zutylizowano leki o łącznej wartości </h4>";
+            $intro = "<h4>W ciągu ostatniego tygodnia zutylizowano leki o łącznej wartości ";
         }
         elseif($option == 'month'){
             $sql = "SELECT money_lost FROM user_actions_log 
@@ -163,10 +163,10 @@
                     AND DATE(created) <= CURRENT_DATE()
                     AND action = 3";
             $result = db_statement($sql, "i", array(&$group_id));
-            $intro = "<h4>W ciągu ostatniego miesiąca zutylizowano leki o łącznej wartości </h4>";
+            $intro = "<h4>W ciągu ostatniego miesiąca zutylizowano leki o łącznej wartości ";
         }
         elseif($option == 'specific'){
-            $intro = "<h4>W okresie od $from do $to zutylizowano leki o łącznej wartości </h4>";
+            $intro = "<h4>W okresie od $from do $to zutylizowano leki o łącznej wartości ";
             $from = $from . " 00:00:00";
             $to = $to . " 23:59:59";
             $sql = "SELECT money_lost FROM user_actions_log 
@@ -183,7 +183,7 @@
         }
         $money_lost = number_format($money_lost, 2);
 
-        $message = $intro . "<h2>". $money_lost . " zł</h2>";
+        $message = $intro . "<strong>". $money_lost . " zł</strong>";
         echo $message;
     }
 
@@ -195,7 +195,7 @@
                         AND DATE(overdue) >= CURRENT_DATE()";
 
             $result = db_statement($sql, "i", array(&$group_id));
-            $intro = "<h4>W ciągu następnego tygodnia przeterminują się leki o łącznej wartości </h4>";
+            $intro = "<h4>W ciągu następnego tygodnia przeterminują się leki o łącznej wartości ";
         }
         elseif($option == 'month'){
             $sql = "SELECT price_per_unit, amount FROM DrugsDB
@@ -204,10 +204,10 @@
                         AND DATE(overdue) >= CURRENT_DATE()";
 
             $result = db_statement($sql, "i", array(&$group_id));
-            $intro = "<h4>W ciągu następnego miesiąca przeterminują się leki o łącznej wartości </h4>";
+            $intro = "<h4>W ciągu następnego miesiąca przeterminują się leki o łącznej wartości ";
         }
         elseif($option == 'specific'){
-            $intro = "<h4>W okresie od $from do $to przeterminują się leki o łącznej wartości </h4>";
+            $intro = "<h4>W okresie od $from do $to przeterminują się leki o łącznej wartości ";
             $from = $from . " 00:00:00";
             $to = $to . " 23:59:59";
             $sql = "SELECT price_per_unit, amount FROM DrugsDB
@@ -215,7 +215,7 @@
                         AND overdue <= ?
                         AND group_id = ?";
 
-            $result = db_statement($sql, "iss", array(&$from, &$to, &$group_id));
+            $result = db_statement($sql, "ssi", array(&$from, &$to, &$group_id));
         }
 
         $money_lost = 0.0;
@@ -224,7 +224,50 @@
         }
         $money_lost = number_format($money_lost, 2);
 
-        $message = $intro . "<h2>". $money_lost . " zł</h2>";
+        $sql_overdue = "SELECT price_per_unit, amount FROM DrugsDB
+                    WHERE group_id = ?
+                    AND DATE(overdue) <= CURRENT_DATE()";
+
+        $result_overdue = db_statement($sql_overdue, "i", array(&$group_id));
+
+        $money_lost_overdue = 0.0;
+        while ($row = mysqli_fetch_assoc($result_overdue)) {
+            $money_lost_overdue = $money_lost_overdue + ($row['amount'] * $row['price_per_unit']);
+        }
+        $money_lost_overdue = number_format($money_lost_overdue, 2);
+        $overdue_msg = "<h4>Obecnie w apteczce znajdują się przeterminowane leki o wartości <strong>$money_lost_overdue</strong> zł.</h4>";
+
+        $message = $overdue_msg . " " . $intro ."<strong>" .$money_lost . " zł</strong";
         echo $message;
+    }
+
+    function print_drugs_by_packages($group_id, $page){
+        $sql = "SELECT name, COUNT(*) as count FROM DrugsDB WHERE group_id = ? GROUP BY name ORDER BY count DESC";
+        $href = "statistics.php";
+        $sql_pag = paginate($sql, $href, 10, $page, array('i', array(&$group_id)));
+        
+        $result = db_statement($sql_pag, 'i', array(&$group_id));
+
+        if (mysqli_num_rows($result) > 0) {
+            echo
+            "<table class='table table-hover'>
+                      <tr>
+                        <th>Nazwa leku</th>
+                        <th>Ilość opakowań</th>
+                      </tr>
+                    <tbody>";
+            while ($row = mysqli_fetch_assoc($result)) {
+                echo
+                    "<tr>".
+                    "<td>" . $row["name"] . "</td>" .
+                    "<td>" . $row["count"] . "</td>" .
+                    "<td class='hidden'><div class=''>" . "</tr>";
+            }
+            echo "</table>";
+
+        } else {
+            echo
+            "<p>Apteczka jest pusta.</p>";
+        }
     }
 ?>

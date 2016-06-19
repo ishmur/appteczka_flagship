@@ -122,10 +122,10 @@
 			<div class="col-md-8 col-md-offset-2">
 				<div class="container-fluid">
 					<div class="col-md-12">
-						<form class="action="#">
+						<form class="" method="POST">
 							<div class="form-group">
 								<label for="drugsSearch"><i class="fa fa-question-circle"></i> Szukaj leku...</label>
-								<input type="text" class="form-control" id="drugsSearch" placeholder="Wpisz nazwę poszukiwanego leku">
+								<input type="text" name="search" class="form-control" id="drugsSearch" placeholder="Wpisz nazwę poszukiwanego leku" value="<? echo $_POST['search'] ?>">
 							<br />
 							<button type="submit" class="btn btn-col btn-block">Szukaj</button>
 							</div>
@@ -137,7 +137,8 @@
 								
 									<?php
 										if(!isset($_GET['p'])) $_GET['p'] = 1;
-										drugs_print_table($groupID, $_GET['p']);
+										if(isset($_POST['search'])) drugs_print_table($groupID, $_GET['p'], $_POST['search']);
+										else drugs_print_table($groupID, $_GET['p']);
 									?>
 
 						</div>
