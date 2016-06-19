@@ -3,6 +3,7 @@
     overflow-x: hidden;
 }
 
+@media (max-width: 767px) {
     #contentContainer {
         padding-top: 300px;
         padding-bottom: 200px;
@@ -12,6 +13,7 @@
     }
 }
 
+@media (min-width: 768px) {
     #contentContainer {
         position: relative;
         top: -70px;
