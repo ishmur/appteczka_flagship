@@ -9,7 +9,7 @@
         $password_check = validate_trim_input($_POST['password_check']);
 
         $is_email_valid = login_valid($username, $login_error);
-        $are_passwords_valid = password_valid($password, $password_check, $password_error);
+        $are_passwords_valid = validate_password_fields($password, $password_check, $password_error);
 
         if($is_email_valid && $are_passwords_valid) {
             $password = md5($password);
