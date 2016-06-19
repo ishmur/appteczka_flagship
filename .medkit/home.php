@@ -16,7 +16,7 @@ if($_SESSION['drugsOverdueModal'] == "show"){
 }
 
 if(!isset($_GET['p'])) $_GET['p'] = 1;
-if(isset($_POST['user_filter'])) {$_SESSION['user_filter'] = $_POST['user_filter'];}
+if(isset($_POST['user_filter'])) {$_SESSION['user_filter'] = $_POST['user_filter']; $_GET['p'] = 1;}
 if($_POST['clear'] == 1) {unset($_SESSION['user_filter']);}
 
 ?>
@@ -59,11 +59,11 @@ include("include/navigation.php"); // load template html with top-navigation bar
 
             <?php } else { ?>
 
-                <div class="col-sm-3">
-                    <form action = "" method = "POST">
+                <div class="row left-buffer">
+                    <form action='' method='POST' class="form-inline">
                         <div class="form-group">
-                            <label for="email"><i class="fa"></i>Wybierz użytkownika apteczki</label><br/>
-                            <input name="user_filter" list="users_list" placeholder="Wybierz użytkownika" class="form-control" value="<? echo $_SESSION['user_filter']; ?>">
+                            <label for="user_filter">Wybierz użytkownika apteczki</label>
+                            <input id="user_filter" name="user_filter" list="users_list" placeholder="Wybierz użytkownika" class="form-control" value="<? echo $_SESSION['user_filter']; ?>">
                             <datalist id="users_list">
                                 <?php
                                 $result = get_users_of_group($_SESSION['groupID']);
@@ -74,9 +74,10 @@ include("include/navigation.php"); // load template html with top-navigation bar
                             </datalist>
                         </div>
                         <button type="submit" class="btn btn-primary">Filtruj</button>
-                    </form>
-                    <form action="" method="POST">
                         <button type = "submit" class="btn btn-info" name="clear" value="1">Wyczyść filtry</button>
+                    </form>
+                    <form action='' method='POST' class="form-inline">
+
                     </form>
                 </div>
 
