@@ -30,6 +30,21 @@
 ?>
 
 <div class="fluid-container">
+	<?php if(empty($_SESSION["groupID"])) { ?>
+	<div class="row">
+		<div class="col-sm-9 col-sm-offset-3">
+			<div class="col-md-8 col-md-offset-2">
+				<div class="container-fluid">
+					<div class="col-md-12 inline-element-center">
+						<h1 style="color:red">Nie należysz do żadnej grupy - proszę wybrać grupę.</h1><br>
+						<a href="group_choose.php"><button type="button" class="btn btn-danger col-xs-12">Wybierz grupę</button></a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<?php } else { ?>
 <div class="row" style="background-color: #cce;">
 	<div class="col-sm-3 col-sm-offset-3"><h3>Koszt leków, które zutylizowano</h3></div>
 	<div class="col-sm-3">
@@ -82,6 +97,7 @@
 		?>
 	</div>
 </div>
+	<?php } ?>
 <script src="js/statistics.js"></script>
 </body>
 
