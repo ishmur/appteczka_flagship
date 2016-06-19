@@ -111,8 +111,10 @@
         } else {
 
             echo
-                "<p>Niezdefiniowano żadnej specyfikacji leku.</p>" .
-                "<a href='specif_new.php'>Dodaj nową specyfikację</a>";
+                "<div class='col-sm-4 col-sm-offset-4 inline-element-center'>".
+                "<h4>Nie znaleziono żadnej specyfikacji leku.</h4>" .
+                "<a href='specif_new.php'><button type='button' class='btn btn-warning col-xs-12'>Dodaj nową specyfikację</button></a>".
+                "</div>";
 
         }
 
@@ -228,8 +230,10 @@
             } else {
 
                 echo
-                    "<p>W apteczce nie ma leku o wybranej specyfikacji.</p>" .
-                    "<a href='specif_new.php'>Dodaj nową specyfikację</a>";
+                    "<div class='col-sm-4 col-sm-offset-4 inline-element-center'>".
+                    "<h4>W apteczce nie ma leku o wybranej specyfikacji.</h4>" .
+                    "<a href='specif_new.php'><button type='button' class='btn btn-warning col-xs-12'>Dodaj nową specyfikację</button></a>".
+                    "</div>";
 
             }
 
