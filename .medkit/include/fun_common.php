@@ -81,24 +81,7 @@
         }
     }
 
-    function password_valid($password, $password_check, &$error) {
-
-        if ($password != $password_check){
-
-            $error = "Wartości obu pól haseł muszą być identyczne";
-            return false;
-
-        } else {
-
-            if (empty($password)){
-                $error = "Pole nie może być puste";
-                return false;
-            } else {
-                return true;
-            }
-
-        }
-    }
+    
 
     function login_basic_check($login, &$error){
         if (filter_var($login, FILTER_VALIDATE_EMAIL)) {

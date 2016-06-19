@@ -18,7 +18,7 @@
 		$password_check = md5(validate_trim_input($_POST['pswNew2']));
 
 		$correct_old_password = correct_password($username, $oldpassword);
-		$are_passwords_valid = password_valid($password, $password_check, $newpass_error);
+		$are_passwords_valid = validate_password_fields($password, $password_check, $newpass_error);
 
 		if(!$correct_old_password) $oldpass_error = "Podałeś złe hasło";
 

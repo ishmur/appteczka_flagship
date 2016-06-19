@@ -16,8 +16,6 @@
             $groupID = $row["show_group_id"];
         }
 
-        
-
         return $groupID;
 
     }
