@@ -1,5 +1,5 @@
 <?php
-    function add_event($user, $group_id, $action, $drug_name = "", $amount = 0, $unit = ""){
+    function add_event($user, $group_id, $action, $drug_name = "", $amount = 0, $unit = "", $money_lost = 0.0){
 
         switch($action) {
             case "drugs_new":
@@ -9,8 +9,8 @@
                 break;
             case "drugs_delete":
                 $action = 3;
-                $sql = "INSERT INTO user_actions_log (email, group_id, action, drug_name) VALUES (?,?,?,?)";
-                $processed = db_statement($sql, "siis", array(&$user, &$group_id, &$action, &$drug_name));
+                $sql = "INSERT INTO user_actions_log (email, group_id, action, drug_name, money_lost) VALUES (?,?,?,?,?)";
+                $processed = db_statement($sql, "siisd", array(&$user, &$group_id, &$action, &$drug_name, &$money_lost));
                 break;
             case "drugs_take":
                 $action = 4;
@@ -140,5 +140,87 @@
             return "$days dni temu";
         }
         return "";
+    }
+
+    function print_utilized_stats($group_id, $option, $from, $to){
+        if($option == 'week'){
+            $sql = "SELECT money_lost FROM user_actions_log 
+                    WHERE group_id = ?
+                    AND DATE(created) >= CURRENT_DATE() - INTERVAL 7 day
+                    AND DATE(created) <= CURRENT_DATE()
+                    AND action = 3";
+            $result = db_statement($sql, "i", array(&$group_id));
+            $intro = "<h4>W ciągu ostatniego tygodnia zutylizowano leki o łącznej wartości </h4>";
+        }
+        elseif($option == 'month'){
+            $sql = "SELECT money_lost FROM user_actions_log 
+                    WHERE group_id = ?
+                    AND DATE(created) >= CURRENT_DATE() - INTERVAL 30 day
+                    AND DATE(created) <= CURRENT_DATE()
+                    AND action = 3";
+            $result = db_statement($sql, "i", array(&$group_id));
+            $intro = "<h4>W ciągu ostatniego miesiąca zutylizowano leki o łącznej wartości </h4>";
+        }
+        elseif($option == 'specific'){
+            $intro = "<h4>W okresie od $from do $to zutylizowano leki o łącznej wartości </h4>";
+            $from = $from . " 00:00:00";
+            $to = $to . " 23:59:59";
+            $sql = "SELECT money_lost FROM user_actions_log 
+                    WHERE created >= ?
+                    AND created <= ?
+                    AND group_id = ?
+                    AND action = 3";
+            $result = db_statement($sql, "iss", array(&$from, &$to, &$group_id));
+        }
+
+        $money_lost = 0.0;
+        while ($row = mysqli_fetch_assoc($result)) {
+            $money_lost = $money_lost + $row['money_lost'];
+        }
+        $money_lost = number_format($money_lost, 2);
+
+        $message = $intro . "<h2>". $money_lost . " zł</h2>";
+        echo $message;
+    }
+
+    function print_to_utilize_stats($group_id, $option, $from, $to){
+        if($option == 'week'){
+            $sql = "SELECT price_per_unit, amount FROM DrugsDB
+                        WHERE group_id = ?
+                        AND DATE(overdue) <= CURRENT_DATE() + INTERVAL 7 day
+                        AND DATE(overdue) >= CURRENT_DATE()";
+
+            $result = db_statement($sql, "i", array(&$group_id));
+            $intro = "<h4>W ciągu następnego tygodnia przeterminują się leki o łącznej wartości </h4>";
+        }
+        elseif($option == 'month'){
+            $sql = "SELECT price_per_unit, amount FROM DrugsDB
+                        WHERE group_id = ?
+                        AND DATE(overdue) <= CURRENT_DATE() + INTERVAL 30 day
+                        AND DATE(overdue) >= CURRENT_DATE()";
+
+            $result = db_statement($sql, "i", array(&$group_id));
+            $intro = "<h4>W ciągu następnego miesiąca przeterminują się leki o łącznej wartości </h4>";
+        }
+        elseif($option == 'specific'){
+            $intro = "<h4>W okresie od $from do $to przeterminują się leki o łącznej wartości </h4>";
+            $from = $from . " 00:00:00";
+            $to = $to . " 23:59:59";
+            $sql = "SELECT price_per_unit, amount FROM DrugsDB
+                        WHERE overdue >= ?
+                        AND overdue <= ?
+                        AND group_id = ?";
+
+            $result = db_statement($sql, "iss", array(&$from, &$to, &$group_id));
+        }
+
+        $money_lost = 0.0;
+        while ($row = mysqli_fetch_assoc($result)) {
+            $money_lost = $money_lost + ($row['amount'] * $row['price_per_unit']);
+        }
+        $money_lost = number_format($money_lost, 2);
+
+        $message = $intro . "<h2>". $money_lost . " zł</h2>";
+        echo $message;
     }
 ?>

@@ -125,3 +125,6 @@ h2 {
 	/* change bg-color of dropdown menu in sidebar */
 	background-color: #eee
 }
+
+.top-buffer { margin-top:50px; }
+.sm-top-buffer { margin-top:5px; }
