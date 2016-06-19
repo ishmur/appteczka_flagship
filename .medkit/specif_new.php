@@ -134,7 +134,14 @@
 								<input type="text" class="form-control" name="specif_active" placeholder="Wpisz substancję czynną" required="required" value=<?php echo "$specif_active" ?>>
 							</div>
 							<br />
-							<button type="submit" name="specif-submit" class="btn btn-col btn-block">Dodaj nową specyfikację</button>
+                            <div class="container-fluid">
+                                <div class="col-sm-6">
+                                    <a href="specif_overview.php"><button type="button" class="btn btn-danger col-xs-12">Wróć do listy specyfikacji</button></a>
+                                </div>
+                                <div class="col-sm-6">
+                                    <button type="submit" name="specif-submit" class="btn btn-col btn-block">Dodaj nową specyfikację</button>
+                                </div>
+                            </div>
 						</form>
 					</div>
 				</div>

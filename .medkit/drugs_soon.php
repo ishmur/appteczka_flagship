@@ -66,7 +66,7 @@ include("include/navigation.php"); // load template html with top-navigation bar
                 <div class="container-fluid">
                     <div class="col-md-12">
                         <div class="container-fluid">
-                            <br><br><h2>Lista leków, których termin ważności wkrótce minie:</h2><hr>
+                            <br><h2>Lista leków, których termin ważności wkrótce minie:</h2><hr>
 
                             <?php
                             if(!isset($_GET['p'])) $_GET['p'] = 1;

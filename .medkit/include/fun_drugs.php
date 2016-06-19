@@ -93,8 +93,10 @@ function drugs_print_table($groupID, $page){
                     </form>";
     } else {
         echo
-            "<p>Apteczka jest pusta.</p>" .
-            "<a href='drugs_new.php'>Dodaj nowy lek</a>";
+            "<div class='col-sm-4 col-sm-offset-4 inline-element-center'>".
+            "<h4>Apteczka jest pusta.</h4>" .
+            "<a href='drugs_new.php'><button type='button' class='btn btn-warning col-xs-12'>Dodaj nowy lek</button></a>".
+            "</div>";
     }
 }
 function drug_name_from_id($drug_id){
