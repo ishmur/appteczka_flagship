@@ -103,11 +103,19 @@ function drugs_print_table($groupID, $page, $search = ''){
                     <form action='drugs_edit.php' method='POST' id='edit_drugs'>
                     </form>";
     } else {
-        echo
-            "<div class='col-sm-4 col-sm-offset-4 inline-element-center'>".
-            "<h4>Apteczka jest pusta.</h4>" .
-            "<a href='drugs_new.php'><button type='button' class='btn btn-warning col-xs-12'>Dodaj nowy lek</button></a>".
-            "</div>";
+        if($search == '') {
+            echo
+                "<div class='col-sm-6 col-sm-offset-3 inline-element-center'>" .
+                "<h4>Apteczka jest pusta.</h4>" .
+                "<a href='drugs_new.php'><button type='button' class='btn btn-warning col-xs-12'>Dodaj nowy lek</button></a>" .
+                "</div>";
+        } else {
+            echo
+                "<div class='col-sm-6 col-sm-offset-3 inline-element-center'>" .
+                "<h4>W apteczce nie ma leku o podanej nazwie.</h4>" .
+                "<a href='drugs_new.php'><button type='button' class='btn btn-warning col-xs-12'>Dodaj nowy lek</button></a>" .
+                "</div>";
+        }
     }
 }
 function drug_name_from_id($drug_id){

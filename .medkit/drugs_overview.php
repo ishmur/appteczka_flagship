@@ -11,6 +11,16 @@
 	$groupID = $_SESSION["groupID"];
 	$username = $_SESSION["username"];
 
+	if(isset($_POST['search'])) {
+
+		$drug_name = validate_trim_input($_POST['search']);
+
+		if (!preg_match("/^[ąćęłńóśźżĄĆĘŁŃÓŚŹŻ a-zA-Z0-9,.\-\/]*$/", $drug_name)) {
+			$error_name_text = "Nazwa leku może składać się wyłącznie z liter, cyfr, kropek, przecinków, spacji i znaków '/-'.";
+			$error_name_flag = "has-error";
+		}
+	}
+
 	if(isset($_POST['drugs'])) {
 		foreach ($_POST['drugs'] as $drugID) {
 			drugs_delete_record($username, $drugID, $groupID);
@@ -123,8 +133,9 @@
 				<div class="container-fluid">
 					<div class="col-md-12">
 						<form class="" method="POST">
-							<div class="form-group">
+							<div class="form-group <? echo $error_name_flag; ?>">
 								<label for="drugsSearch"><i class="fa fa-question-circle"></i> Szukaj leku...</label>
+								<p style="color:red"><?php echo $error_name_text ?></p>
 								<input type="text" name="search" class="form-control" id="drugsSearch" placeholder="Wpisz nazwę poszukiwanego leku" value="<? echo $_POST['search'] ?>">
 							<br />
 							<button type="submit" class="btn btn-col btn-block">Szukaj</button>
@@ -137,7 +148,7 @@
 								
 									<?php
 										if(!isset($_GET['p'])) $_GET['p'] = 1;
-										if(isset($_POST['search'])) drugs_print_table($groupID, $_GET['p'], $_POST['search']);
+										if(!isset($error_name_flag)) drugs_print_table($groupID, $_GET['p'], $_POST['search']);
 										else drugs_print_table($groupID, $_GET['p']);
 									?>
 

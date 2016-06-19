@@ -3,14 +3,26 @@
     overflow-x: hidden;
 }
 
-#contentContainer {
-    position: relative;
-    top: -70px;
-	padding-top: 150px;
-    padding-bottom: 200px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    background-color: rgba(217,217,238,1);
+@media (max-width: 767px) {
+    #contentContainer {
+        padding-top: 300px;
+        padding-bottom: 200px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        background-color: rgba(217, 217, 238, 1);
+    }
+}
+
+@media (min-width: 768px) {
+    #contentContainer {
+        position: relative;
+        top: -70px;
+        padding-top: 150px;
+        padding-bottom: 200px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        background-color: rgba(217, 217, 238, 1);
+    }
 }
 
 .index-btn {
