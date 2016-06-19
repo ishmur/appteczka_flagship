@@ -10,7 +10,7 @@
 
     }
 
-    if(!isset($specif) && !isset($_POST["edit-specification"])){
+    if(!isset($_POST["specif_edit"]) && !isset($_POST["edit-specification"])){
 
         header("Location: specif_overview.php");
         exit();
@@ -72,9 +72,9 @@
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl-PL">
 <head>
-    <title>Home</title>
+    <title>Edytuj specyfikację</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">

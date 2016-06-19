@@ -296,7 +296,7 @@
                     <thead>
                       <tr>
                         <th>Użytkownik</th>
-                        <th></th>
+                        <th>Uprawnienia</th>
                       </tr>
                     </thead>
                     <tbody>";
@@ -311,8 +311,11 @@
                         "<input form='kick_users' type='checkbox' name='kickUsers[]' value='" . $row['user_id'] . "'>" .
                         "</div></td>" .
                         "<td class=''>
-                            <button type='button' class='btn btn-danger btn-delete-kick'>Zaznacz</button>
+                            <button type='button' class='btn btn-danger btn-delete-kick'>Użytkownik</button>
                          </td>" .
+                        "</tr>";
+                } else {
+                    echo "<td>Administrator</td>".
                         "</tr>";
                 }
             }
@@ -324,7 +327,9 @@
                     </form>";
         } else {
             echo
-            "<p>BŁĄD! Brak użytkowników w grupie.</p>";
+            "<div class='alert alert-danger'>
+                Wystąpił błąd - nie można wyświetlić członków apteczki. Prosimy spróbować ponownie później.
+            </div>";
         }
     }
 

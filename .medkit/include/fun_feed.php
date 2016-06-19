@@ -70,8 +70,8 @@
             echo "</tbody></table>";
         }
         else{
-            if ($username == "") echo "Brak aktualności do wyświetlenia";
-            else echo "Brak aktualności od tego użytkownika";
+            if ($username == "") echo "<div class='left-buffer top-buffer'><p>Dziennik aktywności jest pusty.</p></div>";
+            else echo "<div class='left-buffer top-buffer'><p>Brak aktywności wybranego użytkownika.</p></div>";
         }
     }
 

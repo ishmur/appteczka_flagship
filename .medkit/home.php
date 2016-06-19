@@ -15,17 +15,30 @@ if($_SESSION['drugsOverdueModal'] == "show"){
     $_SESSION['drugsOverdueModal'] = "hide";
 }
 
-if(!isset($_GET['p'])) $_GET['p'] = 1;
-if(isset($_POST['user_filter'])) {$_SESSION['user_filter'] = $_POST['user_filter']; $_GET['p'] = 1;}
-if($_POST['clear'] == 1) {unset($_SESSION['user_filter']);}
+if(!isset($_GET['p']))
+    $_GET['p'] = 1;
+if(isset($_POST['user_filter'])) {
+    $user_filter = validate_trim_input($_POST['user_filter']);
+    $userame_valid = validate_email($user_filter, $error_user_text, $error_user_flag);
+
+    if ($userame_valid){
+        $_SESSION['user_filter'] = $user_filter;
+    } else {
+        unset($_SESSION['user_filter']);
+    }
+    $_GET['p'] = 1;
+}
+if($_POST['clear'] == 1) {
+    unset($_SESSION['user_filter']);
+}
 
 ?>
 
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl-PL">
 <head>
-    <title>Home</title>
+    <title>Ostatnia aktywność</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
@@ -79,7 +92,7 @@ include("include/navigation.php"); // load template html with top-navigation bar
                     <form action='' method='POST' class="form-inline">
 
                     </form>
-                </div>
+                </div><hr>
 
                 <?
                 if(isset($_SESSION['user_filter'])){
