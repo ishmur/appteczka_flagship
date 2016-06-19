@@ -49,4 +49,32 @@
         return $processed;
     }
 
+    function users_get_name_from_id($user_id){
+        $sql = "SELECT email FROM users WHERE id = ?";
+        $result = db_statement($sql, 'i', array(&$user_id));
+        if (mysqli_num_rows($result) == 1) {
+            $row = mysqli_fetch_assoc($result);
+            return $row['email'];
+        }
+        else return false;
+    }
+
+    function users_get_id_from_name($username){
+        $sql = "SELECT id FROM users WHERE email = ?";
+        $result = db_statement($sql, 's', array(&$username));
+        if (mysqli_num_rows($result) == 1) {
+            $row = mysqli_fetch_assoc($result);
+            return $row['id'];
+        }
+        else return false;
+    }
+
+    function users_is_admin($user_id, $group_id){
+        $sql = "SELECT user_id FROM connections WHERE user_id = ? AND group_id = ? AND admin_rights = 1";
+        $result = db_statement($sql, 'ii', array(&$user_id, &$group_id));
+        if (mysqli_num_rows($result) == 1) return true;
+        else return false;
+
+    }
+
 ?>

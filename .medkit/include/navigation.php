@@ -91,6 +91,10 @@ $settings = Ustawienia
 						<a <?php echo $settingsGroupNew ?> href="group_new.php">Utwórz grupę</a>
 					</div>
 				</li>
+				<?php if(users_is_admin(users_get_id_from_name($_SESSION['username']), $_SESSION['groupID'])) {
+					echo "<li" . $panelAdmin . "><a href='group_manage.php'>Panel administratora</a></li>";
+				}?>
+
 				<li><a href="index.php?logout=1">Wyloguj</a></li>
 			</ul><br>
 		</div>
@@ -100,7 +104,7 @@ $settings = Ustawienia
 			<div class="jumbotron text-center">
 				<h1><?php echo $header ?></h1> 
 				<h2><br \><?php echo "Zalogowany jako: " . $_SESSION['username'] ?></h2>
-				<h2><br \><?php echo "Wybrana apteczka: " . $_SESSION["groupName"] ?></h2>
+				<h2><br \><?php echo "Wybrana apteczka: " . $_SESSION["groupName"] . " (id: " . $_SESSION["groupID"] . ") - liczba członków: " . group_how_many_members($_SESSION["groupID"]); ?></h2>
 			</div>
 		</div>
 		

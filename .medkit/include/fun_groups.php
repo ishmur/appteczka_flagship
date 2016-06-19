@@ -120,9 +120,6 @@
 
     function groups_leave($groupID, $username){
 
-        require("config/sql_connect.php");
-        
-
         $sql = "DELETE FROM connections 
                 WHERE group_id = ?
                 AND user_id = 
@@ -277,6 +274,58 @@
         $result = db_statement($sql, "i", array(&$group_id));
         return $result;
 
+    }
+
+    function group_how_many_members($group_id){
+
+        $sql = "SELECT COUNT(*) as members FROM connections WHERE group_id = ?";
+        $result = db_statement($sql, "i", array(&$group_id));
+        $row = mysqli_fetch_assoc($result);
+        return $row['members'];
+
+    }
+
+    function group_print_members($group_id){
+
+        $sql = "SELECT user_id, admin_rights FROM connections WHERE group_id = ?";
+        $result = db_statement($sql, "i", array(&$group_id));
+
+        if (mysqli_num_rows($result) > 0) {
+            echo
+            "<table class='table table-hover'>
+                    <thead>
+                      <tr>
+                        <th>Użytkownik</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>";
+            while ($row = mysqli_fetch_assoc($result)) {
+                
+                echo
+                    "<tr>" .
+                    "<td>" . users_get_name_from_id($row["user_id"]) . "</td>";
+                if($row['admin_rights'] == 0) {
+                    echo
+                        "<td class='hidden'><div class=''>" .
+                        "<input form='kick_users' type='checkbox' name='kickUsers[]' value='" . $row['user_id'] . "'>" .
+                        "</div></td>" .
+                        "<td class=''>
+                            <button type='button' class='btn btn-danger btn-delete-kick'>Zaznacz</button>
+                         </td>" .
+                        "</tr>";
+                }
+            }
+            echo
+            "</table>
+                    </tbody>
+                    <form action='' method='POST' id='kick_users'>
+                        <button type='submit' name='delete-submit' class='btn btn-col btn-block'>Usuń zaznaczonych użytkowników</button>
+                    </form>";
+        } else {
+            echo
+            "<p>BŁĄD! Brak użytkowników w grupie.</p>";
+        }
     }
 
 ?>
