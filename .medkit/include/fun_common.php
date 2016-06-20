@@ -24,8 +24,8 @@
                 trigger_error('Statement failed! ' . htmlspecialchars(mysqli_error($dbConnection)), E_USER_ERROR);
                 return false;
             }
-
-            $bind = call_user_func_array(array($stmt, "bind_param"), array_merge(array($types), $params));
+            $bind = call_user_func_array('mysqli_stmt_bind_param', array_merge (array($stmt, $types), $params));
+            //$bind = call_user_func_array(array($stmt, "bind_param"), array_merge(array($types), $params));
             if ($bind === false) {
                 trigger_error('Bind param failed!', E_USER_ERROR);
                 return false;
