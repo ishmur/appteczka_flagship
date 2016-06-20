@@ -145,8 +145,8 @@
             echo "</ul></div>";
 
 
-            echo "<form><div class='col-md-4'>
-                        <div class='input-group' style='padding-top: 20px;><form class='' method='GET'>
+            echo "<form class='' method='GET'><div class='col-md-4'>
+                        <div class='input-group' style='padding-top: 20px;'>
                         <input type='number' min='1' max='$pages' step = '1' name='p' class='form-control input-sm' style='width:90px;'  placeholder='Strona'>
                         <span class='input-group-btn' style='width:0;'>
                         <button type='submit' class='btn btn-sm btn-primary'>>>></button></span>
