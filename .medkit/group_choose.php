@@ -35,10 +35,10 @@
                 $_SESSION["groupName"] = null;
             }
             groups_leave($groupID, $username);
-            $_SESSION['left_group'] = true;
-            header("Location: group_choose.php");
-            exit();
         }
+        $_SESSION['left_group'] = true;
+        header("Location: group_choose.php");
+        exit();
     }
 
 ?>
