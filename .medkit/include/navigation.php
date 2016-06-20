@@ -104,7 +104,7 @@ $settings = Ustawienia
 			<div class="jumbotron text-center">
 				<h1><?php echo $header ?></h1> 
 				<h2><br \><?php echo "Zalogowany jako: " . $_SESSION['username'] ?></h2>
-				<h2><br \><?php echo "Wybrana apteczka: " . $_SESSION["groupName"] . " (id: " . $_SESSION["groupID"] . ") - liczba członków: " . group_how_many_members($_SESSION["groupID"]); ?></h2>
+				<h2><br \><?php echo "Wybrana apteczka: " . $_SESSION["groupName"] ?></h2>
 			</div>
 		</div>
 		
@@ -114,12 +114,12 @@ $settings = Ustawienia
 <script src="js/navigation.js"></script>
 <?php
 	if(isset($showDropdownDrugs)){
-		echo "<script src=\"js/navigation_drugs.js\"></script>";
+		echo "<script src='js/navigation_drugs.js'></script>";
 	}
 	if(isset($showDropdownSpecification)){
-		echo "<script src=\"js/navigation_specification.js\"></script>";
+		echo "<script src='js/navigation_specification.js'></script>";
 	}
 	elseif (isset($showDropdownSettings)){
-		echo "<script src=\"js/navigation_settings.js\"></script>";
+		echo "<script src='js/navigation_settings.js'></script>";
 	}
 ?>

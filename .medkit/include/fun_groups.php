@@ -311,7 +311,7 @@
                         "<input form='kick_users' type='checkbox' name='kickUsers[]' value='" . $row['user_id'] . "'>" .
                         "</div></td>" .
                         "<td class=''>
-                            <button type='button' class='btn btn-danger btn-delete-kick'>Użytkownik</button>
+                            <button type='button' class='btn btn-danger btn-delete-kick'>Zaznacz użytkownika</button>
                          </td>" .
                         "</tr>";
                 } else {

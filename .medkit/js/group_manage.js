@@ -12,11 +12,11 @@ for (var index = 0; index < userButtonsKick.length; index++){
         if(input.checked) {
             input.checked = false;
             row.classList.remove("danger");
-            button.innerHTML = "Zaznacz";
+            button.innerHTML = "Zaznacz użytkownika";
         } else {
             input.checked = true;
             row.classList.add("danger");
-            button.innerHTML = "Odznacz";
+            button.innerHTML = "Odznacz użytkownika";
         }
     });
 }

@@ -1,3 +1,18 @@
+.unstyled {
+    color: inherit;
+    text-decoration: inherit;
+}
+
+.unstyled:link {
+    color: inherit;
+    text-decoration: inherit;
+}
+
+.unstyled:hover {
+    color: inherit;
+    text-decoration: inherit;
+}
+
 #bodyIndex {
     background-color: rgba(217,217,238,0.5);
     overflow-x: hidden;
@@ -35,7 +50,7 @@
      left: 0;
      z-index: 1;
      background-color: #4646a0;
-     height: 100px;
+     height: 20px;
      width: 100%;
      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
  }
@@ -46,10 +61,24 @@
     left: 0px;
     z-index: 1;
     background-color: #4646a0;
-    height: 250px;
+    height: 150px;
     width: 100%;
     box-shadow: 0 -4px 8px 0 rgba(0, 0, 0, 0.2), 0 -6px 20px 0 rgba(0, 0, 0, 0.19);
 }
+
+@media (min-height: 700px){
+
+    .index-row-header {
+        height: 100px;
+    }
+
+    .index-row-footer {
+        height: 250px;
+    }
+
+}
+
+
 
 .footer-div-right {
     color: white;
