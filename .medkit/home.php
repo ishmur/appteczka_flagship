@@ -89,9 +89,7 @@ include("include/navigation.php"); // load template html with top-navigation bar
                         <button type="submit" class="btn btn-primary">Filtruj</button>
                         <button type = "submit" class="btn btn-info" name="clear" value="1">Wyczyść filtry</button>
                     </form>
-                    <form action='' method='POST' class="form-inline">
-
-                    </form>
+                    
                 </div><hr>
 
                 <?
