@@ -74,7 +74,6 @@
                         <form action = "" method = "POST">
                             <div class="form-group <? echo $error_name_flag; ?>">
                                 <label for="email"><i class="fa"></i>Wybierz apteczkę</label><br/>
-                                <p style="color:red"><?php echo $error_name_text ?></p>
                                 <input name="group_name" id="choose_group" list="group_list" required placeholder="Wprowadź nazwę grupy" class="form-control" value=<?php echo "$group_name" ?>>
                                 <datalist id="group_list">
                                     <?php
