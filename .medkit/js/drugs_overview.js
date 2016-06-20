@@ -111,16 +111,4 @@ for (index = 0; index < btnTakeArray.length; index++) {
     }
 }
 
-var userInputsEdit = document.querySelectorAll("input[name='drugs_edit[]']");
-var userButtonsEdit = document.getElementsByClassName("btn-edit");
-var editForm = document.forms["edit_drugs"];
 
-for (index = 0; index < userButtonsEdit.length; index++){
-    let input = userInputsEdit[index];
-    let button = userButtonsEdit[index];
-
-    button.addEventListener('click', function(){
-        input.checked = true;
-        editForm.submit();
-    });
-}
